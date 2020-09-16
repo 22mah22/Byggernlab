@@ -32,7 +32,7 @@ void led_test(void){
 	PORTE &= ~(1<<PE1); // set ALE low (valid addr)
 }
 
-const int *BASE = 0x0FFF;
+const int *BASE = 0x1000;
 typedef struct {
 	uint8_t OLED_CMD[512];
 	uint8_t OLED_DATA[512];
@@ -98,12 +98,81 @@ DIRECTION calc_dir(joyVal* val){
 	return LEFT;
 }
 
+void oled_write_command(char c)
+{
+	volatile char *ext_ram = (char *) 0x1000;
+	ext_ram[0] = c;
+}
+void oled_write_data(char c)
+{
+	volatile char *ext_ram = (char *) 0x1200;
+	ext_ram[0] = c;
+}
+
+void oled_init(amap* atmelMap){
+	oled_write_command(0xae); //display off
+	oled_write_command(0xa1); //segment remap
+	oled_write_command(0xda); //common pads hardware: alternative
+	oled_write_command(0x12);
+	oled_write_command(0xc8); //common output scan direction:com63-com0
+	oled_write_command(0xa8); //multiplex ration mode:63
+	oled_write_command(0x3f);
+	oled_write_command(0xd5); //display divide ratio/osc. freq. mode
+	oled_write_command(0x80);
+	oled_write_command(0x81); //contrast control
+	oled_write_command(0x50);
+	oled_write_command(0xd9); //set pre-charge period
+	oled_write_command(0x21);
+	oled_write_command(0x20); //set memory addressing mode
+	oled_write_command(0x02);                                    //page addressing mode
+	oled_write_command(0xdb); //VCOM deselect level mode
+	oled_write_command(0x30);
+	oled_write_command(0xad); //master configuration
+	oled_write_command(0x00);
+	oled_write_command(0xa4); //out follows RAM content
+	oled_write_command(0xa6); //set normal display
+	oled_write_command(0xaf); //display on
+}
+
+void go_to_line(amap* atmelMap, uint8_t line){
+	oled_write_command(0xB0 + line);
+}
+
+void go_to_column(amap* atmelMap, uint8_t column){
+	
+	oled_write_command(0x00 + (column%16));
+	oled_write_command(0x10 + (column/16));
+}
+
+void oled_start_write_at(amap* atmelMap, uint8_t page, uint8_t lowerCol, uint8_t upperCol){
+	atmelMap->OLED_CMD[1] = 0xB1;
+	atmelMap->OLED_CMD[1] = 0x00;
+	atmelMap->OLED_CMD[1] = 0x10;
+}
+void oled_write(amap* atmelMap){
+	atmelMap->OLED_DATA[1] = 0x0F;
+}
+
+void clear_oled(amap* atmelMap){
+	for(int i = 0; i < 8 ; i++){
+		go_to_line(atmelMap, i);
+		
+		go_to_column(atmelMap, 0);
+		for(int j = 0; j < 128; j++){
+			
+			oled_write_data(0x00);
+		}
+	}
+}
+
+
+
 int main(void){
 	
 	joyVal joystick;
 	sliderVal slider;
-	volatile amap* atmelMap = (amap*) BASE;
 	
+	volatile amap* atmelMap = (amap*) BASE;
 	
 	MCUCR |= (1<<SRE);
 	
@@ -131,12 +200,96 @@ int main(void){
 	USART_Init ( MYUBRR );
 	SRAM_test();
 	
-	_delay_ms(500);
+	_delay_ms(100);
 	
+	oled_init(atmelMap);
+	//oled_start_write_at(atmelMap,4,6,0);
+	
+	uint8_t arr[] = {
+	0b00000000,0b00000000,0b00000000,0b00000111,0b11000000,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000000,0b00111110,0b01111000,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000000,0b11100000,0b00000110,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000001,0b00000000,0b00000011,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b00000000,0b00000000,0b10000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b00000000,0b00000000,0b01000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b00000000,0b00000000,0b00100000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001100,0b00000000,0b00000000,0b00110000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000011,0b11111111,0b10010000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000000,0b11110000,0b00010000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00001111,0b00001111,0b10010000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000001,0b11000000,0b10001000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000110,0b00000000,0b00101000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000000,0b00000001,0b00001000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000011,0b10000000,0b00001000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000011,0b11100000,0b11101000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000011,0b11100001,0b11101000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b00000000,0b00000000,0b00100100,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b00000000,0b00000010,0b00000100,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b01000000,0b00000001,0b00000100,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b01000000,0b00000001,0b10000100,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b00100000,0b00110000,0b10001000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000011,0b00100000,0b00110101,0b00001000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000011,0b00110000,0b00000001,0b00011000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000011,0b00110000,0b00000000,0b00010000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000011,0b00101000,0b01111111,0b00100000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b00100110,0b00000000,0b00100000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b00000011,0b00000000,0b01100000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000010,0b00000001,0b10000000,0b01000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b00000000,0b11100001,0b10000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000100,0b01100000,0b00111110,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00001000,0b10000000,0b00100100,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b01111001,0b10000000,0b00000011,0b11111100,0b00000000,0b00000000,
+	0b00000000,0b00000001,0b10000000,0b00000000,0b00000000,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000000,0b00000011,0b01000000,0b00000000,0b00000000,0b00000000,
+	0b00000000,0b00000000,0b00000000,0b00000000,0b10000000,0b00000000,0b00000000,0b00000000};
+	/*go_to_line(atmelMap, 3);
+	for(int i = 0; i < 127; i++){
+		atmelMap->OLED_DATA[1] = 0x00;
+		go_to_column(atmelMap, i);
+		
+	}*/
+	
+	clear_oled(atmelMap);
+	for(int i = 1; i <= 8; i++){
+		go_to_line(atmelMap, i-1);
+		for(int j = 0; j < 36; j++){
+			go_to_column(atmelMap, j);
+			oled_write_data(arr[i*j+i]);
+		}
+	}/*
+	uint8_t arrr[8][64];
+	for(int i = 0; i < 8; i++){
+		for(int j = 0; j < 64; j++){
+			arrr[i][j] += arr[i*j+j]
+		}
+	}
+		
+		
+		go_to_line(atmelMap, i);
+		for(int j = 0; j < 36; j++){
+			go_to_column(atmelMap, j);
+			oled_write_data(arr[i*j+i]);
+		}
+	}*/
+	/*
+	go_to_line(atmelMap, 2);
+	go_to_column(atmelMap, 0);
+	for(int i = 0; i < 127; i++){
+		
+		go_to_column(atmelMap, i);
+		atmelMap->OLED_DATA[1] = 0b10101010;
+		if(i>20){
+			go_to_column(atmelMap, i-21);
+			atmelMap->OLED_DATA[1] = 0x00;
+		}
+		
+		_delay_ms(20);
+		
+	}*/
 	while(1){
-
+		
 		uint8_t val = 1;
-		atmelMap->ADC[1] = 0x04;
+		atmelMap->ADC[1] = 0x04; 
 		uint8_t valx = atmelMap->ADC[1];
 		uint8_t valy = atmelMap->ADC[1];
 		uint8_t vall = atmelMap->ADC[1];
@@ -149,7 +302,8 @@ int main(void){
 		//get_adc_data(atmelMap, &joystick, &slider);
 		calc_pos(&joystick,valx,valy);
 		calc_pos_slider(&slider,vall,valr);
-		printf("%d,%d,%d,%d ||| %d,%d \n",joystick.x_val,joystick.y_val,slider.l_val,slider.r_val,pin4,pin5);
+		printf("%d,%d,%d,%d ||| %d,%d \r",joystick.x_val,joystick.y_val,slider.l_val,slider.r_val,pin4,pin5);
+		
 		
 	}
 
