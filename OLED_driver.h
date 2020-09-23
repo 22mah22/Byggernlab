@@ -19,8 +19,10 @@ void oled_write(amap* atmelMap);
 
 void clear_oled(amap* atmelMap);
 
-void oled_write_string(char* c);
+void oled_write_string(char* c, uint8_t n);
 
-//void oled_write_char_using_font(char c, fontType f);
+void oled_write_char_using_font(char c, uint8_t n);
 
 void oled_write_char8(char c);
+
+void character_printer(amap* atmelMap, uint8_t arr[], int width, int height);

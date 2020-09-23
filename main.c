@@ -14,6 +14,7 @@
 #include "joystick_driver.h"
 #include "OLED_driver.h"
 #include "DEFINITIONS.h"
+#include "protagonists.h"
 
 const int *BASE = 0x1000;
 
@@ -72,7 +73,9 @@ int main(void){
 	
 	oled_init(atmelMap);
 	clear_oled(atmelMap);
-	oled_write_string("ghrytufjditkrjfu");
+	go_to_line(atmelMap,7);
+	//oled_write_string("Gorbatsjov", 4);
+	character_printer(atmelMap, pepe3, 104, 48);
 	/*
 	go_to_line(atmelMap, 2);
 	go_to_column(atmelMap, 0);

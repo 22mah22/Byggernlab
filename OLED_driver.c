@@ -1,6 +1,7 @@
 #include "OLED_driver.h"
 #include "fonts.h"
 
+
 void oled_write_command(char c)
 {
 	volatile char *ext_ram = (char *) 0x1000;
@@ -68,22 +69,32 @@ void clear_oled(amap* atmelMap){
 	}
 }
 
-void oled_write_string(char* c){
+void oled_write_string(char* c, uint8_t n){
 	
 	for (int i=0; i < strlen(c); i++) {
-		oled_write_char8(c[i]);
+		oled_write_char_using_font(c[i],n);
 	}
 	
 }
 
-/*void oled_write_char_using_font(char c, fontType f){
+void oled_write_char_using_font(char c, uint8_t n){
 	uint8_t character = c-32;
 	
-	for (int i=0; i < 8; i++) {
-		oled_write_data(pgm_read_byte(&(f[character][i])));
+	if(n==8){
+		for (int i=0; i < n; i++) {
+			oled_write_data(pgm_read_word(&font8[character][i]));
+		}
+	}else if(n == 5){
+		for (int i=0; i < n; i++) {
+			oled_write_data(pgm_read_word(&font5[character][i]));
+		}
+	}else if(n == 4){
+		for (int i=0; i < n; i++) {
+			oled_write_data(pgm_read_word(&font4[character][i]));
+		}
 	}
 	
-}*/
+}
 
 void oled_write_char8(char c){
 	uint8_t character = c-32;
@@ -92,4 +103,23 @@ void oled_write_char8(char c){
 		oled_write_data(pgm_read_byte(&(font8[character][i])));
 	}
 	
+}
+
+//warning: array must have percieved height and width divisible by 8
+void character_printer(amap* atmelMap, uint8_t arr[], int width, int height){
+	//for(int p = 0; p < 88; p++){
+		for (int line = 0; line < height/8; line++){
+			int offset = line*width*8;
+			for (int col = 0; col < width; col++){
+				unsigned char c = 0b00000000;
+				for (int i = 0; i < 8; i++){
+					c |= (pgm_read_byte(&(arr[i*width + col + offset])) << i);
+				}
+				go_to_line(atmelMap, line);
+				go_to_column(atmelMap, col/*+p*/);
+				oled_write_data(c);
+			}
+		}
+		//clear_oled(atmelMap);
+	//}
 }

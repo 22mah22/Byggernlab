@@ -146,6 +146,9 @@
     <Compile Include="fonts.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="protagonists.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sram_test.h">
       <SubType>compile</SubType>
     </Compile>

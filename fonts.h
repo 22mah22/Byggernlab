@@ -309,4 +309,7 @@ const unsigned char PROGMEM font4[95][4] = {
 		};
 
 
+
+PGM_P const font_array[] PROGMEM = {font8, font5, font4};
+
 #endif /* FONTS_H_ */
