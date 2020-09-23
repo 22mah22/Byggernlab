@@ -2,8 +2,7 @@
 #include <stdint.h>
 #include "DEFINITIONS.h"
 
-uint8_t x_offset = 156;
-uint8_t y_offset = 164;
+
 
 typedef struct {
 	int8_t x_val;

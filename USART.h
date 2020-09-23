@@ -1,5 +1,6 @@
 #pragma once
 #include <avr/io.h>
+#include "DEFINITIONS.h"
 
 void USART_Init (unsigned int ubrr );
 void USART_Transmit(unsigned char data);

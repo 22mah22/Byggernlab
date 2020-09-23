@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include "sram_test.h"
     void SRAM_test(void)
     {
 		volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM

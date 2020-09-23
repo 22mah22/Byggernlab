@@ -10,11 +10,12 @@
 #include "USART.h"
 #include <stdio.h>
 #include <string.h>
-#include "sram_test.c"
+#include "sram_test.h"
 #include "joystick_driver.h"
 #include "OLED_driver.h"
 #include "DEFINITIONS.h"
 
+const int *BASE = 0x1000;
 
 void led_test(void){
 	
@@ -31,14 +32,7 @@ void led_test(void){
 	PORTE &= ~(1<<PE1); // set ALE low (valid addr)
 }
 
-void oled_write_char8(char c){
-	uint8_t character = c-32;
-	
-	for (int i=0; i < 8; i++) {
-		oled_write_data(pgm_read_byte(&(font8[character][i])));
-	}
-	
-}
+
 
 int main(void){
 	
@@ -94,6 +88,9 @@ int main(void){
 		_delay_ms(20);
 		
 	}*/
+	for(int i = 0; i < 92; i++){
+		printf("\n");
+	}
 	while(1){
 		
 		uint8_t val = 1;
@@ -110,7 +107,7 @@ int main(void){
 		//get_adc_data(atmelMap, &joystick, &slider);
 		calc_pos(&joystick,valx,valy);
 		calc_pos_slider(&slider,vall,valr);
-		printf("%d,%d,%d,%d ||| %d,%d \r",joystick.x_val,joystick.y_val,slider.l_val,slider.r_val,pin4,pin5);
+		printf("\r J_x: %4d, J_y: %4d, Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,slider.l_val,slider.r_val,pin4,pin5);
 		
 		
 	}

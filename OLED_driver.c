@@ -1,4 +1,5 @@
 #include "OLED_driver.h"
+#include "fonts.h"
 
 void oled_write_command(char c)
 {
@@ -75,11 +76,20 @@ void oled_write_string(char* c){
 	
 }
 
-void oled_write_char_using_font(char c, fontType f){
+/*void oled_write_char_using_font(char c, fontType f){
 	uint8_t character = c-32;
 	
 	for (int i=0; i < 8; i++) {
 		oled_write_data(pgm_read_byte(&(f[character][i])));
+	}
+	
+}*/
+
+void oled_write_char8(char c){
+	uint8_t character = c-32;
+	
+	for (int i=0; i < 8; i++) {
+		oled_write_data(pgm_read_byte(&(font8[character][i])));
 	}
 	
 }
