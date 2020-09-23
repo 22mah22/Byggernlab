@@ -5,19 +5,12 @@ typedef struct
 {
     char labels[8][16];
 
-    menu* links[8] = {
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr
-    };
+    struct menu* links[8];
 
     uint8_t selected = 0;
 } menu;
+
+menu* new_menu(menu* parent);
 
 void write_menu_to_screen(menu* currentMenu);
 
