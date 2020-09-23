@@ -9,26 +9,32 @@ menu* new_menu(menu* parent){
         menu->links[i] = NULL;
     }
     *(menu->selected) = 0;
+    menu->links[7] = parent;
+    menu->labels[7] = "<- Back";
 	return menu;
 }
 
-void write_menu_to_screen(menu* currentMenu){
+void write_menu_to_screen(menu* menuPointer){
     for(uint8_t i = 0; i < 8; i++){
         go_to_line(i);
-        oled_write_string(currentMenu->labels[i])
+        oled_write_string(menuPointer->labels[i]);
     }
 }
 
-void change_menu(menu* currentMenu){
-    write_menu_to_screen(currentMenu->links[currentMenu->selected])
+void change_menu(menu* menuPointer){
+    write_menu_to_screen(menuPointer->links[menuPointer->selected]);
+    currentMenu = menuPointer;
 }
 
-void invert_selected(menu* currentMenu){
+void invert_selected(menu* menuPointer){
 
 }
 
-void change_selected(menu* currentMenu){
-
+void change_selected(menu* menuPointer){
+    //if joystick opp: Selected -= 1
+    //if joystick ned: Selected += 1
+    // if selected = -1, selected = 7
+    //if selected = 8, selected = 0
 }
 
 void test_menu(){
