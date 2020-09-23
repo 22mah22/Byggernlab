@@ -1,5 +1,8 @@
 #pragma once
 #include "DEFINITIONS.h"
+#include "fonts.h"
+
+typedef enum{font8, font5, font4} fontType;
 
 void oled_write_command(char c);
 
@@ -18,3 +21,12 @@ void oled_write(amap* atmelMap);
 void clear_oled(amap* atmelMap);
 
 void oled_write_string(char* c);
+
+void oled_write_char_using_font(char c){
+	uint8_t character = c-32;
+	
+	for (int i=0; i < 8; i++) {
+		oled_write_data(pgm_read_byte(&(font8[character][i])));
+	}
+	
+}
