@@ -19,9 +19,15 @@ void oled_write(amap* atmelMap);
 
 void clear_oled(amap* atmelMap);
 
+void clear_oled_new();
+
 void oled_write_string(uint8_t startline, char* c, uint8_t n);
 
+void oled_write_string_inverted(uint8_t startline, char* c, uint8_t n);
+
 void oled_write_char_using_font(char c, uint8_t n);
+
+void oled_write_inverted_char_using_font(char c, uint8_t n);
 
 void oled_write_char8(char c);
 

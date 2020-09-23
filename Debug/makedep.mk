@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+menu.c
+
 menu_list.c
 
 joystick_driver.c

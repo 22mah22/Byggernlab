@@ -1,30 +1,25 @@
 #pragma once
 #include <stdint.h>
+#include "joystick_driver.h"
+#include <util/delay.h>
 
 typedef struct
 {
-	char labels[8][16];
+	char* labels;
 
-	menu* links[8] = {
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL
-	};
+	struct menu* links[8];
 
-	uint8_t selected = 0;
+	uint8_t* selected;
 } menu;
 
-void write_menu_to_screen(menu* currentMenu);
+menu* new_menu(menu* parent);
 
-void change_menu(menu* currentMenu);
+void write_menu_to_screen(menu* menuPointer);
 
-void invert_selected(menu* currentMenu);
+void change_menu(menu* next_menu, menu* prev_menu);
 
-void change_selected(menu* currentMenu);
+void invert_selected(menu* menuPointer);
 
-void test_menu();
+void change_selected(menu* menuPointer, DIRECTION d);
+
+void button_pressed(menu* menuPointer);

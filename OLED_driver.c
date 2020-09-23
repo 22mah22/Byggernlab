@@ -69,6 +69,18 @@ void clear_oled(amap* atmelMap){
 	}
 }
 
+void clear_oled_new(){
+	for(int i = 0; i < 8 ; i++){
+		go_to_line(i);
+		
+		go_to_column(0);
+		for(int j = 0; j < 128; j++){
+			
+			oled_write_data(0x00);
+		}
+	}
+}
+
 void oled_write_string(uint8_t startline, char* c, uint8_t n){
 	go_to_line(startline);
 	
@@ -77,6 +89,19 @@ void oled_write_string(uint8_t startline, char* c, uint8_t n){
 			go_to_line(startline+i/((int)128/n));
 		}
 		oled_write_char_using_font(c[i],n);
+		
+	}
+	
+}
+
+void oled_write_string_inverted(uint8_t startline, char* c, uint8_t n){
+	go_to_line(startline);
+	
+	for (int i=0; i < strlen(c); i++) {
+		if(i%((int)128/n) == 0){
+			go_to_line(startline+i/((int)128/n));
+		}
+		oled_write_inverted_char_using_font(c[i],n);
 		
 	}
 	
@@ -96,6 +121,25 @@ void oled_write_char_using_font(char c, uint8_t n){
 	}else if(n == 4){
 		for (int i=0; i < n; i++) {
 			oled_write_data(pgm_read_word(&font4[character][i]));
+		}
+	}
+	
+}
+
+void oled_write_inverted_char_using_font(char c, uint8_t n){
+	uint8_t character = c-32;
+	
+	if(n==8){
+		for (int i=0; i < n; i++) {
+			oled_write_data(~pgm_read_word(&font8[character][i]));
+		}
+		}else if(n == 5){
+		for (int i=0; i < n; i++) {
+			oled_write_data(~pgm_read_word(&font5[character][i]));
+		}
+		}else if(n == 4){
+		for (int i=0; i < n; i++) {
+			oled_write_data(~pgm_read_word(&font4[character][i]));
 		}
 	}
 	

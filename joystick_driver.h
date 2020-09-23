@@ -24,14 +24,17 @@ void calc_pos_slider(sliderVal* values, uint8_t left, uint8_t right);
 
 uint8_t button_check(uint8_t current);
 
+
+
 typedef enum{
 		LEFT,
-		UPLEFT,
 		RIGHT,
-		UPRIGHT,
 		UP,
 		DOWN,
 		NEUTRAL,
+		HOLDER
 } DIRECTION;
+
+DIRECTION joystick_direction(joyVal stick);
 
 DIRECTION calc_dir(joyVal* val);
