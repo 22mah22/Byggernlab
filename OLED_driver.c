@@ -38,11 +38,11 @@ void oled_init(amap* atmelMap){
 	oled_write_command(0xaf); //display on
 }
 
-void go_to_line(amap* atmelMap, uint8_t line){
-	oled_write_command(0xB0 + line);
+void go_to_line(uint8_t line){
+	oled_write_command(0xB0 + line%8);
 }
 
-void go_to_column(amap* atmelMap, uint8_t column){
+void go_to_column(uint8_t column){
 	
 	oled_write_command(0x00 + (column%16));
 	oled_write_command(0x10 + (column/16));
@@ -59,9 +59,9 @@ void oled_write(amap* atmelMap){
 
 void clear_oled(amap* atmelMap){
 	for(int i = 0; i < 8 ; i++){
-		go_to_line(atmelMap, i);
+		go_to_line(i);
 		
-		go_to_column(atmelMap, 0);
+		go_to_column(0);
 		for(int j = 0; j < 128; j++){
 			
 			oled_write_data(0x00);
@@ -69,10 +69,15 @@ void clear_oled(amap* atmelMap){
 	}
 }
 
-void oled_write_string(char* c, uint8_t n){
+void oled_write_string(uint8_t startline, char* c, uint8_t n){
+	go_to_line(startline);
 	
 	for (int i=0; i < strlen(c); i++) {
+		if(i%((int)128/n) == 0){
+			go_to_line(startline+i/((int)128/n));
+		}
 		oled_write_char_using_font(c[i],n);
+		
 	}
 	
 }
@@ -115,8 +120,8 @@ void character_printer(amap* atmelMap, uint8_t arr[], int width, int height){
 				for (int i = 0; i < 8; i++){
 					c |= (pgm_read_byte(&(arr[i*width + col + offset])) << i);
 				}
-				go_to_line(atmelMap, line);
-				go_to_column(atmelMap, col/*+p*/);
+				go_to_line(line);
+				go_to_column(col/*+p*/);
 				oled_write_data(c);
 			}
 		}

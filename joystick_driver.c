@@ -1,7 +1,10 @@
 #include "joystick_driver.h"
 
-uint8_t x_offset = 156;
-uint8_t y_offset = 164;
+uint8_t x_offset = 160;
+uint8_t y_offset = 160;
+
+uint8_t previous = 1;
+
 
 void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider){
 	uint8_t val = 1;
@@ -20,12 +23,12 @@ void calc_offset(amap* atmelMap){
 }
 
 void calc_pos(joyVal* values, uint8_t x, uint8_t y){
-	if(x>x_offset){
+	if(x>=x_offset){
 		values->x_val = (x-x_offset)*(100)/(255-x_offset);
 		}else if(x<x_offset){
 		values->x_val = -(x_offset-x)*(100)/x_offset;
 	}
-	if(y>y_offset){
+	if(y>=y_offset){
 		values->y_val = (y-y_offset)*(100)/(255-y_offset);
 		}else if(y<y_offset){
 		values->y_val = -(y_offset-y)*(100)/y_offset;
@@ -34,4 +37,15 @@ void calc_pos(joyVal* values, uint8_t x, uint8_t y){
 void calc_pos_slider(sliderVal* values, uint8_t left, uint8_t right){
 	values->l_val = left*100/255;
 	values->r_val = right*100/255;
+}
+
+uint8_t button_check(uint8_t current){
+	if(current == 0 && previous == 1){
+		previous = 0;
+		printf("%s", "B");
+		return 1;
+		}else if(current != 0){
+		previous = 1;
+		printf("%s", "A");
+	}
 }

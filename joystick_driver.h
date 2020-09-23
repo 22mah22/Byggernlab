@@ -22,6 +22,8 @@ void calc_pos_stick(joyVal* values, uint8_t x, uint8_t y);
 
 void calc_pos_slider(sliderVal* values, uint8_t left, uint8_t right);
 
+uint8_t button_check(uint8_t current);
+
 typedef enum{
 		LEFT,
 		UPLEFT,

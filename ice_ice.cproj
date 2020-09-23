@@ -146,6 +146,12 @@
     <Compile Include="fonts.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="menu_list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="menu_list.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="protagonists.h">
       <SubType>compile</SubType>
     </Compile>
