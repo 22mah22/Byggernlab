@@ -7,7 +7,7 @@ typedef struct
 
     struct menu* links[8];
 
-    uint8_t selected = 0;
+    uint8_t* selected;
 } menu;
 
 menu* new_menu(menu* parent);

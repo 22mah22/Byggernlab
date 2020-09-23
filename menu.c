@@ -8,6 +8,7 @@ menu* new_menu(menu* parent){
 	for(unsigned int i = 0; i < 8, i++){
         menu->links[i] = NULL;
     }
+    *(menu->selected) = 0;
 	return menu;
 }
 
