@@ -6,6 +6,8 @@ uint8_t y_offset = 160;
 uint8_t previous = 1;
 DIRECTION joydir = NEUTRAL;
 
+DIRECTION direction;
+
 
 void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider){
 	uint8_t val = 1;
@@ -52,7 +54,7 @@ uint8_t button_check(uint8_t current){
 	return 0;
 }
 
-
+/*
 DIRECTION joystick_direction(joyVal stick){
 	if(joydir == NEUTRAL){
 		if(stick.x_val > 80){
@@ -75,4 +77,26 @@ DIRECTION joystick_direction(joyVal stick){
 	joydir = NEUTRAL;
 	return joydir;
 	
+}*/
+
+DIRECTION joystick_direction(DIRECTION dir, joyVal stick){
+	if(stick.x_val < 50 && stick.x_val > -50 && stick.y_val < 50 && stick.y_val > -50 ){
+		dir = NEUTRAL;
+	}
+	if(dir == NEUTRAL){
+		if(stick.x_val > 95){
+			return RIGHT;
+		}
+		if(stick.x_val < -95){
+			return LEFT;
+		}
+		if(stick.y_val < -95){
+			return DOWN;
+		}
+		if(stick.y_val > 95){
+			return UP;
+		}
+		return NEUTRAL;
+	}
+	return WAITING;
 }

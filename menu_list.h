@@ -4,59 +4,53 @@
  * Created: 23.09.2020 16:57:57
  *  Author: magneah
  */ 
+#pragma once
 
-
-#ifndef MENU_LIST_H_
-#define MENU_LIST_H_
-
-
-
+#include "joystick_driver.h"
+/*
+uint8_t totalMenuItems;
+uint8_t current_line;
+uint8_t current_line_max;
+uint8_t current_col;
+uint8_t current_col_max;
+DIRECTION direction;
+*/
 typedef struct{
 	struct menuItem* prev;
 	struct menuItem* next;
-	char label[];
-} menuItem;
+	struct menuItem* parent;
+	struct menuItem* child;
+	uint8_t line;
+	char* label;
+}menuItem;
 
-struct menuItem* head;
+void insertion_beginning(char *label, uint8_t line); 
 
-menuItem* ptr;
-ptr = (menuItem*)malloc(sizeof(menuItem));
+void insertion_last(char *label, uint8_t line); 
 
-ptr->label = "start";
-ptr->prev = NULL;
-ptr->next = NULL;
-head = ptr;
+void child_insertion_last(char *parentlabel, char *label, uint8_t line);
 
-ptr = (menuItem*)malloc(sizeof(menuItem));
+void insertion_specified(char *label, uint8_t line); 
 
-ptr->label = "second";
-ptr->prev = head;
-ptr->prev->next = ptr;
-ptr->next = NULL;
+void deletion_beginning(); 
 
+void deletion_last(); 
 
+void deletion_specified(char *label); 
 
-ptr = (menuItem*)malloc(sizeof(menuItem));
+void search();
 
-menuItem* temp = head;
+void update_position(DIRECTION dir);
 
-ptr->label = "third";
-while(temp->next != NULL){
-	temp = temp->next;
-}
-temp->next = ptr;
-ptr->prev = temp;
-ptr->next = NULL;
+void button_action();
 
-ptr = head;
+DIRECTION joystick_check(DIRECTION dir, joyVal stick);
 
-while(ptr != NULL){
-	printf("%s \n", ptr->label);
-	ptr = ptr->next;
-}
+uint8_t write_menu(menuItem *currentHead);
 
+menuItem* menuItem_at_line(menuItem *currentHead, uint8_t linje);
 
+void init_main(char* list[]);
 
+void init_child(char* list[]);
 
-
-#endif /* MENU_LIST_H_ */

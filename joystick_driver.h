@@ -32,9 +32,11 @@ typedef enum{
 		UP,
 		DOWN,
 		NEUTRAL,
-		HOLDER
+		WAITING
 } DIRECTION;
 
-DIRECTION joystick_direction(joyVal stick);
+//DIRECTION joystick_direction(joyVal stick);
+
+DIRECTION joystick_direction(DIRECTION dir, joyVal stick);
 
 DIRECTION calc_dir(joyVal* val);

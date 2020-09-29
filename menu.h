@@ -5,11 +5,11 @@
 
 typedef struct
 {
-	char* labels;
+	char* labels[8];
 
 	struct menu* links[8];
 
-	uint8_t* selected;
+	uint8_t selected;
 } menu;
 
 menu* new_menu(menu* parent);

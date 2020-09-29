@@ -155,9 +155,13 @@ int main(void){
 		
 	}
 	
-	menu* currentMenu = new_menu(NULL);
+	menu* currentMenu;
+	currentMenu = new_menu(NULL);
 	menu* submenu = new_menu(currentMenu);
-	submenu->labels = "laks";
+	submenu->labels[0] = "laks1";
+	submenu->labels[1] = "laks2";
+	submenu->labels[2] = "laks3";
+	submenu->labels[3] = "laks4";
 	currentMenu->links[0] = submenu;
 	write_menu_to_screen(currentMenu);
 	
@@ -219,9 +223,9 @@ int main(void){
 		//printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button,slider.l_val,slider.r_val,left_button,right_button);
 		
 
-
-		DIRECTION current = joystick_direction(joystick);
-		if(current != NEUTRAL){
+		_delay_ms(1);
+		DIRECTION current = joystick_direction(current, joystick);
+		if(current != NEUTRAL && current != WAITING){
 			change_selected(currentMenu, current);
 		}
 		if(button_check(joy_button)){
