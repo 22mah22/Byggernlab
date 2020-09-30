@@ -34,9 +34,9 @@ void write_menu_to_screen(menu* menuPointer){
 	invert_selected(menuPointer);
 }
 
-//Husk: Funksjoner i C kan bare endre minneområdet til pekerene som sendes inn.
-//Dvs at denne setter minneområdet prev peker på til minneområdet next peker på.
-//Har dette ønsket hensikt? Kan det løses med å ha en overordnet peker-til-peker?
+//Husk: Funksjoner i C kan bare endre minneomrï¿½det til pekerene som sendes inn.
+//Dvs at denne setter minneomrï¿½det prev peker pï¿½ til minneomrï¿½det next peker pï¿½.
+//Har dette ï¿½nsket hensikt? Kan det lï¿½ses med ï¿½ ha en overordnet peker-til-peker?
 void change_menu(menu* next_menu, menu** menuHead){
 	write_menu_to_screen(next_menu);
 	*menuHead = next_menu;
@@ -50,10 +50,16 @@ void invert_selected(menu* menuPointer){
 void change_selected(menu** menuHead, DIRECTION d){
 	if(d == UP){
 		((*(menuHead))->selected)--;
+		while(((*(menuHead))->data[((*(menuHead))->selected)]) == ""){
+			((*(menuHead))->selected)--;
+		}
 		printf("%d up",((*(menuHead))->selected));
 	}
 	if(d == DOWN){
 		((*(menuHead))->selected)++;
+		while(((*(menuHead))->data[((*(menuHead))->selected)]) == ""){
+			((*(menuHead))->selected)++;
+		}
 		printf("%d down",((*(menuHead))->selected));
 	}
 	if(((*(menuHead))->selected) == 8){
