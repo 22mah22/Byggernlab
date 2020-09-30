@@ -155,7 +155,7 @@ void oled_write_char8(char c){
 }
 
 //warning: array must have percieved height and width divisible by 8
-void character_printer(amap* atmelMap, uint8_t arr[], int width, int height){
+void character_printer(uint8_t arr[], int width, int height){
 	//for(int p = 0; p < 88; p++){
 		for (int line = 0; line < height/8; line++){
 			int offset = line*width*8;

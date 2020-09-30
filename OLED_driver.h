@@ -31,4 +31,4 @@ void oled_write_inverted_char_using_font(char c, uint8_t n);
 
 void oled_write_char8(char c);
 
-void character_printer(amap* atmelMap, uint8_t arr[], int width, int height);
+void character_printer(uint8_t arr[], int width, int height);

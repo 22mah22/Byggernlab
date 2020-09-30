@@ -14,7 +14,7 @@
 #include "joystick_driver.h"
 #include "OLED_driver.h"
 #include "DEFINITIONS.h"
-#include "protagonists.h"
+//#include "protagonists.h"
 #include "mcp2515_driver.h"
 #include "can_driver.h"
 
@@ -54,8 +54,8 @@ typedef struct{
 
 int main(void){
 	
-	joyVal joystick; 
-	sliderVal slider; 
+//  	joyVal joystick; 
+//  	sliderVal slider; 
 	volatile amap* atmelMap = (amap*) BASE;
 	
 	MCUCR |= (1<<SRE);
@@ -90,7 +90,8 @@ int main(void){
 		
 	go_to_line(7);
 	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
-	//character_printer(atmelMap, wojak, 64, 40);
+	//character_printer(wojak, 64, 40);
+	//_delay_ms(60000);
 	/*
 	go_to_line(atmelMap, 2);
 	go_to_column(atmelMap, 0);
@@ -125,6 +126,7 @@ int main(void){
 	submenu->labels[5] = "";
 	submenu->labels[6] = "";
 	mainMenu->links[0] = submenu;
+	//submenu->fun_ptr = printwojak_prototyp;
 	write_menu_to_screen(mainMenu);
 	
 	headPointer = &mainMenu;
@@ -137,7 +139,7 @@ int main(void){
 	for(int i = 0; i < 8; i++){
 		msgToSend.data[i] = 97+i;
 	}
-	msgToSend.id = 0x000f;
+	msgToSend.id = 0xffff;
 	
 	can_message* msgToReceive;
 	
@@ -146,7 +148,7 @@ int main(void){
 	
 	while(1){
 		for(int i = 0; i < 8; i++){
-			printf("%c | %d | %d \r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
+			printf("\r   %c | %d | %d   \r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
 			_delay_ms(5000);
 		}
 	}

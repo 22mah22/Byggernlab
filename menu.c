@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "OLED_driver.h"
 #include <string.h>
+#include "protagonists.h"
 
 char* string_list[] = {
 	"option1",
@@ -22,6 +23,7 @@ menu* new_menu(menu* parent){
 	(mymenu->selected) = 0;
 	mymenu->links[7] = (parent);
 	mymenu->labels[7] = "<- Back";
+	mymenu->fun_ptr = NULL;
 	return mymenu;
 }
 
@@ -38,6 +40,10 @@ void write_menu_to_screen(menu* menuPointer){
 //Dvs at denne setter minneomr�det prev peker p� til minneomr�det next peker p�.
 //Har dette �nsket hensikt? Kan det l�ses med � ha en overordnet peker-til-peker?
 void change_menu(menu* next_menu, menu** menuHead){
+	/*if (next_menu->fun_ptr != NULL){
+		(*(next_menu->fun_ptr));
+	}*/
+
 	write_menu_to_screen(next_menu);
 	*menuHead = next_menu;
 }
@@ -50,14 +56,14 @@ void invert_selected(menu* menuPointer){
 void change_selected(menu** menuHead, DIRECTION d){
 	if(d == UP){
 		((*(menuHead))->selected)--;
-		while(((*(menuHead))->data[((*(menuHead))->selected)]) == ""){
+		while(((*(menuHead))->labels[((*(menuHead))->selected)]) == ""){
 			((*(menuHead))->selected)--;
 		}
 		printf("%d up",((*(menuHead))->selected));
 	}
 	if(d == DOWN){
 		((*(menuHead))->selected)++;
-		while(((*(menuHead))->data[((*(menuHead))->selected)]) == ""){
+		while(((*(menuHead))->labels[((*(menuHead))->selected)]) == ""){
 			((*(menuHead))->selected)++;
 		}
 		printf("%d down",((*(menuHead))->selected));
@@ -79,3 +85,10 @@ void button_pressed(menu** menuHead){
 		change_menu((*(menuHead))->links[((*(menuHead))->selected)], menuHead);
 	}
 }
+
+/*void printwojak_prototyp(){
+	clear_oled_new();
+	character_printer(wojak, 64, 40);
+	//while(joystick.x_val > -90){}
+	while(1){};
+}*/

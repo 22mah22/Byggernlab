@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "joystick_driver.h"
+//#include "protagonists.h"
 #include <util/delay.h>
 
 typedef struct
@@ -10,6 +11,8 @@ typedef struct
 	struct menu* links[8];
 
 	uint8_t selected;
+	
+	void (*fun_ptr)(void);
 } menu;
 
 menu* new_menu(menu* parent);
@@ -23,3 +26,5 @@ void invert_selected(menu* menuPointer);
 void change_selected(menu** menuHead, DIRECTION d);
 
 void button_pressed(menu** menuHead);
+
+//void printwojak_prototyp();
