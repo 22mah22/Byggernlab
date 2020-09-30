@@ -167,7 +167,6 @@ int main(void){
 	submenu->labels[4] = "";
 	submenu->labels[5] = "";
 	submenu->labels[6] = "";
-	submenu->labels[7] = "";
 	mainMenu->links[0] = submenu;
 	write_menu_to_screen(mainMenu);
 	

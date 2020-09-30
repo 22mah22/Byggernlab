@@ -21,7 +21,7 @@ menu* new_menu(menu* parent){
 	
 	(mymenu->selected) = 0;
 	mymenu->links[7] = (parent);
-	//menu->labels[7] = "<- Back";
+	mymenu->labels[7] = "<- Back";
 	return mymenu;
 }
 
