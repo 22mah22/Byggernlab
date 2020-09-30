@@ -34,9 +34,12 @@ void write_menu_to_screen(menu* menuPointer){
 	invert_selected(menuPointer);
 }
 
-void change_menu(menu* next_menu, menu* prev_menu){
+//Husk: Funksjoner i C kan bare endre minneområdet til pekerene som sendes inn.
+//Dvs at denne setter minneområdet prev peker på til minneområdet next peker på.
+//Har dette ønsket hensikt? Kan det løses med å ha en overordnet peker-til-peker?
+void change_menu(menu* next_menu, menu** menuHead){
 	write_menu_to_screen(next_menu);
-	*prev_menu = *next_menu;
+	*menuHead = next_menu;
 }
 
 void invert_selected(menu* menuPointer){
@@ -44,29 +47,29 @@ void invert_selected(menu* menuPointer){
 	oled_write_string_inverted((menuPointer->selected), menuPointer->labels[(menuPointer->selected)], 8);
 }
 
-void change_selected(menu* menuPointer, DIRECTION d){
+void change_selected(menu** menuHead, DIRECTION d){
 	if(d == UP){
-		(menuPointer->selected)--;
-		printf("%d up",(menuPointer->selected));
+		((*(menuHead))->selected)--;
+		printf("%d up",((*(menuHead))->selected));
 	}
 	if(d == DOWN){
-		(menuPointer->selected)++;
-		printf("%d down",(menuPointer->selected));
+		((*(menuHead))->selected)++;
+		printf("%d down",((*(menuHead))->selected));
 	}
-	if((menuPointer->selected) == 8){
-		(menuPointer->selected) = 0;
+	if(((*(menuHead))->selected) == 8){
+		((*(menuHead))->selected) = 0;
 	}
-	if((menuPointer->selected) == 255){
-		(menuPointer->selected) = 7;
+	if(((*(menuHead))->selected) == 255){
+		((*(menuHead))->selected) = 7;
 	}
 	if(d != WAITING && d != NEUTRAL){
-		write_menu_to_screen(menuPointer);
+		write_menu_to_screen(*(menuHead));
 	}
 	
 }
 
-void button_pressed(menu* menuPointer){
-	if(menuPointer->links[(menuPointer->selected)] != NULL){
-		change_menu(menuPointer->links[(menuPointer->selected)], menuPointer);
+void button_pressed(menu** menuHead){
+	if((*(menuHead))->links[((*(menuHead))->selected)] != NULL){
+		change_menu((*(menuHead))->links[((*(menuHead))->selected)], menuHead);
 	}
 }

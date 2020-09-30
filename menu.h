@@ -16,10 +16,10 @@ menu* new_menu(menu* parent);
 
 void write_menu_to_screen(menu* menuPointer);
 
-void change_menu(menu* next_menu, menu* prev_menu);
+void change_menu(menu* next_menu, menu** menuHead);
 
 void invert_selected(menu* menuPointer);
 
-void change_selected(menu* menuPointer, DIRECTION d);
+void change_selected(menu** menuHead, DIRECTION d);
 
-void button_pressed(menu* menuPointer);
+void button_pressed(menu** menuHead);

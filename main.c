@@ -155,16 +155,23 @@ int main(void){
 		
 	}
 	
-	menu* currentMenu;
-	currentMenu = new_menu(NULL);
-	menu* submenu = new_menu(currentMenu);
+	menu** headPointer = NULL;
+	
+	menu* mainMenu;
+	mainMenu = new_menu(NULL);
+	menu* submenu = new_menu(mainMenu);
 	submenu->labels[0] = "laks1";
 	submenu->labels[1] = "laks2";
 	submenu->labels[2] = "laks3";
 	submenu->labels[3] = "laks4";
-	currentMenu->links[0] = submenu;
-	write_menu_to_screen(currentMenu);
+	submenu->labels[4] = "";
+	submenu->labels[5] = "";
+	submenu->labels[6] = "";
+	submenu->labels[7] = "";
+	mainMenu->links[0] = submenu;
+	write_menu_to_screen(mainMenu);
 	
+	headPointer = &mainMenu;
 	while(1){
 		
 		uint8_t val = 1;
@@ -224,12 +231,12 @@ int main(void){
 		
 
 		_delay_ms(1);
-		DIRECTION current = joystick_direction(current, joystick);
-		if(current != NEUTRAL && current != WAITING){
-			change_selected(currentMenu, current);
+		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		if(current_dir != NEUTRAL && current_dir != WAITING){
+			change_selected(headPointer, current_dir);
 		}
 		if(button_check(joy_button)){
-			button_pressed(currentMenu);
+			button_pressed(headPointer);
 		}
 		
 		
