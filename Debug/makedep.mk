@@ -2,9 +2,15 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+can_driver.c
+
+mcp2515_driver.c
+
 menu.c
 
 menu_list.c
+
+spi_driver.c
 
 joystick_driver.c
 

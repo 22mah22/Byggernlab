@@ -140,10 +140,25 @@
     <CleanTarget>clean</CleanTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="can_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="can_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp2515_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp2515_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="DEFINITIONS.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp2515.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="menu.c">
@@ -159,6 +174,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="protagonists.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="spi_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="spi_driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sram_test.h">

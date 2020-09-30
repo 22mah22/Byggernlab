@@ -15,6 +15,8 @@
 #include "OLED_driver.h"
 #include "DEFINITIONS.h"
 #include "protagonists.h"
+#include "mcp2515_driver.h"
+#include "can_driver.h"
 
 #include "menu.h"
 
@@ -80,52 +82,7 @@ int main(void){
 	USART_Init ( MYUBRR );
 	SRAM_test(); _delay_ms(5000);
 		
-	struct menuItem* head;
 
-	menuItem* ptr;
-	ptr = (menuItem*)malloc(sizeof(menuItem));
-	
-	menuItem* child;
-	child = (menuItem*)malloc(sizeof(menuItem));
-	child->label = "kid";
-	child->line = 0;
-	child->next = NULL;
-	child->prev = NULL;
-
-	ptr->label = "first";
-	ptr->line = 0;
-	ptr->prev = NULL;
-	ptr->next = NULL;
-	ptr->child = child;
-	head = ptr;
-	
-	child->parent = head;
-
-	ptr = (menuItem*)malloc(sizeof(menuItem));
-
-	menuItem* temp = head;
-
-	ptr->label = "second";
-	ptr->line = 1;
-	while(temp->next != NULL){
-		temp = temp->next;
-	}
-	temp->next = ptr;
-	ptr->prev = temp;
-	ptr->next = NULL;
-
-	ptr = (menuItem*)malloc(sizeof(menuItem));
-
-	temp = head;
-
-	ptr->label = "third";
-	ptr->line = 2;
-	while(temp->next != NULL){
-		temp = temp->next;
-	}
-	temp->next = ptr;
-	ptr->prev = temp;
-	ptr->next = NULL;
 
 	oled_init(atmelMap);
 	clear_oled(atmelMap);
@@ -171,6 +128,44 @@ int main(void){
 	write_menu_to_screen(mainMenu);
 	
 	headPointer = &mainMenu;
+	
+	
+	can_init();
+	
+	can_message msgToSend;
+	msgToSend.data_length = 8;
+	for(int i = 0; i < 8; i++){
+		msgToSend.data[i] = 97+i;
+	}
+	msgToSend.id = 0x000f;
+	
+	can_message* msgToReceive;
+	
+	send_can_msg(&msgToSend);
+	msgToReceive = receive_can_msg(0);
+	
+	while(1){
+		for(int i = 0; i < 8; i++){
+			printf("%c | %d | %d \r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
+			_delay_ms(5000);
+		}
+	}
+	
+	/*
+	mcp2515_init();
+	char ch;
+	while(1){
+		mcp2515_write(0x36, 98);
+		mcp2515_write(0x46, 99);
+		mcp2515_write(0x56, 100);
+		ch = mcp2515_read(0x36);
+		printf("%c |||| \r\n", ch);
+		ch = mcp2515_read(0x46);
+		printf("%c |||| \r\n", ch);
+		ch = mcp2515_read(0x56);
+		printf("%c |||| \r\n", ch);
+		_delay_ms(5000);
+	}*/
 	while(1){
 		
 		uint8_t val = 1;
@@ -185,41 +180,7 @@ int main(void){
 		uint8_t joy_button = PINB & (1<< PINB1);
 		
 		
-		/*if(button_check(joy_button)){
-			character_printer(atmelMap, wojak, 64, 40);
-		}*/
-		/*
-		if(joystick_direction(joystick) == RIGHT){
-			clear_oled(atmelMap);
-		}
-		if (currentMenu != 0 && joystick_direction(joystick) == UP)
-		{
-			currentMenu -= 1;
-		}
-		if (currentMenu != menuMax && joystick_direction(joystick) == DOWN)
-		{
-			currentMenu += 1;
-		}
-		
-		if(button_check(joy_button)){
-			temp = head;
-			while(temp->line != currentMenu){
-				temp = temp->next;
-			}
-			if(temp->child != NULL){
-				
-				head = temp->child;
-			}
-		}
-		ptr = head;
-		uint8_t counter = 0;
-		while(ptr != NULL){
-			printf("%s \n", ptr->label);
-			go_to_column(0);
-			oled_write_string(counter,ptr->label, 8);
-			ptr = ptr->next;
-			counter ++;
-		}*/
+	
 			
 		
 		//get_adc_data(atmelMap, &joystick, &slider);
