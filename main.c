@@ -143,15 +143,15 @@ int main(void){
 	
 	can_message* msgToReceive;
 	
-	send_can_msg(&msgToSend);
-	msgToReceive = receive_can_msg(0);
 	
-	while(1){
+	//msgToReceive = receive_can_msg(0);
+	
+	/*while(1){
 		for(int i = 0; i < 8; i++){
 			printf("\r   %c | %d | %d   \r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
 			_delay_ms(5000);
 		}
-	}
+	}*/
 	
 	/*
 	mcp2515_init();
@@ -169,6 +169,16 @@ int main(void){
 		_delay_ms(5000);
 	}*/
 	while(1){
+		
+		_delay_ms(5000);
+		send_can_msg(&msgToSend);
+
+		for(int i = 0; i < 8; i++){
+			printf("\r   %c | %d | %d   \r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
+			_delay_ms(1000);
+		}
+		
+		
 		
 		uint8_t val = 1;
 		atmelMap->ADC[1] = 0x04; 

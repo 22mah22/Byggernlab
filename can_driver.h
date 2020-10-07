@@ -15,3 +15,5 @@ uint8_t can_init();
 void send_can_msg(can_message *msg);
 
 can_message* receive_can_msg(uint8_t buffer_number);
+
+uint8_t can_check_complete(uint8_t buffer_number);

@@ -19,11 +19,24 @@ uint8_t can_init(){
 	mcp2515_init();
 	
 	
-	//mcp2515_bit_modify(MCP_CANINTE,0b00001111,0b00001111);
-	mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
+	mcp2515_bit_modify(MCP_CANINTE,0b00000111,0b00000111);
+	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
+	mcp2515_write(MCP_CNF3, 0x01); //0x01 // 0b00000010
+	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010
+	mcp2515_write(MCP_CNF1, 0x43); //0x43 // 0b01000000
+	
+	
+	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
 }
 
 void send_can_msg(can_message *msg){
+	
+	/*while(!can_check_complete(buffer_number)){
+		buffer_number += 1;
+		if(buffer_number > 2){
+			buffer_number = 0;
+		}
+	}*/
 	
 	mcp2515_write(idBufferHighAddress+16*buffer_number, msg->id>>3);
 	uint8_t lowbufferval = mcp2515_read(0x32);
@@ -37,7 +50,14 @@ void send_can_msg(can_message *msg){
 		mcp2515_write(dataBufferAddress+m+16*buffer_number, msg->data[m]);
 	}
 	
+	/*buffer_number += 1;
+	if(buffer_number > 2){
+		buffer_number = 0;
+	}*/
+	
 	mcp2515_request_to_send(MCP_RTS_TX0+buffer_number);
+	//mcp2515_bit_modify(MCP_TXB0CTRL+16*buffer_number,0b00001000,0b00001000);
+	//mcp2515_bit_modify(0x0D,0b00000111,0b00000111);
 }
 
 can_message* receive_can_msg(uint8_t buffer_number){
@@ -60,4 +80,16 @@ can_message* receive_can_msg(uint8_t buffer_number){
 	//flag recieved
 	
 	return &msg;
+}
+
+uint8_t can_check_complete(uint8_t buffer_number){
+	uint8_t active_flags = mcp2515_read(MCP_CANINTF);
+	uint8_t isBufferTransmitted = (active_flags & (MCP_TX0IF+2*buffer_number));
+	printf("%d || \r", active_flags);
+	if(!(isBufferTransmitted & (MCP_TX0IF+2*buffer_number)) ){
+		return 0;
+	}
+	printf("check");
+	mcp2515_bit_modify(MCP_CANINTF,MCP_TX0IF+2*buffer_number,0x00);
+	return 1;
 }

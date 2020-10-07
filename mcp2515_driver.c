@@ -19,7 +19,8 @@ uint8_t mcp2515_init(){
 	
 	/*value = mcp2515_read(MCP_CANCTRL);
 	value = MODE_LOOPBACK; */
-	mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
+	//mcp2515_write(MCP_CANCTRL, MODE_CONFIG); config is default after restart
+	
 }
 
 uint8_t mcp2515_read(uint8_t address){
@@ -30,18 +31,18 @@ uint8_t mcp2515_read(uint8_t address){
 	spi_write(address);
 	result = spi_read();
 	
-	PORTB |= (1<<PB4); //ss
+	PORTB |= (1<<PB4); //!ss
 	
 	return result;
 }
 void mcp2515_write(uint8_t address, uint8_t data){
-	PORTB &= ~(1<<PB4);
+	PORTB &= ~(1<<PB4); //slave select
 	
 	spi_write(MCP_WRITE);
 	spi_write(address);
 	spi_write(data);
 	
-	PORTB |= (1<<PB4);
+	PORTB |= (1<<PB4); //slave deselect
 }
 void mcp2515_request_to_send(uint8_t command){
 	PORTB &= ~(1<<PB4);
