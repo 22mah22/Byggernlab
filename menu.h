@@ -31,3 +31,7 @@ void button_pressed(menu** menuHead);
 void launch_menusystem();
 
 void wojakprinter();
+
+void hello_world();
+
+void choose_character();

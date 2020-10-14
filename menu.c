@@ -3,16 +3,17 @@
 #include <string.h>
 #include "protagonists.h"
 #include "joystick_driver.h"
+#include "menuconfigs.h"
 
 char* string_list[] = {
-	"option1",
-	"option2",
-	"option3",
-	"option4",
-	"option5",
-	"option6",
-	"option7",
-	"option8",
+	"Option 1",
+	"Option 2",
+	"Option 3",
+	"Option 4",
+	"Option 5",
+	"Option 6",
+	"Option 7",
+	"<- Back",
 };
 menu* new_menu(menu* parent){
 	menu* mymenu = malloc(sizeof(menu));
@@ -24,7 +25,6 @@ menu* new_menu(menu* parent){
 	
 	(mymenu->selected) = 0;
 	mymenu->links[7] = parent;
-	mymenu->labels[7] = "<- Back";
 	return mymenu;
 }
 
@@ -92,62 +92,26 @@ void button_pressed(menu** menuHead){
 }
 
 void launch_menusystem(){
-	//SETUP
-	menu** headPointer = NULL;
-	
-	menu* mainMenu;
-	mainMenu = new_menu(NULL);
-	menu* submenu = new_menu(mainMenu);
-	menu* submenu_4 = new_menu(mainMenu);
-	menu* submenu_5 = new_menu(mainMenu);
-	
-	mainMenu->labels[0] = "submenu_demo";
-	mainMenu->labels[1] = "do_nothing";
-	mainMenu->labels[2] = "";
-	mainMenu->labels[3] = "empty_submenu";
-	mainMenu->labels[4] = "empty_submenu";
-	mainMenu->labels[5] = "";
-	mainMenu->labels[6] = "";
-	mainMenu->labels[7] = "";
-	mainMenu->links[0] = submenu;
-	mainMenu->links[3] = submenu_4;
-	mainMenu->links[4] = submenu_5;
-	
-	submenu->labels[0] = "do_nothing";
-	submenu->labels[1] = "laks";
-	submenu->labels[2] = "salami";
-	submenu->labels[3] = "draw a wojak";
-	submenu->f[3] = wojakprinter;
-	submenu->labels[4] = "";
-	submenu->labels[5] = "";
-	submenu->labels[6] = "";
-	
 	
 	//INITIATE
-	write_menu_to_screen(mainMenu);
-	headPointer = &mainMenu;
+	menu** headPointer = NULL;
+	headPointer = &setup_testmenu();
+	write_menu_to_screen(*headPointer);
 	const int *BASE = 0x1000;
 	const int *ADC = 0x1401;
 	volatile amap* atmelMap = (amap*) BASE;
 	 
-	
-	
 	calc_offset();
 
 	//RUN
 	while(1){
 		
-		
 		update_adc_values(&joystick, &slider);
-		
-		
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
 		uint8_t joy_button = PINB & (1<< PINB1);
-		
 	
-		
 		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button<1,slider.l_val,slider.r_val,left_button>1,right_button>1);
 	
 		//_delay_ms(1);
@@ -168,4 +132,119 @@ void wojakprinter(){
 	_delay_ms(1000);
 	while((PINB & (1<< PINB1))){}
 	return;
+}
+
+void hello_world(){
+	clear_oled();
+	oled_write_string(0, "Hello world!", 8);
+	oled_write_string(7, "Press the joystick to return", 8);
+	_delay_ms(1000);
+	while((PINB & (1<< PINB1))){}
+	return;
+}
+
+void choose_character(){
+	clear_oled();
+	oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+
+	//INVERT LEFT PICTURE
+	for (int line = 1; line < 9; line++){
+			int offset = line*5*8;
+			for (int col = 0; col < 5; col++){
+				char c = 0b00000000;
+				for (int i = 0; i < 8; i++){
+					c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+				}
+				go_to_line(line);
+				go_to_column(col/*+p*/);
+				oled_write_data(~c);
+			}
+		}
+	for (int line = 1; line < 9; line++){
+			int offset = line*5*8;
+			for (int col = 0; col < 5; col++){
+				char c = 0b00000000;
+				for (int i = 0; i < 8; i++){
+					c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+				}
+				go_to_line(line);
+				go_to_column(col/*+p*/);
+				oled_write_data(c);
+			}
+		}
+	
+	while(1){
+		update_adc_values(&joystick, &slider);
+		
+		uint8_t left_button = PIND & (1<< PIND4);
+		uint8_t right_button = PIND & (1<< PIND5);
+		uint8_t joy_button = PINB & (1<< PINB1);
+	
+		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		if(current_dir != NEUTRAL && current_dir != WAITING){
+			if (current_dir == RIGHT){
+				//INVERT RIGHT PICTURE
+				clear_oled();
+				oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+
+				for (int line = 1; line < 9; line++){
+					int offset = line*5*8;
+					for (int col = 0; col < 5; col++){
+						char c = 0b00000000;
+						for (int i = 0; i < 8; i++){
+							c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+						}
+						go_to_line(line);
+						go_to_column(col/*+p*/);
+						oled_write_data(c);
+					}
+				}
+				for (int line = 1; line < 9; line++){
+						int offset = line*5*8;
+					for (int col = 0; col < 5; col++){
+						char c = 0b00000000;
+						for (int i = 0; i < 8; i++){
+							c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+						}
+						go_to_line(line);
+						go_to_column(col/*+p*/);
+						oled_write_data(~c);
+					}
+				}
+			}
+			//INVERT LEFT PICTURE
+			else if (current_dir == LEFT){
+				clear_oled();
+				oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+
+				for (int line = 1; line < 9; line++){
+					int offset = line*5*8;
+					for (int col = 0; col < 5; col++){
+						char c = 0b00000000;
+						for (int i = 0; i < 8; i++){
+							c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+						}
+						go_to_line(line);
+						go_to_column(col/*+p*/);
+						oled_write_data(~c);
+					}
+				}
+				for (int line = 1; line < 9; line++){
+						int offset = line*5*8;
+					for (int col = 0; col < 5; col++){
+						char c = 0b00000000;
+						for (int i = 0; i < 8; i++){
+							c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+						}
+						go_to_line(line);
+						go_to_column(col/*+p*/);
+						oled_write_data(c);
+					}
+				}
+			}
+		}
+		if(button_check(joy_button)){
+			return;
+		}
+	}
 }
