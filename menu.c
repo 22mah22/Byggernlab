@@ -123,25 +123,30 @@ void launch_menusystem(){
 	write_menu_to_screen(mainMenu);
 	headPointer = &mainMenu;
 	const int *BASE = 0x1000;
+	const int *ADC = 0x1401;
 	volatile amap* atmelMap = (amap*) BASE;
+	 
 	
+	
+	calc_offset();
+
 	//RUN
 	while(1){
-		uint8_t val = 1;
-		atmelMap->ADC[1] = 0x04;
-		uint8_t valx = atmelMap->ADC[1];
-		uint8_t valy = atmelMap->ADC[1];
-		uint8_t vall = atmelMap->ADC[1];
-		uint8_t valr = atmelMap->ADC[1];
+		
+		
+		update_adc_values(&joystick, &slider);
+		
+		
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
 		uint8_t joy_button = PINB & (1<< PINB1);
 		
-		calc_pos(&joystick,valx,valy);
-		calc_pos_slider(&slider,vall,valr);
 	
-		_delay_ms(1);
+		
+		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button<1,slider.l_val,slider.r_val,left_button>1,right_button>1);
+	
+		//_delay_ms(1);
 		DIRECTION current_dir = joystick_direction(current_dir, joystick);
 		if(current_dir != NEUTRAL && current_dir != WAITING){
 			change_selected(headPointer, current_dir);

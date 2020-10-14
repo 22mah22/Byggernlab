@@ -15,6 +15,7 @@
 #include "printf-stdarg.h"
 
 
+
 /**
  * \brief Initialize can bus with predefined number of rx and tx mailboxes, 
  * CAN0->CAN_MB[0] is used for transmitting
@@ -26,7 +27,7 @@
  */
 uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
 {
-	return can_init(can_br, 2, 3);
+	return can_init(can_br, 1, 2);
 }
 
 /**
@@ -44,6 +45,7 @@ uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
 
 uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 {
+	
 	//Make sure num_rx_mb and num_tx_mb is valid
 	if(num_rx_mb > 8 | num_tx_mb > 8 | num_rx_mb + num_tx_mb > 8)
 	{
@@ -78,21 +80,22 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 	PMC->PMC_PCER1 |= 1 << (ID_CAN0 - 32);
 	
 	//Set baudrate, Phase1, phase2 and propagation delay for can bus. Must match on all nodes!
-	CAN0->CAN_BR = can_br;
+	CAN0->CAN_BR = can_br; 
+	
 
 	/****** Start of mailbox configuration ******/
 
 	uint32_t can_ier = 0;
 
 	/* Configure receive mailboxes */
-	for (int n = num_tx_mb; n <= num_rx_mb; n++)  //Simply one mailbox setup for all messages. You might want to apply filter for them.
+	for (int n = num_tx_mb; n <= num_rx_mb + num_tx_mb; n++)  //Simply one mailbox setup for all messages. You might want to apply filter for them.
 	{
 		CAN0->CAN_MB[n].CAN_MAM = 0; //Accept all messages
 		CAN0->CAN_MB[n].CAN_MID = CAN_MID_MIDE;
 		CAN0->CAN_MB[n].CAN_MMR = (CAN_MMR_MOT_MB_RX);
 		CAN0->CAN_MB[n].CAN_MCR |= CAN_MCR_MTCR;
 
-		//can_ier |= 1 << n; //Enable interrupt on rx mailbox
+		can_ier |= 1 << n; //Enable interrupt on rx mailbox
 	}
 	
 	/*Configure transmit mailboxes */
@@ -172,20 +175,8 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 		uint32_t data_low = CAN0->CAN_MB[rx_mb_id].CAN_MDL;
 		uint32_t data_high = CAN0->CAN_MB[rx_mb_id].CAN_MDH;
 		
-		printf("datahigh: %d  |||||||\r", data_high);
-		for(int j = 0; j < 5*1600000; j++){
-			//printf("%d \r", i);
-		}
-		
-		
 		//Get message ID
 		can_msg->id = (uint16_t)((CAN0->CAN_MB[rx_mb_id].CAN_MID & CAN_MID_MIDvA_Msk) >> CAN_MID_MIDvA_Pos);
-		
-		
-		printf("dataid: %d  |||||||\r", can_msg->id);
-		for(int j = 0; j < 5*1600000; j++){
-			//printf("%d \r", i);
-		}
 		
 		//Get data length
 		can_msg->data_length = (uint8_t)((CAN0->CAN_MB[rx_mb_id].CAN_MSR & CAN_MSR_MDLC_Msk) >> CAN_MSR_MDLC_Pos);
@@ -196,7 +187,6 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 			if(i < 4)
 			{
 				can_msg->data[i] = (char)(data_low & 0xff);
-				
 				data_low = data_low >> 8;
 			}
 			else

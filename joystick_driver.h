@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "DEFINITIONS.h"
+#include "can_driver.h"
 
 
 typedef struct {
@@ -18,13 +19,17 @@ static sliderVal slider;
 
 void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider);
 
-void calc_offset(amap* atmelMap);
+void calc_offset();
 
-void calc_pos_stick(joyVal* values, uint8_t x, uint8_t y);
+void calc_pos_stick(joyVal* values, char* adc);
 
 void calc_pos_slider(sliderVal* values, uint8_t left, uint8_t right);
 
 uint8_t button_check(uint8_t current);
+
+void update_adc_values(joyVal* stick, sliderVal* slider);
+
+void send_stick_can();
 
 
 

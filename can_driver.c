@@ -6,6 +6,8 @@
  */ 
 #include "can_driver.h"
 
+#include <avr/interrupt.h>
+
 #define idBufferHighAddress 0x31
 #define idBufferLowAddress 0x32
 #define dataLengthBufferAddress 0x35
@@ -27,6 +29,17 @@ uint8_t can_init(){
 	
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
+	
+	
+// 	cli();
+// 	
+// 	
+// 	MCUCR |= 1 << ISC01;
+// 	MCUCR &= ~(1 << ISC00);
+// 	GICR |= 1 << INT0;
+// 	
+// 	sei();
+	
 }
 
 void send_can_msg(can_message *msg){

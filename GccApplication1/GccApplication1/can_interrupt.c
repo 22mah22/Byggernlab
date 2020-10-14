@@ -17,6 +17,9 @@
 
 #include "can_controller.h"
 
+#include "joystick.h"
+
+
 #define DEBUG_INTERRUPT 1
 
 /**
@@ -49,14 +52,35 @@ void CAN0_Handler( void )
 		{
 			printf("CAN0 message arrived in non-used mailbox\n\r");
 		}
-
-		if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
-		if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
-		for (int i = 0; i < message.data_length; i++)
-		{
-			if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
+		
+		if(message.id < 0x00ff && message.id > 0x000f){
+			//interpret_joystick
+			joystick.x_val = (message.data[3] == 0x11) ? message.data[0] : message.data[0]*-1;
+			joystick.y_val = (message.data[4] == 0x11) ? message.data[1] : message.data[1]*-1;
+			joystick.butt_pressed = message.data[2];
+			
+			printf("Joystick message/data incoming: \n\r");
+			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
+			if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
+			
+			if(DEBUG_INTERRUPT)printf("joystick x-direction: %d ", joystick.x_val);
+			if(DEBUG_INTERRUPT)printf("\n\r");
+			if(DEBUG_INTERRUPT)printf("joystick y-direction: %d ", joystick.y_val);
+			if(DEBUG_INTERRUPT)printf("\n\r");
+			if(DEBUG_INTERRUPT)printf("joystick button: %d ", joystick.butt_pressed);
+			if(DEBUG_INTERRUPT)printf("\n\r");
 		}
-		if(DEBUG_INTERRUPT)printf("\n\r");
+		
+		else{
+			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
+			if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
+			for (int i = 0; i < message.data_length; i++)
+			{
+				if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
+			}
+			if(DEBUG_INTERRUPT)printf("\n\r");
+		}
+		
 	}
 	
 	if(can_sr & CAN_SR_MB0)

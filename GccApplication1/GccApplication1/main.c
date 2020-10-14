@@ -16,10 +16,11 @@ int main(void)
 {
     /* Initialize the SAM system */
     SystemInit();
-	
-	can_init_def_tx_rx_mb(0x00290561); // 0x00290561 = 0b 00000000001010010000010101100001// 0b000000000000100100010001000100010
+	WDT->WDT_MR |= 1 << 15;
 	configure_uart();
+	can_init_def_tx_rx_mb(0x00290561); // 0x00290561 = 0b 00000000001010010000010101100001// 0b000000000000100100010001000100010
 	
+	printf("hello\n\r");
 	//PMC->PMC_MCKR = 0b00000000000000000000000001110010;
 
 	
@@ -46,17 +47,17 @@ int main(void)
 		PIOA->PIO_CODR = PIO_CODR_P19; //Set Output Data Register, Set Output Data
 		PIOA->PIO_SODR = PIO_SODR_P20; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
-			//printf("%d \r", i);
 		}
 		PIOA->PIO_CODR = PIO_CODR_P20; //Set Output Data Register, Set Output Data
 		
 		
-		if(!can_receive(&msg, 0)){
+		
+		/*if(!can_receive(&msg, 0)){
 			for(int i = 0; i < 8; i++){
 				for(int j = 0; j < 5*1600000; j++){
 					//printf("%d \r", i);
 				}
-				printf("data111: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
+				printf("Data 0: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
 				
 			}
 		}
@@ -65,7 +66,7 @@ int main(void)
 				for(int j = 0; j < 5*1600000; j++){
 					//printf("%d \r", i);
 				}
-				printf("data222: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
+				printf("Data 1: %d %d %d %d          \r", msg.data[i], msg.data_length, msg.id, i);
 				
 			}
 		}
@@ -74,10 +75,10 @@ int main(void)
 				for(int j = 0; j < 5*1600000; j++){
 					//printf("%d \r", i);
 				}
-				printf("data333: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
+				printf("Data 2: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
 				
 			}
-		}
+		}*/
 		
 		
 		

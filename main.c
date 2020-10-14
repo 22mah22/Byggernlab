@@ -6,6 +6,7 @@
  */ 
 
 #include <avr/io.h>
+#include "DEFINITIONS.h"
 #include <util/delay.h>
 #include "USART.h"
 #include <stdio.h>
@@ -13,7 +14,7 @@
 #include "sram_test.h"
 #include "joystick_driver.h"
 #include "OLED_driver.h"
-#include "DEFINITIONS.h"
+
 //#include "protagonists.h"
 #include "mcp2515_driver.h"
 #include "can_driver.h"
@@ -80,10 +81,9 @@ int main(void){
 	*/
 
 	USART_Init ( MYUBRR );
-	SRAM_test(); _delay_ms(5000);
+	SRAM_test(); _delay_ms(1000);
 		
-
-
+		
 	oled_init();
 	clear_oled();
 	
@@ -92,21 +92,7 @@ int main(void){
 	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
 	//character_printer(wojak, 64, 40);
 	//_delay_ms(60000);
-	/*
-	go_to_line(atmelMap, 2);
-	go_to_column(atmelMap, 0);
-	for(int i = 0; i < 127; i++){
-		
-		go_to_column(atmelMap, i);
-		atmelMap->OLED_DATA[1] = 0b10101010;
-		if(i>20){
-			go_to_column(atmelMap, i-21);
-			atmelMap->OLED_DATA[1] = 0x00;
-		}
-		
-		_delay_ms(20);
-		
-	}*/
+
 	for(int i = 0; i < 92; i++){
 		printf("\n");
 		
@@ -120,7 +106,7 @@ int main(void){
 	for(int i = 0; i < 8; i++){
 		msgToSend.data[i] = 97+i;
 	}
-	msgToSend.id = 0xffff;
+	msgToSend.id = 0x0006;
 	
 	can_message* msgToReceive;
 	
@@ -134,38 +120,21 @@ int main(void){
 		}
 	}*/
 	
-	/*
-	mcp2515_init();
-	char ch;
-	while(1){
-		mcp2515_write(0x36, 98);
-		mcp2515_write(0x46, 99);
-		mcp2515_write(0x56, 100);
-		ch = mcp2515_read(0x36);
-		printf("%c |||| \r\n", ch);
-		ch = mcp2515_read(0x46);
-		printf("%c |||| \r\n", ch);
-		ch = mcp2515_read(0x56);
-		printf("%c |||| \r\n", ch);
-		_delay_ms(5000);
-	}*/
 	
-	launch_menusystem();
+	//launch_menusystem();
 	
 	while(1){
 		// CAN BUS TEST
 		
-		_delay_ms(5000);
-		send_can_msg(&msgToSend);
+		//_delay_ms(5000);
+		//send_can_msg(&msgToSend);
+		send_stick_can(&msgToSend);
 
 		for(int i = 0; i < 8; i++){
-			printf("\r   %c | %d | %d   \r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
-			_delay_ms(1000);
+			printf("\r   %c | %d | %d   \n\r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
+			_delay_ms(200);
 		}
-		/*
-		get_adc_data(atmelMap, &joystick, &slider);
-		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button,slider.l_val,slider.r_val,left_button,right_button);
-		*/	
+		
 	}
 
 		/*
