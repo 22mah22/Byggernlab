@@ -23,7 +23,7 @@ int main(void)
 	printf("hello\n\r");
 	//PMC->PMC_MCKR = 0b00000000000000000000000001110010;
 
-	
+	/*
 	PMC->PMC_PCER0 |= PMC_PCER0_PID11; //Peripheral Clock Enable Register 0, Peripheral Clock 14 Enable
 	//PIOA->PIO_WPMR &= ~PIO_WPMR_WPEN; //Write Protect Mode Register, Write Protect Enable
 	
@@ -41,7 +41,7 @@ int main(void)
 	PWM->PWM_CH_NUM[0].PWM_CMR &= ~PWM_CMR_CPOL;
 	PWM->PWM_CH_NUM[2].PWM_CMR &= ~PWM_CMR_CPOL;
 	
-	PIOA->PIO_ABSR |= PIO_ABSR_P5; //PIO set peripheral b on pin 5
+	PIOA->PIO_ABSR |= PIO_ABSR_P5; //PIO set peripheral b on pin 5*/
 	
 	
 	PIOA->PIO_PER |= PIO_PER_P19; //PIO Enable Register, PIO Enable

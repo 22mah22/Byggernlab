@@ -156,8 +156,7 @@ void oled_write_char8(char c){
 }
 
 //warning: array must have percieved height and width divisible by 8
-void character_printer(uint8_t arr[], int width, int height){
-	//for(int p = 0; p < 88; p++){
+void character_printer(uint8_t arr[], int width, int height, uint8_t x_offset, uint8_t y_offset, uint8_t inverted){
 		for (int line = 0; line < height/8; line++){
 			int offset = line*width*8;
 			for (int col = 0; col < width; col++){
@@ -165,11 +164,14 @@ void character_printer(uint8_t arr[], int width, int height){
 				for (int i = 0; i < 8; i++){
 					c |= (pgm_read_byte(&(arr[i*width + col + offset])) << i);
 				}
-				go_to_line(line);
-				go_to_column(col/*+p*/);
-				oled_write_data(c);
+				go_to_line(line + y_offset);
+				go_to_column(col + x_offset);
+				if(inverted){
+					oled_write_data(~c);
+				}
+				else{
+					oled_write_data(c);
+				}
 			}
 		}
-		//clear_oled(atmelMap);
-	//}
 }
