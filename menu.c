@@ -25,7 +25,6 @@ menu* new_menu(menu* parent){
 	(mymenu->selected) = 0;
 	mymenu->links[7] = parent;
 	mymenu->labels[7] = "<- Back";
-	mymenu->fun_ptr = NULL;
 	return mymenu;
 }
 
@@ -84,7 +83,7 @@ void change_selected(menu** menuHead, DIRECTION d){
 
 void button_pressed(menu** menuHead){
 	if((*(menuHead))->f[((*(menuHead))->selected)] != NULL){
-		(*f[((*(menuHead))->selected)])(void);
+		(*(menuHead))->f[((*(menuHead))->selected)]();
 		write_menu_to_screen(*(menuHead));
 	}
 	else if((*(menuHead))->links[((*(menuHead))->selected)] != NULL){
@@ -165,6 +164,8 @@ void launch_menusystem(){
 void wojakprinter(){
 	clear_oled();
 	character_printer(wojak, 64, 40);
+	
+	_delay_ms(1000);
 	while((PINB & (1<< PINB1))){}
 	return;
 }

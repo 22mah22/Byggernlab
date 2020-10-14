@@ -121,8 +121,8 @@ int main(void){
 	}*/
 	
 	
-	//launch_menusystem();
-	
+	launch_menusystem();
+	calc_offset();
 	while(1){
 		// CAN BUS TEST
 		
