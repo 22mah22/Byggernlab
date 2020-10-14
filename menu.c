@@ -18,6 +18,7 @@ menu* new_menu(menu* parent){
 	menu* mymenu = malloc(sizeof(menu));
 	for(unsigned int i = 0; i < 8; i++){
 		mymenu->links[i] = NULL;
+		mymenu->f[i] = NULL;
 		mymenu->labels[i] = string_list[i];
 	}
 	
@@ -82,7 +83,11 @@ void change_selected(menu** menuHead, DIRECTION d){
 }
 
 void button_pressed(menu** menuHead){
-	if((*(menuHead))->links[((*(menuHead))->selected)] != NULL){
+	if((*(menuHead))->f[((*(menuHead))->selected)] != NULL){
+		(*f[((*(menuHead))->selected)])(void);
+		write_menu_to_screen(*(menuHead));
+	}
+	else if((*(menuHead))->links[((*(menuHead))->selected)] != NULL){
 		change_menu((*(menuHead))->links[((*(menuHead))->selected)], menuHead);
 	}
 }
@@ -113,11 +118,11 @@ void launch_menusystem(){
 	submenu->labels[1] = "laks";
 	submenu->labels[2] = "salami";
 	submenu->labels[3] = "draw a wojak";
+	submenu->f[3] = wojakprinter;
 	submenu->labels[4] = "";
 	submenu->labels[5] = "";
 	submenu->labels[6] = "";
 	
-	//submenu->fun_ptr = printwojak_prototyp;
 	
 	//INITIATE
 	write_menu_to_screen(mainMenu);
@@ -152,9 +157,9 @@ void launch_menusystem(){
 	}
 }
 
-/*void printwojak_prototyp(){
-	clear_oled_new();
+void wojakprinter(){
+	clear_oled();
 	character_printer(wojak, 64, 40);
-	//while(joystick.x_val > -90){}
-	while(1){};
-}*/
+	while((PINB & (1<< PINB1))){}
+	return;
+}
