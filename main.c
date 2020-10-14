@@ -23,7 +23,7 @@
 uint8_t currentMenu = 0;
 uint8_t menuMax = 2;
 
-const int *BASE = 0x1000;
+//const int *BASE = 0x1000;
 
 void led_test(void){
 	
@@ -56,7 +56,7 @@ int main(void){
 	
 //  	joyVal joystick; 
 //  	sliderVal slider; 
-	volatile amap* atmelMap = (amap*) BASE;
+//	volatile amap* atmelMap = (amap*) BASE;
 	
 	MCUCR |= (1<<SRE);
 	
@@ -84,8 +84,8 @@ int main(void){
 		
 
 
-	oled_init(atmelMap);
-	clear_oled(atmelMap);
+	oled_init();
+	clear_oled();
 	
 		
 	go_to_line(7);
@@ -112,25 +112,6 @@ int main(void){
 		
 		
 	}
-	
-	menu** headPointer = NULL;
-	
-	menu* mainMenu;
-	mainMenu = new_menu(NULL);
-	menu* submenu = new_menu(mainMenu);
-	submenu->labels[0] = "laks1";
-	submenu->labels[1] = "laks2";
-	submenu->labels[2] = "laks3";
-	submenu->labels[3] = "laks4";
-	submenu->labels[4] = "";
-	submenu->labels[5] = "";
-	submenu->labels[6] = "";
-	mainMenu->links[0] = submenu;
-	//submenu->fun_ptr = printwojak_prototyp;
-	write_menu_to_screen(mainMenu);
-	
-	headPointer = &mainMenu;
-	
 	
 	can_init();
 	
@@ -168,7 +149,11 @@ int main(void){
 		printf("%c |||| \r\n", ch);
 		_delay_ms(5000);
 	}*/
+	
+	launch_menusystem();
+	
 	while(1){
+		// CAN BUS TEST
 		
 		_delay_ms(5000);
 		send_can_msg(&msgToSend);
@@ -179,7 +164,7 @@ int main(void){
 		}
 		
 		
-		
+		/*
 		uint8_t val = 1;
 		atmelMap->ADC[1] = 0x04; 
 		uint8_t valx = atmelMap->ADC[1];
@@ -195,11 +180,11 @@ int main(void){
 	
 			
 		
-		//get_adc_data(atmelMap, &joystick, &slider);
+		get_adc_data(atmelMap, &joystick, &slider);
 		
 		calc_pos(&joystick,valx,valy);
 		calc_pos_slider(&slider,vall,valr);
-		//printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button,slider.l_val,slider.r_val,left_button,right_button);
+		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button,slider.l_val,slider.r_val,left_button,right_button);
 		
 
 		_delay_ms(1);
@@ -211,7 +196,7 @@ int main(void){
 			button_pressed(headPointer);
 		}
 		
-		
+		*/
 		
 		
 		

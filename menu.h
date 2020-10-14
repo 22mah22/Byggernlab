@@ -27,4 +27,6 @@ void change_selected(menu** menuHead, DIRECTION d);
 
 void button_pressed(menu** menuHead);
 
+void launch_menusystem();
+
 //void printwojak_prototyp();

@@ -7,7 +7,7 @@ void oled_write_command(char c);
 
 void oled_write_data(char c);
 
-void oled_init(amap* atmelMap);
+void oled_init();
 
 void go_to_line(uint8_t line);
 
@@ -17,7 +17,7 @@ void oled_start_write_at(amap* atmelMap, uint8_t page, uint8_t lowerCol, uint8_t
 
 void oled_write(amap* atmelMap);
 
-void clear_oled(amap* atmelMap);
+void clear_oled();
 
 void clear_oled_new();
 

@@ -13,7 +13,7 @@ void oled_write_data(char c)
 	ext_ram[0] = c;
 }
 
-void oled_init(amap* atmelMap){
+void oled_init(){
 	oled_write_command(0xae); //display off
 	oled_write_command(0xa1); //segment remap
 	oled_write_command(0xda); //common pads hardware: alternative
@@ -57,7 +57,7 @@ void oled_write(amap* atmelMap){
 	atmelMap->OLED_DATA[1] = 0x0F;
 }
 
-void clear_oled(amap* atmelMap){
+void clear_oled(){
 	for(int i = 0; i < 8 ; i++){
 		go_to_line(i);
 		
