@@ -44,11 +44,11 @@ int main(void)
 		PIOA->PIO_SODR = PIO_SODR_P19; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
-		PIOA->PIO_CODR = PIO_CODR_P19; //Set Output Data Register, Set Output Data
+		//PIOA->PIO_CODR = PIO_CODR_P19; //Clear Output Data Register, Set Output Data
 		PIOA->PIO_SODR = PIO_SODR_P20; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
-		PIOA->PIO_CODR = PIO_CODR_P20; //Set Output Data Register, Set Output Data
+		//PIOA->PIO_CODR = PIO_CODR_P20; //Clear Output Data Register,
 		
 		
 		
