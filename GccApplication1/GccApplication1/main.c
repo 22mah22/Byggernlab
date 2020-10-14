@@ -41,6 +41,8 @@ int main(void)
 	PWM->PWM_CH_NUM[0].PWM_CMR &= ~PWM_CMR_CPOL;
 	PWM->PWM_CH_NUM[2].PWM_CMR &= ~PWM_CMR_CPOL;
 	
+	PIOA->PIO_ABSR |= PIO_ABSR_P5; //PIO set peripheral b on pin 5
+	
 	
 	PIOA->PIO_PER |= PIO_PER_P19; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P19; //Output Enable Register, Output Enable
