@@ -16,5 +16,7 @@ main.c
 
 printf-stdarg.c
 
+timer_driver.c
+
 uart.c
 

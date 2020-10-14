@@ -29,6 +29,18 @@ int main(void)
 	
 	PMC->PMC_PCER0 |= PMC_PCER1_PID36; //enable pwm controller
 	
+	PWM->PWM_CLK |= 0x00010001; // select mck with noe dividers
+	PWM->PWM_ENA |= PWM_ENA_CHID0;
+	PWM->PWM_ENA |= PWM_ENA_CHID2;
+	PWM->PWM_CH_NUM[2].PWM_CPRD |= 0x00000400;
+	PWM->PWM_CH_NUM[0].PWM_CPRD |= 0x00000200;
+	PWM->PWM_CH_NUM[2].PWM_CDTY |= 0x00000200;
+	PWM->PWM_CH_NUM[0].PWM_CDTY |= 0x00000100;
+	PWM->PWM_CH_NUM[0].PWM_CMR |= PWM_CMR_CPRE_MCK; //choose clock a?
+	PWM->PWM_CH_NUM[2].PWM_CMR |= PWM_CMR_CPRE_MCK; //choose clock a?
+	PWM->PWM_CH_NUM[0].PWM_CMR &= ~PWM_CMR_CPOL;
+	PWM->PWM_CH_NUM[2].PWM_CMR &= ~PWM_CMR_CPOL;
+	
 	
 	PIOA->PIO_PER |= PIO_PER_P19; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P19; //Output Enable Register, Output Enable

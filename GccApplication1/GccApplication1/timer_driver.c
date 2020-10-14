@@ -15,6 +15,10 @@ void timer_init(){
 	
 	Tc.TC_CHANNEL[0]->TC_CMR |= 1 << TC_CMR_WAVE; // enables waveform mode
 	Tc.TC_CHANNEL[0]->TC_CMR |= 0x0 << TC_CMR_TCCLKS_Pos; // choose which clock to use*/
-	Pwm.PWM_CLK |= 0x00010001; // select mck with noe dividers
+	/*Pwm.PWM_CLK |= 0x00010001; // select mck with noe dividers
 	Pwm.PWM_ENA |= 0x00000005;
+	Pwm.PWM_CH_NUM[2].PWM_CPRD |= 0x00000400; 
+	Pwm.PWM_CH_NUM[0].PWM_CPRD |= 0x00000200; 
+	Pwm.PWM_CH_NUM[2].PWM_CDTY |= 0x00000200;
+	Pwm.PWM_CH_NUM[0].PWM_CDTY |= 0x00000100;*/
 }
