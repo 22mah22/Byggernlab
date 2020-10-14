@@ -177,24 +177,24 @@ void choose_character(){
 	oled_write_string(0, "CHOOSE!", 8);
 
 	//INVERT LEFT PICTURE
-	for (int line = 1; line < 9; line++){
-			int offset = line*5*8;
-			for (int col = 0; col < 5; col++){
+	for (int line = 1; line < 6; line++){
+			int offset = line*64*8;
+			for (int col = 0; col < 64; col++){
 				char c = 0b00000000;
 				for (int i = 0; i < 8; i++){
-					c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+					c |= (pgm_read_byte(&(wojak[i*64 + col + offset])) << i);
 				}
 				go_to_line(line);
 				go_to_column(col/*+p*/);
 				oled_write_data(~c);
 			}
 		}
-	for (int line = 1; line < 9; line++){
-			int offset = line*5*8;
-			for (int col = 0; col < 5; col++){
+	for (int line = 1; line < 6; line++){
+			int offset = line*64*8;
+			for (int col = 64; col < 2*64; col++){
 				char c = 0b00000000;
 				for (int i = 0; i < 8; i++){
-					c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+					c |= (pgm_read_byte(&(pepe[i*64 + col + offset])) << i);
 				}
 				go_to_line(line);
 				go_to_column(col/*+p*/);
@@ -216,60 +216,60 @@ void choose_character(){
 				clear_oled();
 				oled_write_string(0, "CHOOSE!", 8);
 
-				for (int line = 1; line < 9; line++){
-					int offset = line*5*8;
-					for (int col = 0; col < 5; col++){
-						char c = 0b00000000;
-						for (int i = 0; i < 8; i++){
-							c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+				for (int line = 1; line < 6; line++){
+						int offset = line*64*8;
+						for (int col = 0; col < 64; col++){
+							char c = 0b00000000;
+							for (int i = 0; i < 8; i++){
+								c |= (pgm_read_byte(&(wojak[i*64 + col + offset])) << i);
+							}
+							go_to_line(line);
+							go_to_column(col/*+p*/);
+							oled_write_data(c);
 						}
-						go_to_line(line);
-						go_to_column(col/*+p*/);
-						oled_write_data(c);
 					}
-				}
-				for (int line = 1; line < 9; line++){
-						int offset = line*5*8;
-					for (int col = 0; col < 5; col++){
-						char c = 0b00000000;
-						for (int i = 0; i < 8; i++){
-							c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+				for (int line = 1; line < 6; line++){
+						int offset = line*64*8;
+						for (int col = 64; col < 2*64; col++){
+							char c = 0b00000000;
+							for (int i = 0; i < 8; i++){
+								c |= (pgm_read_byte(&(pepe[i*64 + col + offset])) << i);
+							}
+							go_to_line(line);
+							go_to_column(col/*+p*/);
+							oled_write_data(~c);
 						}
-						go_to_line(line);
-						go_to_column(col/*+p*/);
-						oled_write_data(~c);
 					}
-				}
 			}
 			//INVERT LEFT PICTURE
 			else if (current_dir == LEFT){
 				clear_oled();
 				oled_write_string(0, "CHOOSE!", 8);
 
-				for (int line = 1; line < 9; line++){
-					int offset = line*5*8;
-					for (int col = 0; col < 5; col++){
-						char c = 0b00000000;
-						for (int i = 0; i < 8; i++){
-							c |= (pgm_read_byte(&(wojak[i*5 + col + offset])) << i);
+				for (int line = 1; line < 6; line++){
+						int offset = line*64*8;
+						for (int col = 0; col < 64; col++){
+							char c = 0b00000000;
+							for (int i = 0; i < 8; i++){
+								c |= (pgm_read_byte(&(wojak[i*64 + col + offset])) << i);
+							}
+							go_to_line(line);
+							go_to_column(col/*+p*/);
+							oled_write_data(~c);
 						}
-						go_to_line(line);
-						go_to_column(col/*+p*/);
-						oled_write_data(~c);
 					}
-				}
-				for (int line = 1; line < 9; line++){
-						int offset = line*5*8;
-					for (int col = 0; col < 5; col++){
-						char c = 0b00000000;
-						for (int i = 0; i < 8; i++){
-							c |= (pgm_read_byte(&(pepe[i*5 + col + offset])) << i);
+				for (int line = 1; line < 6; line++){
+						int offset = line*64*8;
+						for (int col = 64; col < 2*64; col++){
+							char c = 0b00000000;
+							for (int i = 0; i < 8; i++){
+								c |= (pgm_read_byte(&(pepe[i*64 + col + offset])) << i);
+							}
+							go_to_line(line);
+							go_to_column(col/*+p*/);
+							oled_write_data(c);
 						}
-						go_to_line(line);
-						go_to_column(col/*+p*/);
-						oled_write_data(c);
 					}
-				}
 			}
 		}
 		if(button_check(joy_button)){
