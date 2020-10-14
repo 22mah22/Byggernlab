@@ -14,5 +14,5 @@ void timer_init(){
 	Tc.TC_CHANNEL[0]->TC_CCR |= 1 << TC_CCR_CLKEN; // enables clock on channel 1
 	
 	Tc.TC_CHANNEL[0]->TC_CMR |= 1 << TC_CMR_WAVE; // enables waveform mode
-	Tc.TC_CHANNEL[0]->TC_CMR |= 0x0 << TC_CMR_TCCLKS_Pos; // enables waveform mode
+	Tc.TC_CHANNEL[0]->TC_CMR |= 0x0 << TC_CMR_TCCLKS_Pos; // choose which clock to use
 }

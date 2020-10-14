@@ -1,9 +1,10 @@
-# include "menuconfigs.h"
 # include "menu.h"
+# include "menuconfigs.h"
+
 
 menu* setup_testmenu(){
 
-	menu* mainMenu;
+	static menu* mainMenu;
 	mainMenu = new_menu(NULL);
 	menu* submenu = new_menu(mainMenu);
 	menu* submenu_5 = new_menu(mainMenu);

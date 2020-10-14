@@ -13,7 +13,7 @@ char* string_list[] = {
 	"Option 5",
 	"Option 6",
 	"Option 7",
-	"<- Back",
+	"<- Back"
 };
 menu* new_menu(menu* parent){
 	menu* mymenu = malloc(sizeof(menu));
@@ -95,7 +95,36 @@ void launch_menusystem(){
 	
 	//INITIATE
 	menu** headPointer = NULL;
-	headPointer = &setup_testmenu();
+	
+		static menu* mainMenu;
+		mainMenu = new_menu(NULL);
+		menu* submenu = new_menu(mainMenu);
+		menu* submenu_5 = new_menu(mainMenu);
+		
+		mainMenu->labels[0] = "Demo of a submenu";
+		mainMenu->labels[1] = "Choose your character";
+		mainMenu->f[1] = choose_character;
+		mainMenu->labels[2] = "";
+		mainMenu->labels[3] = "Write a greeting";
+		mainMenu->f[3] = hello_world;
+		mainMenu->labels[4] = "Default submenu";
+		mainMenu->labels[5] = "";
+		mainMenu->labels[6] = "";
+		mainMenu->labels[7] = "";
+		mainMenu->links[0] = submenu;
+		mainMenu->links[4] = submenu_5;
+		
+		submenu->labels[0] = "Do nothing";
+		submenu->labels[1] = "Loaf around";
+		submenu->labels[2] = "List of funny women";
+		submenu->labels[3] = "Draw a wojak";
+		submenu->f[3] = wojakprinter;
+		submenu->labels[4] = "";
+		submenu->labels[5] = "";
+		submenu->labels[6] = "";
+		
+		
+	headPointer = &mainMenu;
 	write_menu_to_screen(*headPointer);
 	const int *BASE = 0x1000;
 	const int *ADC = 0x1401;
