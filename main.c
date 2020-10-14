@@ -162,44 +162,10 @@ int main(void){
 			printf("\r   %c | %d | %d   \r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
 			_delay_ms(1000);
 		}
-		
-		
 		/*
-		uint8_t val = 1;
-		atmelMap->ADC[1] = 0x04; 
-		uint8_t valx = atmelMap->ADC[1];
-		uint8_t valy = atmelMap->ADC[1];
-		uint8_t vall = atmelMap->ADC[1];
-		uint8_t valr = atmelMap->ADC[1];
-		
-		uint8_t left_button = PIND & (1<< PIND4);
-		uint8_t right_button = PIND & (1<< PIND5);
-		uint8_t joy_button = PINB & (1<< PINB1);
-		
-		
-	
-			
-		
 		get_adc_data(atmelMap, &joystick, &slider);
-		
-		calc_pos(&joystick,valx,valy);
-		calc_pos_slider(&slider,vall,valr);
 		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button,slider.l_val,slider.r_val,left_button,right_button);
-		
-
-		_delay_ms(1);
-		DIRECTION current_dir = joystick_direction(current_dir, joystick);
-		if(current_dir != NEUTRAL && current_dir != WAITING){
-			change_selected(headPointer, current_dir);
-		}
-		if(button_check(joy_button)){
-			button_pressed(headPointer);
-		}
-		
-		*/
-		
-		
-		
+		*/	
 	}
 
 		/*
