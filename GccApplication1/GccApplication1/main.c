@@ -27,6 +27,8 @@ int main(void)
 	PMC->PMC_PCER0 |= PMC_PCER0_PID11; //Peripheral Clock Enable Register 0, Peripheral Clock 14 Enable
 	//PIOA->PIO_WPMR &= ~PIO_WPMR_WPEN; //Write Protect Mode Register, Write Protect Enable
 	
+	PMC->PMC_PCER0 |= PMC_PCER1_PID36; //enable pwm controller
+	
 	
 	PIOA->PIO_PER |= PIO_PER_P19; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P19; //Output Enable Register, Output Enable

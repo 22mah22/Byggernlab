@@ -3,31 +3,31 @@ ice_ice.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000202  00800100  000036ee  00003782  2**0
+  0 .data         000001d8  00800100  000036ee  00003782  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         000036ee  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000015  00800302  00800302  00003984  2**0
+  2 .bss          00000015  008002d8  008002d8  0000395a  2**0
                   ALLOC
-  3 .comment      0000005c  00000000  00000000  00003984  2**0
+  3 .comment      0000005c  00000000  00000000  0000395a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000039e0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000039b8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000280  00000000  00000000  00003a1c  2**0
+  5 .debug_aranges 00000280  00000000  00000000  000039f4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000037c6  00000000  00000000  00003c9c  2**0
+  6 .debug_info   000037c6  00000000  00000000  00003c74  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000014b0  00000000  00000000  00007462  2**0
+  7 .debug_abbrev 000014b0  00000000  00000000  0000743a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001903  00000000  00000000  00008912  2**0
+  8 .debug_line   00001903  00000000  00000000  000088ea  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000006e4  00000000  00000000  0000a218  2**2
+  9 .debug_frame  000006e4  00000000  00000000  0000a1f0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000a61  00000000  00000000  0000a8fc  2**0
+ 10 .debug_str    00000a61  00000000  00000000  0000a8d4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00002604  00000000  00000000  0000b35d  2**0
+ 11 .debug_loc    00002604  00000000  00000000  0000b335  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000003e8  00000000  00000000  0000d961  2**0
+ 12 .debug_ranges 000003e8  00000000  00000000  0000d939  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -740,7 +740,7 @@ Disassembly of section .text:
     1aca:	cd bf       	out	0x3d, r28	; 61
 
 00001acc <__do_copy_data>:
-    1acc:	13 e0       	ldi	r17, 0x03	; 3
+    1acc:	12 e0       	ldi	r17, 0x02	; 2
     1ace:	a0 e0       	ldi	r26, 0x00	; 0
     1ad0:	b1 e0       	ldi	r27, 0x01	; 1
     1ad2:	ee ee       	ldi	r30, 0xEE	; 238
@@ -748,21 +748,21 @@ Disassembly of section .text:
     1ad6:	02 c0       	rjmp	.+4      	; 0x1adc <__do_copy_data+0x10>
     1ad8:	05 90       	lpm	r0, Z+
     1ada:	0d 92       	st	X+, r0
-    1adc:	a2 30       	cpi	r26, 0x02	; 2
+    1adc:	a8 3d       	cpi	r26, 0xD8	; 216
     1ade:	b1 07       	cpc	r27, r17
     1ae0:	d9 f7       	brne	.-10     	; 0x1ad8 <__do_copy_data+0xc>
 
 00001ae2 <__do_clear_bss>:
-    1ae2:	23 e0       	ldi	r18, 0x03	; 3
-    1ae4:	a2 e0       	ldi	r26, 0x02	; 2
-    1ae6:	b3 e0       	ldi	r27, 0x03	; 3
+    1ae2:	22 e0       	ldi	r18, 0x02	; 2
+    1ae4:	a8 ed       	ldi	r26, 0xD8	; 216
+    1ae6:	b2 e0       	ldi	r27, 0x02	; 2
     1ae8:	01 c0       	rjmp	.+2      	; 0x1aec <.do_clear_bss_start>
 
 00001aea <.do_clear_bss_loop>:
     1aea:	1d 92       	st	X+, r1
 
 00001aec <.do_clear_bss_start>:
-    1aec:	a7 31       	cpi	r26, 0x17	; 23
+    1aec:	ad 3e       	cpi	r26, 0xED	; 237
     1aee:	b2 07       	cpc	r27, r18
     1af0:	e1 f7       	brne	.-8      	; 0x1aea <.do_clear_bss_loop>
     1af2:	0e 94 bd 12 	call	0x257a	; 0x257a <main>
@@ -835,7 +835,7 @@ void send_can_msg(can_message *msg){
     1b42:	67 95       	ror	r22
     1b44:	76 95       	lsr	r23
     1b46:	67 95       	ror	r22
-    1b48:	80 91 02 03 	lds	r24, 0x0302	; 0x800302 <__data_end>
+    1b48:	80 91 d8 02 	lds	r24, 0x02D8	; 0x8002d8 <__data_end>
     1b4c:	82 95       	swap	r24
     1b4e:	80 7f       	andi	r24, 0xF0	; 240
     1b50:	8f 5c       	subi	r24, 0xCF	; 207
@@ -852,7 +852,7 @@ void send_can_msg(can_message *msg){
     1b64:	60 7e       	andi	r22, 0xE0	; 224
     1b66:	8f 71       	andi	r24, 0x1F	; 31
     1b68:	68 2b       	or	r22, r24
-    1b6a:	80 91 02 03 	lds	r24, 0x0302	; 0x800302 <__data_end>
+    1b6a:	80 91 d8 02 	lds	r24, 0x02D8	; 0x8002d8 <__data_end>
     1b6e:	82 95       	swap	r24
     1b70:	80 7f       	andi	r24, 0xF0	; 240
     1b72:	8e 5c       	subi	r24, 0xCE	; 206
@@ -867,7 +867,7 @@ void send_can_msg(can_message *msg){
     1b82:	92 81       	ldd	r25, Z+2	; 0x02
     1b84:	68 2f       	mov	r22, r24
     1b86:	69 2b       	or	r22, r25
-    1b88:	80 91 02 03 	lds	r24, 0x0302	; 0x800302 <__data_end>
+    1b88:	80 91 d8 02 	lds	r24, 0x02D8	; 0x8002d8 <__data_end>
     1b8c:	82 95       	swap	r24
     1b8e:	80 7f       	andi	r24, 0xF0	; 240
     1b90:	8b 5c       	subi	r24, 0xCB	; 203
@@ -883,7 +883,7 @@ void send_can_msg(can_message *msg){
     1ba0:	f8 01       	movw	r30, r16
     1ba2:	ec 0f       	add	r30, r28
     1ba4:	f1 1d       	adc	r31, r1
-    1ba6:	80 91 02 03 	lds	r24, 0x0302	; 0x800302 <__data_end>
+    1ba6:	80 91 d8 02 	lds	r24, 0x02D8	; 0x8002d8 <__data_end>
     1baa:	9c 2f       	mov	r25, r28
     1bac:	20 e1       	ldi	r18, 0x10	; 16
     1bae:	82 9f       	mul	r24, r18
@@ -910,7 +910,7 @@ void send_can_msg(can_message *msg){
 	}*/
 	
 	mcp2515_request_to_send(MCP_RTS_TX0+buffer_number);
-    1bc8:	80 91 02 03 	lds	r24, 0x0302	; 0x800302 <__data_end>
+    1bc8:	80 91 d8 02 	lds	r24, 0x02D8	; 0x8002d8 <__data_end>
     1bcc:	8f 57       	subi	r24, 0x7F	; 127
     1bce:	0e 94 0d 0e 	call	0x1c1a	; 0x1c1a <mcp2515_request_to_send>
 	//mcp2515_bit_modify(MCP_TXB0CTRL+16*buffer_number,0b00001000,0b00001000);
@@ -1123,7 +1123,7 @@ uint8_t mcp2515_init(){
     1ce4:	df 93       	push	r29
     1ce6:	0e 94 88 13 	call	0x2710	; 0x2710 <clear_oled>
     1cea:	48 e0       	ldi	r20, 0x08	; 8
-    1cec:	67 e4       	ldi	r22, 0x47	; 71
+    1cec:	6a e3       	ldi	r22, 0x3A	; 58
     1cee:	71 e0       	ldi	r23, 0x01	; 1
     1cf0:	80 e0       	ldi	r24, 0x00	; 0
     1cf2:	0e 94 0e 14 	call	0x281c	; 0x281c <oled_write_string>
@@ -1226,18 +1226,18 @@ uint8_t mcp2515_init(){
     1dc2:	89 e0       	ldi	r24, 0x09	; 9
     1dc4:	d8 12       	cpse	r13, r24
     1dc6:	d5 cf       	rjmp	.-86     	; 0x1d72 <choose_character+0xa8>
-    1dc8:	65 e0       	ldi	r22, 0x05	; 5
-    1dca:	73 e0       	ldi	r23, 0x03	; 3
-    1dcc:	87 e0       	ldi	r24, 0x07	; 7
-    1dce:	93 e0       	ldi	r25, 0x03	; 3
+    1dc8:	6b ed       	ldi	r22, 0xDB	; 219
+    1dca:	72 e0       	ldi	r23, 0x02	; 2
+    1dcc:	8d ed       	ldi	r24, 0xDD	; 221
+    1dce:	92 e0       	ldi	r25, 0x02	; 2
     1dd0:	0e 94 e1 11 	call	0x23c2	; 0x23c2 <update_adc_values>
     1dd4:	80 b3       	in	r24, 0x10	; 16
     1dd6:	80 b3       	in	r24, 0x10	; 16
     1dd8:	86 b3       	in	r24, 0x16	; 22
     1dda:	82 70       	andi	r24, 0x02	; 2
     1ddc:	b8 2e       	mov	r11, r24
-    1dde:	60 91 07 03 	lds	r22, 0x0307	; 0x800307 <joystick>
-    1de2:	70 91 08 03 	lds	r23, 0x0308	; 0x800308 <joystick+0x1>
+    1dde:	60 91 dd 02 	lds	r22, 0x02DD	; 0x8002dd <joystick>
+    1de2:	70 91 de 02 	lds	r23, 0x02DE	; 0x8002de <joystick+0x1>
     1de6:	8c 2d       	mov	r24, r12
     1de8:	0e 94 55 12 	call	0x24aa	; 0x24aa <joystick_direction>
     1dec:	c8 2e       	mov	r12, r24
@@ -1251,7 +1251,7 @@ uint8_t mcp2515_init(){
     1dfc:	66 c0       	rjmp	.+204    	; 0x1eca <choose_character+0x200>
     1dfe:	0e 94 88 13 	call	0x2710	; 0x2710 <clear_oled>
     1e02:	48 e0       	ldi	r20, 0x08	; 8
-    1e04:	67 e4       	ldi	r22, 0x47	; 71
+    1e04:	6a e3       	ldi	r22, 0x3A	; 58
     1e06:	71 e0       	ldi	r23, 0x01	; 1
     1e08:	80 e0       	ldi	r24, 0x00	; 0
     1e0a:	0e 94 0e 14 	call	0x281c	; 0x281c <oled_write_string>
@@ -1347,7 +1347,7 @@ uint8_t mcp2515_init(){
     1ecc:	65 c0       	rjmp	.+202    	; 0x1f98 <choose_character+0x2ce>
     1ece:	0e 94 88 13 	call	0x2710	; 0x2710 <clear_oled>
     1ed2:	48 e0       	ldi	r20, 0x08	; 8
-    1ed4:	67 e4       	ldi	r22, 0x47	; 71
+    1ed4:	6a e3       	ldi	r22, 0x3A	; 58
     1ed6:	71 e0       	ldi	r23, 0x01	; 1
     1ed8:	80 e0       	ldi	r24, 0x00	; 0
     1eda:	0e 94 0e 14 	call	0x281c	; 0x281c <oled_write_string>
@@ -1579,8 +1579,8 @@ void change_selected(menu** menuHead, DIRECTION d){
     209a:	bf 1f       	adc	r27, r31
     209c:	4d 91       	ld	r20, X+
     209e:	5c 91       	ld	r21, X
-    20a0:	41 50       	subi	r20, 0x01	; 1
-    20a2:	53 40       	sbci	r21, 0x03	; 3
+    20a0:	46 5d       	subi	r20, 0xD6	; 214
+    20a2:	52 40       	sbci	r21, 0x02	; 2
     20a4:	89 f4       	brne	.+34     	; 0x20c8 <change_selected+0x58>
 			((*(menuHead))->selected)--;
     20a6:	81 50       	subi	r24, 0x01	; 1
@@ -1603,15 +1603,15 @@ void change_selected(menu** menuHead, DIRECTION d){
     20bc:	bf 1f       	adc	r27, r31
     20be:	4d 91       	ld	r20, X+
     20c0:	5c 91       	ld	r21, X
-    20c2:	41 50       	subi	r20, 0x01	; 1
-    20c4:	53 40       	sbci	r21, 0x03	; 3
+    20c2:	46 5d       	subi	r20, 0xD6	; 214
+    20c4:	52 40       	sbci	r21, 0x02	; 2
     20c6:	79 f3       	breq	.-34     	; 0x20a6 <change_selected+0x36>
 			((*(menuHead))->selected)--;
 		}
 		printf("%d up",((*(menuHead))->selected));
     20c8:	3f 93       	push	r19
     20ca:	2f 93       	push	r18
-    20cc:	8e e5       	ldi	r24, 0x5E	; 94
+    20cc:	82 e4       	ldi	r24, 0x42	; 66
     20ce:	91 e0       	ldi	r25, 0x01	; 1
     20d0:	9f 93       	push	r25
     20d2:	8f 93       	push	r24
@@ -1644,8 +1644,8 @@ void change_selected(menu** menuHead, DIRECTION d){
     2102:	bf 1f       	adc	r27, r31
     2104:	4d 91       	ld	r20, X+
     2106:	5c 91       	ld	r21, X
-    2108:	41 50       	subi	r20, 0x01	; 1
-    210a:	53 40       	sbci	r21, 0x03	; 3
+    2108:	46 5d       	subi	r20, 0xD6	; 214
+    210a:	52 40       	sbci	r21, 0x02	; 2
     210c:	89 f4       	brne	.+34     	; 0x2130 <change_selected+0xc0>
 			((*(menuHead))->selected)++;
     210e:	8f 5f       	subi	r24, 0xFF	; 255
@@ -1668,15 +1668,15 @@ void change_selected(menu** menuHead, DIRECTION d){
     2124:	bf 1f       	adc	r27, r31
     2126:	4d 91       	ld	r20, X+
     2128:	5c 91       	ld	r21, X
-    212a:	41 50       	subi	r20, 0x01	; 1
-    212c:	53 40       	sbci	r21, 0x03	; 3
+    212a:	46 5d       	subi	r20, 0xD6	; 214
+    212c:	52 40       	sbci	r21, 0x02	; 2
     212e:	79 f3       	breq	.-34     	; 0x210e <change_selected+0x9e>
 			((*(menuHead))->selected)++;
 		}
 		printf("%d down",((*(menuHead))->selected));
     2130:	3f 93       	push	r19
     2132:	2f 93       	push	r18
-    2134:	84 e6       	ldi	r24, 0x64	; 100
+    2134:	88 e4       	ldi	r24, 0x48	; 72
     2136:	91 e0       	ldi	r25, 0x01	; 1
     2138:	9f 93       	push	r25
     213a:	8f 93       	push	r24
@@ -1794,27 +1794,27 @@ void change_menu(menu* next_menu, menu** menuHead){
     21ce:	80 e0       	ldi	r24, 0x00	; 0
     21d0:	90 e0       	ldi	r25, 0x00	; 0
     21d2:	0e 94 e1 0f 	call	0x1fc2	; 0x1fc2 <new_menu>
-    21d6:	90 93 04 03 	sts	0x0304, r25	; 0x800304 <mainMenu.2406+0x1>
-    21da:	80 93 03 03 	sts	0x0303, r24	; 0x800303 <mainMenu.2406>
+    21d6:	90 93 da 02 	sts	0x02DA, r25	; 0x8002da <mainMenu.2406+0x1>
+    21da:	80 93 d9 02 	sts	0x02D9, r24	; 0x8002d9 <mainMenu.2406>
 		menu* submenu = new_menu(mainMenu);
     21de:	0e 94 e1 0f 	call	0x1fc2	; 0x1fc2 <new_menu>
     21e2:	ec 01       	movw	r28, r24
 		menu* submenu_5 = new_menu(mainMenu);
-    21e4:	80 91 03 03 	lds	r24, 0x0303	; 0x800303 <mainMenu.2406>
-    21e8:	90 91 04 03 	lds	r25, 0x0304	; 0x800304 <mainMenu.2406+0x1>
+    21e4:	80 91 d9 02 	lds	r24, 0x02D9	; 0x8002d9 <mainMenu.2406>
+    21e8:	90 91 da 02 	lds	r25, 0x02DA	; 0x8002da <mainMenu.2406+0x1>
     21ec:	0e 94 e1 0f 	call	0x1fc2	; 0x1fc2 <new_menu>
 		
 		mainMenu->labels[0] = "Demo of a submenu";
-    21f0:	e0 91 03 03 	lds	r30, 0x0303	; 0x800303 <mainMenu.2406>
-    21f4:	f0 91 04 03 	lds	r31, 0x0304	; 0x800304 <mainMenu.2406+0x1>
-    21f8:	2c e6       	ldi	r18, 0x6C	; 108
+    21f0:	e0 91 d9 02 	lds	r30, 0x02D9	; 0x8002d9 <mainMenu.2406>
+    21f4:	f0 91 da 02 	lds	r31, 0x02DA	; 0x8002da <mainMenu.2406+0x1>
+    21f8:	20 e5       	ldi	r18, 0x50	; 80
     21fa:	31 e0       	ldi	r19, 0x01	; 1
     21fc:	31 83       	std	Z+1, r19	; 0x01
     21fe:	20 83       	st	Z, r18
-		mainMenu->labels[1] = "Choose your character";
-    2200:	e0 91 03 03 	lds	r30, 0x0303	; 0x800303 <mainMenu.2406>
-    2204:	f0 91 04 03 	lds	r31, 0x0304	; 0x800304 <mainMenu.2406+0x1>
-    2208:	2e e7       	ldi	r18, 0x7E	; 126
+		mainMenu->labels[1] = "Choose character";
+    2200:	e0 91 d9 02 	lds	r30, 0x02D9	; 0x8002d9 <mainMenu.2406>
+    2204:	f0 91 da 02 	lds	r31, 0x02DA	; 0x8002da <mainMenu.2406+0x1>
+    2208:	22 e6       	ldi	r18, 0x62	; 98
     220a:	31 e0       	ldi	r19, 0x01	; 1
     220c:	33 83       	std	Z+3, r19	; 0x03
     220e:	22 83       	std	Z+2, r18	; 0x02
@@ -1824,12 +1824,12 @@ void change_menu(menu* next_menu, menu** menuHead){
     2214:	33 a3       	std	Z+35, r19	; 0x23
     2216:	22 a3       	std	Z+34, r18	; 0x22
 		mainMenu->labels[2] = "";
-    2218:	21 e0       	ldi	r18, 0x01	; 1
-    221a:	33 e0       	ldi	r19, 0x03	; 3
+    2218:	26 ed       	ldi	r18, 0xD6	; 214
+    221a:	32 e0       	ldi	r19, 0x02	; 2
     221c:	35 83       	std	Z+5, r19	; 0x05
     221e:	24 83       	std	Z+4, r18	; 0x04
-		mainMenu->labels[3] = "Write a greeting";
-    2220:	44 e9       	ldi	r20, 0x94	; 148
+		mainMenu->labels[3] = "Write greeting";
+    2220:	43 e7       	ldi	r20, 0x73	; 115
     2222:	51 e0       	ldi	r21, 0x01	; 1
     2224:	57 83       	std	Z+7, r21	; 0x07
     2226:	46 83       	std	Z+6, r20	; 0x06
@@ -1839,7 +1839,7 @@ void change_menu(menu* next_menu, menu** menuHead){
     222c:	57 a3       	std	Z+39, r21	; 0x27
     222e:	46 a3       	std	Z+38, r20	; 0x26
 		mainMenu->labels[4] = "Default submenu";
-    2230:	45 ea       	ldi	r20, 0xA5	; 165
+    2230:	42 e8       	ldi	r20, 0x82	; 130
     2232:	51 e0       	ldi	r21, 0x01	; 1
     2234:	51 87       	std	Z+9, r21	; 0x09
     2236:	40 87       	std	Z+8, r20	; 0x08
@@ -1860,22 +1860,22 @@ void change_menu(menu* next_menu, menu** menuHead){
     224a:	80 8f       	std	Z+24, r24	; 0x18
 		
 		submenu->labels[0] = "Do nothing";
-    224c:	85 eb       	ldi	r24, 0xB5	; 181
+    224c:	82 e9       	ldi	r24, 0x92	; 146
     224e:	91 e0       	ldi	r25, 0x01	; 1
     2250:	99 83       	std	Y+1, r25	; 0x01
     2252:	88 83       	st	Y, r24
 		submenu->labels[1] = "Loaf around";
-    2254:	80 ec       	ldi	r24, 0xC0	; 192
+    2254:	8d e9       	ldi	r24, 0x9D	; 157
     2256:	91 e0       	ldi	r25, 0x01	; 1
     2258:	9b 83       	std	Y+3, r25	; 0x03
     225a:	8a 83       	std	Y+2, r24	; 0x02
-		submenu->labels[2] = "List of funny women";
-    225c:	8c ec       	ldi	r24, 0xCC	; 204
+		submenu->labels[2] = "funny women";
+    225c:	89 ea       	ldi	r24, 0xA9	; 169
     225e:	91 e0       	ldi	r25, 0x01	; 1
     2260:	9d 83       	std	Y+5, r25	; 0x05
     2262:	8c 83       	std	Y+4, r24	; 0x04
 		submenu->labels[3] = "Draw a wojak";
-    2264:	80 ee       	ldi	r24, 0xE0	; 224
+    2264:	85 eb       	ldi	r24, 0xB5	; 181
     2266:	91 e0       	ldi	r25, 0x01	; 1
     2268:	9f 83       	std	Y+7, r25	; 0x07
     226a:	8e 83       	std	Y+6, r24	; 0x06
@@ -1897,8 +1897,8 @@ void change_menu(menu* next_menu, menu** menuHead){
 		
 	headPointer = &mainMenu;
 	write_menu_to_screen(*headPointer);
-    2280:	80 91 03 03 	lds	r24, 0x0303	; 0x800303 <mainMenu.2406>
-    2284:	90 91 04 03 	lds	r25, 0x0304	; 0x800304 <mainMenu.2406+0x1>
+    2280:	80 91 d9 02 	lds	r24, 0x02D9	; 0x8002d9 <mainMenu.2406>
+    2284:	90 91 da 02 	lds	r25, 0x02DA	; 0x8002da <mainMenu.2406+0x1>
     2288:	0e 94 14 10 	call	0x2028	; 0x2028 <write_menu_to_screen>
 	const int *BASE = 0x1000;
 	const int *ADC = 0x1401;
@@ -1915,7 +1915,7 @@ void change_menu(menu* next_menu, menu** menuHead){
     2290:	01 e0       	ldi	r16, 0x01	; 1
     2292:	c0 e0       	ldi	r28, 0x00	; 0
     2294:	0f 2e       	mov	r0, r31
-    2296:	fd ee       	ldi	r31, 0xED	; 237
+    2296:	f2 ec       	ldi	r31, 0xC2	; 194
     2298:	ef 2e       	mov	r14, r31
     229a:	f1 e0       	ldi	r31, 0x01	; 1
     229c:	ff 2e       	mov	r15, r31
@@ -1926,10 +1926,10 @@ void change_menu(menu* next_menu, menu** menuHead){
 	while(1){
 		
 		update_adc_values(&joystick, &slider);
-    22a0:	65 e0       	ldi	r22, 0x05	; 5
-    22a2:	73 e0       	ldi	r23, 0x03	; 3
-    22a4:	87 e0       	ldi	r24, 0x07	; 7
-    22a6:	93 e0       	ldi	r25, 0x03	; 3
+    22a0:	6b ed       	ldi	r22, 0xDB	; 219
+    22a2:	72 e0       	ldi	r23, 0x02	; 2
+    22a4:	8d ed       	ldi	r24, 0xDD	; 221
+    22a6:	92 e0       	ldi	r25, 0x02	; 2
     22a8:	0e 94 e1 11 	call	0x23c2	; 0x23c2 <update_adc_values>
 		
 		uint8_t left_button = PIND & (1<< PIND4);
@@ -1957,8 +1957,8 @@ void change_menu(menu* next_menu, menu** menuHead){
     22ce:	9c 2f       	mov	r25, r28
     22d0:	2f 93       	push	r18
     22d2:	9f 93       	push	r25
-    22d4:	e5 e0       	ldi	r30, 0x05	; 5
-    22d6:	f3 e0       	ldi	r31, 0x03	; 3
+    22d4:	eb ed       	ldi	r30, 0xDB	; 219
+    22d6:	f2 e0       	ldi	r31, 0x02	; 2
     22d8:	81 81       	ldd	r24, Z+1	; 0x01
     22da:	1f 92       	push	r1
     22dc:	8f 93       	push	r24
@@ -1971,8 +1971,8 @@ void change_menu(menu* next_menu, menu** menuHead){
     22ea:	8c 2f       	mov	r24, r28
     22ec:	9f 93       	push	r25
     22ee:	8f 93       	push	r24
-    22f0:	e7 e0       	ldi	r30, 0x07	; 7
-    22f2:	f3 e0       	ldi	r31, 0x03	; 3
+    22f0:	ed ed       	ldi	r30, 0xDD	; 221
+    22f2:	f2 e0       	ldi	r31, 0x02	; 2
     22f4:	81 81       	ldd	r24, Z+1	; 0x01
     22f6:	28 2f       	mov	r18, r24
     22f8:	08 2e       	mov	r0, r24
@@ -1993,8 +1993,8 @@ void change_menu(menu* next_menu, menu** menuHead){
 	
 		//_delay_ms(1);
 		DIRECTION current_dir = joystick_direction(current_dir, joystick);
-    2318:	60 91 07 03 	lds	r22, 0x0307	; 0x800307 <joystick>
-    231c:	70 91 08 03 	lds	r23, 0x0308	; 0x800308 <joystick+0x1>
+    2318:	60 91 dd 02 	lds	r22, 0x02DD	; 0x8002dd <joystick>
+    231c:	70 91 de 02 	lds	r23, 0x02DE	; 0x8002de <joystick+0x1>
     2320:	81 2f       	mov	r24, r17
     2322:	0e 94 55 12 	call	0x24aa	; 0x24aa <joystick_direction>
     2326:	18 2f       	mov	r17, r24
@@ -2014,8 +2014,8 @@ void change_menu(menu* next_menu, menu** menuHead){
     2340:	28 f0       	brcs	.+10     	; 0x234c <launch_menusystem+0x17e>
 			change_selected(headPointer, current_dir);
     2342:	61 2f       	mov	r22, r17
-    2344:	83 e0       	ldi	r24, 0x03	; 3
-    2346:	93 e0       	ldi	r25, 0x03	; 3
+    2344:	89 ed       	ldi	r24, 0xD9	; 217
+    2346:	92 e0       	ldi	r25, 0x02	; 2
     2348:	0e 94 38 10 	call	0x2070	; 0x2070 <change_selected>
 		}
 		if(button_check(joy_button)){
@@ -2025,8 +2025,8 @@ void change_menu(menu* next_menu, menu** menuHead){
     2354:	09 f4       	brne	.+2      	; 0x2358 <launch_menusystem+0x18a>
     2356:	a4 cf       	rjmp	.-184    	; 0x22a0 <launch_menusystem+0xd2>
 			button_pressed(headPointer);
-    2358:	83 e0       	ldi	r24, 0x03	; 3
-    235a:	93 e0       	ldi	r25, 0x03	; 3
+    2358:	89 ed       	ldi	r24, 0xD9	; 217
+    235a:	92 e0       	ldi	r25, 0x02	; 2
     235c:	0e 94 bc 10 	call	0x2178	; 0x2178 <button_pressed>
     2360:	9f cf       	rjmp	.-194    	; 0x22a0 <launch_menusystem+0xd2>
 
@@ -2352,10 +2352,10 @@ void send_stick_can(){
     24f8:	cd bf       	out	0x3d, r28	; 61
 	
 	update_adc_values(&joystick, &slider);
-    24fa:	69 e0       	ldi	r22, 0x09	; 9
-    24fc:	73 e0       	ldi	r23, 0x03	; 3
-    24fe:	8b e0       	ldi	r24, 0x0B	; 11
-    2500:	93 e0       	ldi	r25, 0x03	; 3
+    24fa:	6f ed       	ldi	r22, 0xDF	; 223
+    24fc:	72 e0       	ldi	r23, 0x02	; 2
+    24fe:	81 ee       	ldi	r24, 0xE1	; 225
+    2500:	92 e0       	ldi	r25, 0x02	; 2
     2502:	0e 94 e1 11 	call	0x23c2	; 0x23c2 <update_adc_values>
 	
 	can_message msgToSend;
@@ -2363,7 +2363,7 @@ void send_stick_can(){
     2506:	85 e0       	ldi	r24, 0x05	; 5
     2508:	8b 83       	std	Y+3, r24	; 0x03
 	msgToSend.data[0] = abs(joystick.x_val);
-    250a:	30 91 0b 03 	lds	r19, 0x030B	; 0x80030b <joystick>
+    250a:	30 91 e1 02 	lds	r19, 0x02E1	; 0x8002e1 <joystick>
     250e:	83 2f       	mov	r24, r19
     2510:	03 2e       	mov	r0, r19
     2512:	00 0c       	add	r0, r0
@@ -2375,7 +2375,7 @@ void send_stick_can(){
     251e:	91 09       	sbc	r25, r1
     2520:	8c 83       	std	Y+4, r24	; 0x04
 	msgToSend.data[1] = abs(joystick.y_val);
-    2522:	20 91 0c 03 	lds	r18, 0x030C	; 0x80030c <joystick+0x1>
+    2522:	20 91 e2 02 	lds	r18, 0x02E2	; 0x8002e2 <joystick+0x1>
     2526:	82 2f       	mov	r24, r18
     2528:	02 2e       	mov	r0, r18
     252a:	00 0c       	add	r0, r0
@@ -2589,7 +2589,7 @@ int main(void){
 		for(int i = 0; i < 8; i++){
 			printf("\r   %c | %d | %d   \n\r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
     262a:	0f 2e       	mov	r0, r31
-    262c:	fd e7       	ldi	r31, 0x7D	; 125
+    262c:	f2 e5       	ldi	r31, 0x52	; 82
     262e:	ef 2e       	mov	r14, r31
     2630:	f2 e0       	ldi	r31, 0x02	; 2
     2632:	ff 2e       	mov	r15, r31
@@ -2660,7 +2660,7 @@ int main(void){
 	}
 	
 }
-    2690:	80 93 00 12 	sts	0x1200, r24	; 0x801200 <__bss_end+0xee9>
+    2690:	80 93 00 12 	sts	0x1200, r24	; 0x801200 <__bss_end+0xf13>
     2694:	08 95       	ret
 
 00002696 <oled_init>:
@@ -2714,7 +2714,7 @@ int main(void){
 000026f2 <go_to_line>:
     26f2:	87 70       	andi	r24, 0x07	; 7
     26f4:	80 55       	subi	r24, 0x50	; 80
-    26f6:	80 93 00 10 	sts	0x1000, r24	; 0x801000 <__bss_end+0xce9>
+    26f6:	80 93 00 10 	sts	0x1000, r24	; 0x801000 <__bss_end+0xd13>
     26fa:	08 95       	ret
 
 000026fc <go_to_column>:
@@ -3303,7 +3303,7 @@ void character_printer(uint8_t arr[], int width, int height){
         uint16_t write_errors = 0;
         uint16_t retrieval_errors = 0;
         printf("Starting SRAM test...\n");
-    2b18:	83 e9       	ldi	r24, 0x93	; 147
+    2b18:	88 e6       	ldi	r24, 0x68	; 104
     2b1a:	92 e0       	ldi	r25, 0x02	; 2
     2b1c:	0e 94 f7 17 	call	0x2fee	; 0x2fee <puts>
         // rand() stores some internal state, so calling this function in a loop will
@@ -3409,7 +3409,7 @@ void character_printer(uint8_t arr[], int width, int height){
     2b76:	ef 92       	push	r14
     2b78:	1f 93       	push	r17
     2b7a:	0f 93       	push	r16
-    2b7c:	89 ea       	ldi	r24, 0xA9	; 169
+    2b7c:	8e e7       	ldi	r24, 0x7E	; 126
     2b7e:	92 e0       	ldi	r25, 0x02	; 2
     2b80:	9f 93       	push	r25
     2b82:	8f 93       	push	r24
@@ -3551,8 +3551,8 @@ void USART_Init (unsigned int ubrr ){
     2c30:	10 f4       	brcc	.+4      	; 0x2c36 <malloc+0x12>
     2c32:	82 e0       	ldi	r24, 0x02	; 2
     2c34:	90 e0       	ldi	r25, 0x00	; 0
-    2c36:	e0 91 0f 03 	lds	r30, 0x030F	; 0x80030f <__flp>
-    2c3a:	f0 91 10 03 	lds	r31, 0x0310	; 0x800310 <__flp+0x1>
+    2c36:	e0 91 e5 02 	lds	r30, 0x02E5	; 0x8002e5 <__flp>
+    2c3a:	f0 91 e6 02 	lds	r31, 0x02E6	; 0x8002e6 <__flp+0x1>
     2c3e:	20 e0       	ldi	r18, 0x00	; 0
     2c40:	30 e0       	ldi	r19, 0x00	; 0
     2c42:	a0 e0       	ldi	r26, 0x00	; 0
@@ -3577,8 +3577,8 @@ void USART_Init (unsigned int ubrr ){
     2c68:	13 96       	adiw	r26, 0x03	; 3
     2c6a:	1c 93       	st	X, r17
     2c6c:	27 c0       	rjmp	.+78     	; 0x2cbc <malloc+0x98>
-    2c6e:	00 93 0f 03 	sts	0x030F, r16	; 0x80030f <__flp>
-    2c72:	10 93 10 03 	sts	0x0310, r17	; 0x800310 <__flp+0x1>
+    2c6e:	00 93 e5 02 	sts	0x02E5, r16	; 0x8002e5 <__flp>
+    2c72:	10 93 e6 02 	sts	0x02E6, r17	; 0x8002e6 <__flp+0x1>
     2c76:	22 c0       	rjmp	.+68     	; 0x2cbc <malloc+0x98>
     2c78:	21 15       	cp	r18, r1
     2c7a:	31 05       	cpc	r19, r1
@@ -3609,8 +3609,8 @@ void USART_Init (unsigned int ubrr ){
     2cac:	93 83       	std	Z+3, r25	; 0x03
     2cae:	82 83       	std	Z+2, r24	; 0x02
     2cb0:	04 c0       	rjmp	.+8      	; 0x2cba <malloc+0x96>
-    2cb2:	90 93 10 03 	sts	0x0310, r25	; 0x800310 <__flp+0x1>
-    2cb6:	80 93 0f 03 	sts	0x030F, r24	; 0x80030f <__flp>
+    2cb2:	90 93 e6 02 	sts	0x02E6, r25	; 0x8002e6 <__flp+0x1>
+    2cb6:	80 93 e5 02 	sts	0x02E5, r24	; 0x8002e5 <__flp>
     2cba:	fe 01       	movw	r30, r28
     2cbc:	32 96       	adiw	r30, 0x02	; 2
     2cbe:	44 c0       	rjmp	.+136    	; 0x2d48 <malloc+0x124>
@@ -3624,14 +3624,14 @@ void USART_Init (unsigned int ubrr ){
     2cce:	39 83       	std	Y+1, r19	; 0x01
     2cd0:	28 83       	st	Y, r18
     2cd2:	3a c0       	rjmp	.+116    	; 0x2d48 <malloc+0x124>
-    2cd4:	20 91 0d 03 	lds	r18, 0x030D	; 0x80030d <__brkval>
-    2cd8:	30 91 0e 03 	lds	r19, 0x030E	; 0x80030e <__brkval+0x1>
+    2cd4:	20 91 e3 02 	lds	r18, 0x02E3	; 0x8002e3 <__brkval>
+    2cd8:	30 91 e4 02 	lds	r19, 0x02E4	; 0x8002e4 <__brkval+0x1>
     2cdc:	23 2b       	or	r18, r19
     2cde:	41 f4       	brne	.+16     	; 0x2cf0 <malloc+0xcc>
     2ce0:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <__malloc_heap_start>
     2ce4:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <__malloc_heap_start+0x1>
-    2ce8:	30 93 0e 03 	sts	0x030E, r19	; 0x80030e <__brkval+0x1>
-    2cec:	20 93 0d 03 	sts	0x030D, r18	; 0x80030d <__brkval>
+    2ce8:	30 93 e4 02 	sts	0x02E4, r19	; 0x8002e4 <__brkval+0x1>
+    2cec:	20 93 e3 02 	sts	0x02E3, r18	; 0x8002e3 <__brkval>
     2cf0:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__data_start>
     2cf4:	30 91 01 01 	lds	r19, 0x0101	; 0x800101 <__data_start+0x1>
     2cf8:	21 15       	cp	r18, r1
@@ -3643,8 +3643,8 @@ void USART_Init (unsigned int ubrr ){
     2d06:	50 91 05 01 	lds	r21, 0x0105	; 0x800105 <__malloc_margin+0x1>
     2d0a:	24 1b       	sub	r18, r20
     2d0c:	35 0b       	sbc	r19, r21
-    2d0e:	e0 91 0d 03 	lds	r30, 0x030D	; 0x80030d <__brkval>
-    2d12:	f0 91 0e 03 	lds	r31, 0x030E	; 0x80030e <__brkval+0x1>
+    2d0e:	e0 91 e3 02 	lds	r30, 0x02E3	; 0x8002e3 <__brkval>
+    2d12:	f0 91 e4 02 	lds	r31, 0x02E4	; 0x8002e4 <__brkval+0x1>
     2d16:	e2 17       	cp	r30, r18
     2d18:	f3 07       	cpc	r31, r19
     2d1a:	a0 f4       	brcc	.+40     	; 0x2d44 <malloc+0x120>
@@ -3661,8 +3661,8 @@ void USART_Init (unsigned int ubrr ){
     2d30:	48 f0       	brcs	.+18     	; 0x2d44 <malloc+0x120>
     2d32:	4e 0f       	add	r20, r30
     2d34:	5f 1f       	adc	r21, r31
-    2d36:	50 93 0e 03 	sts	0x030E, r21	; 0x80030e <__brkval+0x1>
-    2d3a:	40 93 0d 03 	sts	0x030D, r20	; 0x80030d <__brkval>
+    2d36:	50 93 e4 02 	sts	0x02E4, r21	; 0x8002e4 <__brkval+0x1>
+    2d3a:	40 93 e3 02 	sts	0x02E3, r20	; 0x8002e3 <__brkval>
     2d3e:	81 93       	st	Z+, r24
     2d40:	91 93       	st	Z+, r25
     2d42:	02 c0       	rjmp	.+4      	; 0x2d48 <malloc+0x124>
@@ -3685,21 +3685,21 @@ void USART_Init (unsigned int ubrr ){
     2d60:	32 97       	sbiw	r30, 0x02	; 2
     2d62:	13 82       	std	Z+3, r1	; 0x03
     2d64:	12 82       	std	Z+2, r1	; 0x02
-    2d66:	a0 91 0f 03 	lds	r26, 0x030F	; 0x80030f <__flp>
-    2d6a:	b0 91 10 03 	lds	r27, 0x0310	; 0x800310 <__flp+0x1>
+    2d66:	a0 91 e5 02 	lds	r26, 0x02E5	; 0x8002e5 <__flp>
+    2d6a:	b0 91 e6 02 	lds	r27, 0x02E6	; 0x8002e6 <__flp+0x1>
     2d6e:	10 97       	sbiw	r26, 0x00	; 0
     2d70:	81 f4       	brne	.+32     	; 0x2d92 <free+0x3e>
     2d72:	20 81       	ld	r18, Z
     2d74:	31 81       	ldd	r19, Z+1	; 0x01
     2d76:	82 0f       	add	r24, r18
     2d78:	93 1f       	adc	r25, r19
-    2d7a:	20 91 0d 03 	lds	r18, 0x030D	; 0x80030d <__brkval>
-    2d7e:	30 91 0e 03 	lds	r19, 0x030E	; 0x80030e <__brkval+0x1>
+    2d7a:	20 91 e3 02 	lds	r18, 0x02E3	; 0x8002e3 <__brkval>
+    2d7e:	30 91 e4 02 	lds	r19, 0x02E4	; 0x8002e4 <__brkval+0x1>
     2d82:	28 17       	cp	r18, r24
     2d84:	39 07       	cpc	r19, r25
     2d86:	51 f5       	brne	.+84     	; 0x2ddc <free+0x88>
-    2d88:	f0 93 0e 03 	sts	0x030E, r31	; 0x80030e <__brkval+0x1>
-    2d8c:	e0 93 0d 03 	sts	0x030D, r30	; 0x80030d <__brkval>
+    2d88:	f0 93 e4 02 	sts	0x02E4, r31	; 0x8002e4 <__brkval+0x1>
+    2d8c:	e0 93 e3 02 	sts	0x02E3, r30	; 0x8002e3 <__brkval>
     2d90:	67 c0       	rjmp	.+206    	; 0x2e60 <free+0x10c>
     2d92:	ed 01       	movw	r28, r26
     2d94:	20 e0       	ldi	r18, 0x00	; 0
@@ -3738,8 +3738,8 @@ void USART_Init (unsigned int ubrr ){
     2dd6:	21 15       	cp	r18, r1
     2dd8:	31 05       	cpc	r19, r1
     2dda:	29 f4       	brne	.+10     	; 0x2de6 <free+0x92>
-    2ddc:	f0 93 10 03 	sts	0x0310, r31	; 0x800310 <__flp+0x1>
-    2de0:	e0 93 0f 03 	sts	0x030F, r30	; 0x80030f <__flp>
+    2ddc:	f0 93 e6 02 	sts	0x02E6, r31	; 0x8002e6 <__flp+0x1>
+    2de0:	e0 93 e5 02 	sts	0x02E5, r30	; 0x8002e5 <__flp>
     2de4:	3d c0       	rjmp	.+122    	; 0x2e60 <free+0x10c>
     2de6:	e9 01       	movw	r28, r18
     2de8:	fb 83       	std	Y+3, r31	; 0x03
@@ -3782,20 +3782,20 @@ void USART_Init (unsigned int ubrr ){
     2e32:	3f 4f       	sbci	r19, 0xFF	; 255
     2e34:	82 0f       	add	r24, r18
     2e36:	93 1f       	adc	r25, r19
-    2e38:	20 91 0d 03 	lds	r18, 0x030D	; 0x80030d <__brkval>
-    2e3c:	30 91 0e 03 	lds	r19, 0x030E	; 0x80030e <__brkval+0x1>
+    2e38:	20 91 e3 02 	lds	r18, 0x02E3	; 0x8002e3 <__brkval>
+    2e3c:	30 91 e4 02 	lds	r19, 0x02E4	; 0x8002e4 <__brkval+0x1>
     2e40:	28 17       	cp	r18, r24
     2e42:	39 07       	cpc	r19, r25
     2e44:	69 f4       	brne	.+26     	; 0x2e60 <free+0x10c>
     2e46:	30 97       	sbiw	r30, 0x00	; 0
     2e48:	29 f4       	brne	.+10     	; 0x2e54 <free+0x100>
-    2e4a:	10 92 10 03 	sts	0x0310, r1	; 0x800310 <__flp+0x1>
-    2e4e:	10 92 0f 03 	sts	0x030F, r1	; 0x80030f <__flp>
+    2e4a:	10 92 e6 02 	sts	0x02E6, r1	; 0x8002e6 <__flp+0x1>
+    2e4e:	10 92 e5 02 	sts	0x02E5, r1	; 0x8002e5 <__flp>
     2e52:	02 c0       	rjmp	.+4      	; 0x2e58 <free+0x104>
     2e54:	13 82       	std	Z+3, r1	; 0x03
     2e56:	12 82       	std	Z+2, r1	; 0x02
-    2e58:	b0 93 0e 03 	sts	0x030E, r27	; 0x80030e <__brkval+0x1>
-    2e5c:	a0 93 0d 03 	sts	0x030D, r26	; 0x80030d <__brkval>
+    2e58:	b0 93 e4 02 	sts	0x02E4, r27	; 0x8002e4 <__brkval+0x1>
+    2e5c:	a0 93 e3 02 	sts	0x02E3, r26	; 0x8002e3 <__brkval>
     2e60:	df 91       	pop	r29
     2e62:	cf 91       	pop	r28
     2e64:	08 95       	ret
@@ -3923,12 +3923,12 @@ void USART_Init (unsigned int ubrr ){
     2f58:	02 87       	std	Z+10, r16	; 0x0a
     2f5a:	81 e8       	ldi	r24, 0x81	; 129
     2f5c:	83 83       	std	Z+3, r24	; 0x03
-    2f5e:	80 91 11 03 	lds	r24, 0x0311	; 0x800311 <__iob>
-    2f62:	90 91 12 03 	lds	r25, 0x0312	; 0x800312 <__iob+0x1>
+    2f5e:	80 91 e7 02 	lds	r24, 0x02E7	; 0x8002e7 <__iob>
+    2f62:	90 91 e8 02 	lds	r25, 0x02E8	; 0x8002e8 <__iob+0x1>
     2f66:	89 2b       	or	r24, r25
     2f68:	21 f4       	brne	.+8      	; 0x2f72 <fdevopen+0x54>
-    2f6a:	f0 93 12 03 	sts	0x0312, r31	; 0x800312 <__iob+0x1>
-    2f6e:	e0 93 11 03 	sts	0x0311, r30	; 0x800311 <__iob>
+    2f6a:	f0 93 e8 02 	sts	0x02E8, r31	; 0x8002e8 <__iob+0x1>
+    2f6e:	e0 93 e7 02 	sts	0x02E7, r30	; 0x8002e7 <__iob>
     2f72:	20 97       	sbiw	r28, 0x00	; 0
     2f74:	c9 f0       	breq	.+50     	; 0x2fa8 <fdevopen+0x8a>
     2f76:	d1 87       	std	Z+9, r29	; 0x09
@@ -3936,18 +3936,18 @@ void USART_Init (unsigned int ubrr ){
     2f7a:	83 81       	ldd	r24, Z+3	; 0x03
     2f7c:	82 60       	ori	r24, 0x02	; 2
     2f7e:	83 83       	std	Z+3, r24	; 0x03
-    2f80:	80 91 13 03 	lds	r24, 0x0313	; 0x800313 <__iob+0x2>
-    2f84:	90 91 14 03 	lds	r25, 0x0314	; 0x800314 <__iob+0x3>
+    2f80:	80 91 e9 02 	lds	r24, 0x02E9	; 0x8002e9 <__iob+0x2>
+    2f84:	90 91 ea 02 	lds	r25, 0x02EA	; 0x8002ea <__iob+0x3>
     2f88:	89 2b       	or	r24, r25
     2f8a:	71 f4       	brne	.+28     	; 0x2fa8 <fdevopen+0x8a>
-    2f8c:	f0 93 14 03 	sts	0x0314, r31	; 0x800314 <__iob+0x3>
-    2f90:	e0 93 13 03 	sts	0x0313, r30	; 0x800313 <__iob+0x2>
-    2f94:	80 91 15 03 	lds	r24, 0x0315	; 0x800315 <__iob+0x4>
-    2f98:	90 91 16 03 	lds	r25, 0x0316	; 0x800316 <__iob+0x5>
+    2f8c:	f0 93 ea 02 	sts	0x02EA, r31	; 0x8002ea <__iob+0x3>
+    2f90:	e0 93 e9 02 	sts	0x02E9, r30	; 0x8002e9 <__iob+0x2>
+    2f94:	80 91 eb 02 	lds	r24, 0x02EB	; 0x8002eb <__iob+0x4>
+    2f98:	90 91 ec 02 	lds	r25, 0x02EC	; 0x8002ec <__iob+0x5>
     2f9c:	89 2b       	or	r24, r25
     2f9e:	21 f4       	brne	.+8      	; 0x2fa8 <fdevopen+0x8a>
-    2fa0:	f0 93 16 03 	sts	0x0316, r31	; 0x800316 <__iob+0x5>
-    2fa4:	e0 93 15 03 	sts	0x0315, r30	; 0x800315 <__iob+0x4>
+    2fa0:	f0 93 ec 02 	sts	0x02EC, r31	; 0x8002ec <__iob+0x5>
+    2fa4:	e0 93 eb 02 	sts	0x02EB, r30	; 0x8002eb <__iob+0x4>
     2fa8:	cf 01       	movw	r24, r30
     2faa:	df 91       	pop	r29
     2fac:	cf 91       	pop	r28
@@ -3968,15 +3968,15 @@ void USART_Init (unsigned int ubrr ){
     2fc8:	61 91       	ld	r22, Z+
     2fca:	71 91       	ld	r23, Z+
     2fcc:	af 01       	movw	r20, r30
-    2fce:	80 91 13 03 	lds	r24, 0x0313	; 0x800313 <__iob+0x2>
-    2fd2:	90 91 14 03 	lds	r25, 0x0314	; 0x800314 <__iob+0x3>
+    2fce:	80 91 e9 02 	lds	r24, 0x02E9	; 0x8002e9 <__iob+0x2>
+    2fd2:	90 91 ea 02 	lds	r25, 0x02EA	; 0x8002ea <__iob+0x3>
     2fd6:	0e 94 27 18 	call	0x304e	; 0x304e <vfprintf>
     2fda:	e2 e0       	ldi	r30, 0x02	; 2
     2fdc:	0c 94 39 1b 	jmp	0x3672	; 0x3672 <__epilogue_restores__+0x20>
 
 00002fe0 <putchar>:
-    2fe0:	60 91 13 03 	lds	r22, 0x0313	; 0x800313 <__iob+0x2>
-    2fe4:	70 91 14 03 	lds	r23, 0x0314	; 0x800314 <__iob+0x3>
+    2fe0:	60 91 e9 02 	lds	r22, 0x02E9	; 0x8002e9 <__iob+0x2>
+    2fe4:	70 91 ea 02 	lds	r23, 0x02EA	; 0x8002ea <__iob+0x3>
     2fe8:	0e 94 41 1a 	call	0x3482	; 0x3482 <fputc>
     2fec:	08 95       	ret
 
@@ -3985,8 +3985,8 @@ void USART_Init (unsigned int ubrr ){
     2ff0:	1f 93       	push	r17
     2ff2:	cf 93       	push	r28
     2ff4:	df 93       	push	r29
-    2ff6:	e0 91 13 03 	lds	r30, 0x0313	; 0x800313 <__iob+0x2>
-    2ffa:	f0 91 14 03 	lds	r31, 0x0314	; 0x800314 <__iob+0x3>
+    2ff6:	e0 91 e9 02 	lds	r30, 0x02E9	; 0x8002e9 <__iob+0x2>
+    2ffa:	f0 91 ea 02 	lds	r31, 0x02EA	; 0x8002ea <__iob+0x3>
     2ffe:	23 81       	ldd	r18, Z+3	; 0x03
     3000:	21 ff       	sbrs	r18, 1
     3002:	1b c0       	rjmp	.+54     	; 0x303a <puts+0x4c>
@@ -3996,8 +3996,8 @@ void USART_Init (unsigned int ubrr ){
     300a:	f8 01       	movw	r30, r16
     300c:	81 91       	ld	r24, Z+
     300e:	8f 01       	movw	r16, r30
-    3010:	60 91 13 03 	lds	r22, 0x0313	; 0x800313 <__iob+0x2>
-    3014:	70 91 14 03 	lds	r23, 0x0314	; 0x800314 <__iob+0x3>
+    3010:	60 91 e9 02 	lds	r22, 0x02E9	; 0x8002e9 <__iob+0x2>
+    3014:	70 91 ea 02 	lds	r23, 0x02EA	; 0x8002ea <__iob+0x3>
     3018:	db 01       	movw	r26, r22
     301a:	18 96       	adiw	r26, 0x08	; 8
     301c:	ed 91       	ld	r30, X+

@@ -102,10 +102,10 @@ void launch_menusystem(){
 		menu* submenu_5 = new_menu(mainMenu);
 		
 		mainMenu->labels[0] = "Demo of a submenu";
-		mainMenu->labels[1] = "Choose your character";
+		mainMenu->labels[1] = "Choose character";
 		mainMenu->f[1] = choose_character;
 		mainMenu->labels[2] = "";
-		mainMenu->labels[3] = "Write a greeting";
+		mainMenu->labels[3] = "Write greeting";
 		mainMenu->f[3] = hello_world;
 		mainMenu->labels[4] = "Default submenu";
 		mainMenu->labels[5] = "";
@@ -116,7 +116,7 @@ void launch_menusystem(){
 		
 		submenu->labels[0] = "Do nothing";
 		submenu->labels[1] = "Loaf around";
-		submenu->labels[2] = "List of funny women";
+		submenu->labels[2] = "funny women";
 		submenu->labels[3] = "Draw a wojak";
 		submenu->f[3] = wojakprinter;
 		submenu->labels[4] = "";
@@ -166,7 +166,7 @@ void wojakprinter(){
 void hello_world(){
 	clear_oled();
 	oled_write_string(0, "Hello world!", 8);
-	oled_write_string(7, "Press the joystick to return", 8);
+	oled_write_string(7, "Joystick-return", 8);
 	_delay_ms(1000);
 	while((PINB & (1<< PINB1))){}
 	return;
@@ -174,7 +174,7 @@ void hello_world(){
 
 void choose_character(){
 	clear_oled();
-	oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+	oled_write_string(0, "CHOOSE!", 8);
 
 	//INVERT LEFT PICTURE
 	for (int line = 1; line < 9; line++){
@@ -214,7 +214,7 @@ void choose_character(){
 			if (current_dir == RIGHT){
 				//INVERT RIGHT PICTURE
 				clear_oled();
-				oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+				oled_write_string(0, "CHOOSE!", 8);
 
 				for (int line = 1; line < 9; line++){
 					int offset = line*5*8;
@@ -244,7 +244,7 @@ void choose_character(){
 			//INVERT LEFT PICTURE
 			else if (current_dir == LEFT){
 				clear_oled();
-				oled_write_string(0, "CHOOSE YOUR CHARACTER!", 8);
+				oled_write_string(0, "CHOOSE!", 8);
 
 				for (int line = 1; line < 9; line++){
 					int offset = line*5*8;
