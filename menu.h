@@ -10,9 +10,10 @@ typedef struct
 
 	struct menu* links[8];
 
+	void (*f[8]) (void);
+
 	uint8_t selected;
 	
-	void (*fun_ptr)(void);
 } menu;
 
 menu* new_menu(menu* parent);
@@ -29,4 +30,4 @@ void button_pressed(menu** menuHead);
 
 void launch_menusystem();
 
-//void printwojak_prototyp();
+void wojakprinter();
