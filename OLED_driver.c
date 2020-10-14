@@ -13,6 +13,7 @@ void oled_write_data(char c)
 	ext_ram[0] = c;
 }
 
+
 void oled_init(){
 	oled_write_command(0xae); //display off
 	oled_write_command(0xa1); //segment remap
