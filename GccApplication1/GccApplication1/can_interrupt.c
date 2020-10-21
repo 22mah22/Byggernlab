@@ -31,7 +31,7 @@
  */
 void CAN0_Handler( void )
 {
-	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
+	if(DEBUG_INTERRUPT){}/*printf("CAN0 interrupt\n\r")*/;
 	char can_sr = CAN0->CAN_SR; 
 	
 	//RX interrupt
@@ -59,7 +59,7 @@ void CAN0_Handler( void )
 			joystick.y_val = (message.data[4] == 0x11) ? message.data[1] : message.data[1]*-1;
 			joystick.butt_pressed = message.data[2];
 			
-			printf("Joystick message/data incoming: \n\r");
+			/*printf("Joystick message/data incoming: \n\r");
 			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
 			if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
 			
@@ -68,7 +68,7 @@ void CAN0_Handler( void )
 			if(DEBUG_INTERRUPT)printf("joystick y-direction: %d ", joystick.y_val);
 			if(DEBUG_INTERRUPT)printf("\n\r");
 			if(DEBUG_INTERRUPT)printf("joystick button: %d ", joystick.butt_pressed);
-			if(DEBUG_INTERRUPT)printf("\n\r");
+			if(DEBUG_INTERRUPT)printf("\n\r");*/
 		}
 		
 		else{
@@ -85,7 +85,7 @@ void CAN0_Handler( void )
 	
 	if(can_sr & CAN_SR_MB0)
 	{
-		if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");
+		/*if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");*/
 		
 	//Disable interrupt
 		CAN0->CAN_IDR = CAN_IER_MB0;

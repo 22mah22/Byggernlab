@@ -10,6 +10,7 @@
 #include "can_controller.h"
 #include "uart.h"
 #include "printf-stdarg.h"
+#include "timer_driver.h"
 
 
 int main(void)
@@ -22,7 +23,7 @@ int main(void)
 	
 	printf("hello\n\r");
 	
-	Tc *tc = 0x40080000;
+	
 	//PMC->PMC_MCKR = 0b00000000000000000000000001110010;
 
 	/*
@@ -46,18 +47,26 @@ int main(void)
 	PIOA->PIO_ABSR |= PIO_ABSR_P5; //PIO set peripheral b on pin 5*/
 	
 	
-	PMC->PMC_PCER0 |= PMC_PCER0_PID27; //enable timer counter channel 0
-	
-	PIOB->PIO_PDR |= PIO_PDR_P25; //disable io on pinb 25
-	PIOB->PIO_ABSR |= PIO_ABSR_P25; //PIO set peripheral b on pinb 25*/
-	
-	tc->TC_CHANNEL[0].TC_CMR = 0x0009C000;
-	tc->TC_CHANNEL[0].TC_RA = 0x000b78b8;
-	tc->TC_CHANNEL[0].TC_RC = 0x000CD140;
+	timer_init();
+	timer_change_duty(100);
 	
 	
-	tc->TC_CHANNEL[0].TC_CCR = 0x00000001; //enables the clock
-	tc->TC_CHANNEL[0].TC_CCR |= 0x1 << 2;
+	
+	
+	
+	PMC->PMC_PCER1 = PMC_PCER1_PID37; //enable adc controller
+	
+	ADC->ADC_CHER = 0x1 << ADC_CHER_CH0; //pin a6 på arduino due
+	ADC->ADC_MR = ADC_MR_FREERUN;
+	ADC->ADC_CR = ADC_CR_START;
+	ADC->ADC_IER = ADC_IER_COMPE;
+	ADC->ADC_EMR = ADC_EMR_CMPMODE_LOW;
+	ADC->ADC_EMR = (0x0u << 9);
+	ADC->ADC_EMR = ADC_EMR_CMPSEL(0);
+	ADC->ADC_CWR = ADC_CWR_LOWTHRES(1000);
+	ADC->ADC_EMR = ADC_EMR_CMPFILTER(0);
+	
+	
 	
 	PIOA->PIO_PER |= PIO_PER_P19; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P19; //Output Enable Register, Output Enable
@@ -75,17 +84,25 @@ int main(void)
 		PIOA->PIO_SODR = PIO_SODR_P19; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
-		//PIOA->PIO_CODR = PIO_CODR_P19; //Clear Output Data Register, Set Output Data
+		PIOA->PIO_CODR = PIO_CODR_P19; //Clear Output Data Register, Set Output Data
 		PIOA->PIO_SODR = PIO_SODR_P20; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
 		//printf("%x ", tc->TC_CHANNEL[0].TC_SR);
-		//PIOA->PIO_CODR = PIO_CODR_P20; //Clear Output Data Register,
+		PIOA->PIO_CODR = PIO_CODR_P20; //Clear Output Data Register,
 		
 		
+		move_solenoid();
 		
+		printf("adc_input : %x ::::", ADC->ADC_CDR[0]);
+		printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
+		printf("Gååååållll %d \n\n\n\n\n\n\n\n\n\n\n\n", ADC->ADC_ISR);
 		
-		if(!can_receive(&msg, 0)){
+		if(ADC->ADC_ISR & (0x1 << 26)){
+			printf("Gååååållll %x \n\n\n\n\n\n\n\n\n\n\n\n", ADC->ADC_ISR);
+			
+		}
+		/*if(!can_receive(&msg, 0)){
 			for(int i = 0; i < 8; i++){
 				for(int j = 0; j < 5*1600000; j++){
 					//printf("%d \r", i);
@@ -111,7 +128,7 @@ int main(void)
 				printf("Data 2: %d %d %d %d |||||||\r", msg.data[i], msg.data_length, msg.id, i);
 				
 			}
-		}
+		}*/
 		
 		
 		

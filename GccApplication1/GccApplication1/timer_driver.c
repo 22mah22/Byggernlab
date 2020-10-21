@@ -6,19 +6,40 @@
  */ 
 
 #include "sam.h"
-
+	
+	static Tc *tc = 0x40080000;
 
 void timer_init(){
 	
-	/*Tc.TC_CHANNEL[0]->TC_CCR &= 1 << TC_CCR_CLKDIS; // makes sure disable is off
-	Tc.TC_CHANNEL[0]->TC_CCR |= 1 << TC_CCR_CLKEN; // enables clock on channel 1
 	
-	Tc.TC_CHANNEL[0]->TC_CMR |= 1 << TC_CMR_WAVE; // enables waveform mode
-	Tc.TC_CHANNEL[0]->TC_CMR |= 0x0 << TC_CMR_TCCLKS_Pos; // choose which clock to use*/
-	/*Pwm.PWM_CLK |= 0x00010001; // select mck with noe dividers
-	Pwm.PWM_ENA |= 0x00000005;
-	Pwm.PWM_CH_NUM[2].PWM_CPRD |= 0x00000400; 
-	Pwm.PWM_CH_NUM[0].PWM_CPRD |= 0x00000200; 
-	Pwm.PWM_CH_NUM[2].PWM_CDTY |= 0x00000200;
-	Pwm.PWM_CH_NUM[0].PWM_CDTY |= 0x00000100;*/
+	PMC->PMC_PCER0 |= PMC_PCER0_PID27; //enable timer counter channel 0
+	
+	PIOB->PIO_PDR |= PIO_PDR_P25; //disable io on pinb 25
+	PIOB->PIO_ABSR |= PIO_ABSR_P25; //PIO set peripheral b on pinb 25*/
+	
+	tc->TC_CHANNEL[0].TC_CMR = 0x0009C000;
+	tc->TC_CHANNEL[0].TC_RC = 0x000CD140;
+	
+	
+	tc->TC_CHANNEL[0].TC_CCR = 0x00000001; //enables the clock
+	tc->TC_CHANNEL[0].TC_CCR |= 0x1 << 2;
+}
+
+void timer_change_duty(uint8_t dutyCycle){
+	
+	//max = 84000 = 0x14820
+	//min = 42000 = 0xA410
+	//max - min = 42000
+	// 1 prosent = 420 = 0x1A4
+	//TC_RA = TC_RC - (0xC3D98 + 0x1F8*dutyCycle) = 0x000CD140 - (0xC3D98 + 0x1F8*dutyCycle)
+	if(dutyCycle < 0){
+		dutyCycle = 0;
+	}
+	if(dutyCycle > 100){
+		dutyCycle = 100;
+	}
+	
+	tc->TC_CHANNEL[0].TC_RA = 0x000CD140 - (0xA410 + 0x1A4*dutyCycle); // TC_RA - (min_value + dutyCycle*1prosentOfDifference)
+	
+	
 }

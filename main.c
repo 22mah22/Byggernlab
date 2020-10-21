@@ -129,11 +129,12 @@ int main(void){
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
 		send_stick_can(&msgToSend);
+		_delay_ms(5);
 
-		for(int i = 0; i < 8; i++){
+		/*for(int i = 0; i < 8; i++){
 			printf("\r   %c | %d | %d   \n\r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
 			_delay_ms(200);
-		}
+		}*/
 		
 	}
 

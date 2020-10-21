@@ -16,4 +16,8 @@ typedef struct {
 	int8_t butt_pressed;
 } joyVal;
 
-static joyVal joystick;
+
+
+joyVal joystick;
+
+void move_solenoid();
