@@ -1069,17 +1069,17 @@ END GROUP
  .debug_abbrev  0x00000f8e      0x129 sram_test.o
  .debug_abbrev  0x000010b7       0xdf USART.o
 
-.debug_line     0x00000000     0x1261
+.debug_line     0x00000000     0x1262
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x13f C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
  .debug_line    0x0000013f      0x1da can_driver.o
  .debug_line    0x00000319      0x1dc mcp2515_driver.o
  .debug_line    0x000004f5       0xf5 spi_driver.o
- .debug_line    0x000005ea      0x2cc joystick_driver.o
- .debug_line    0x000008b6      0x25a main.o
- .debug_line    0x00000b10      0x4b8 OLED_driver.o
- .debug_line    0x00000fc8      0x132 sram_test.o
- .debug_line    0x000010fa      0x167 USART.o
+ .debug_line    0x000005ea      0x2cd joystick_driver.o
+ .debug_line    0x000008b7      0x25a main.o
+ .debug_line    0x00000b11      0x4b8 OLED_driver.o
+ .debug_line    0x00000fc9      0x132 sram_test.o
+ .debug_line    0x000010fb      0x167 USART.o
 
 .debug_frame    0x00000000      0x52c
  *(.debug_frame)
@@ -1101,9 +1101,9 @@ END GROUP
                                 0x233 (size before relaxing)
  .debug_str     0x000004a0       0x12 spi_driver.o
                                 0x194 (size before relaxing)
- .debug_str     0x000004b2      0x161 joystick_driver.o
-                                0x31d (size before relaxing)
- .debug_str     0x00000613       0xf7 main.o
+ .debug_str     0x000004b2      0x19d joystick_driver.o
+                                0x317 (size before relaxing)
+ .debug_str     0x0000064f       0xbb main.o
                                 0x2d4 (size before relaxing)
  .debug_str     0x0000070a      0x176 OLED_driver.o
                                 0x35d (size before relaxing)

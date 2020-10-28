@@ -19,7 +19,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00001196  00000000  00000000  00003e88  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001261  00000000  00000000  0000501e  2**0
+  8 .debug_line   00001262  00000000  00000000  0000501e  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  0000052c  00000000  00000000  00006280  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -288,6 +288,12 @@ Disassembly of section .text:
      234:	08 95       	ret
 
 00000236 <calc_offset>:
+			return UP;
+		}
+		return NEUTRAL;
+	}
+	return WAITING;
+}
      236:	e0 e0       	ldi	r30, 0x00	; 0
      238:	f4 e1       	ldi	r31, 0x14	; 20
      23a:	81 e0       	ldi	r24, 0x01	; 1
@@ -409,6 +415,8 @@ Disassembly of section .text:
      332:	08 95       	ret
 
 00000334 <send_stick_can>:
+
+void send_stick_can(){
      334:	cf 93       	push	r28
      336:	df 93       	push	r29
      338:	cd b7       	in	r28, 0x3d	; 61
@@ -419,13 +427,19 @@ Disassembly of section .text:
      342:	de bf       	out	0x3e, r29	; 62
      344:	0f be       	out	0x3f, r0	; 63
      346:	cd bf       	out	0x3d, r28	; 61
+	
+	update_adc_values(&joystick, &slider);
      348:	65 e8       	ldi	r22, 0x85	; 133
      34a:	71 e0       	ldi	r23, 0x01	; 1
      34c:	87 e8       	ldi	r24, 0x87	; 135
      34e:	91 e0       	ldi	r25, 0x01	; 1
      350:	0e 94 26 01 	call	0x24c	; 0x24c <update_adc_values>
+	
+	can_message msgToSend;
+	msgToSend.data_length = 5;
      354:	85 e0       	ldi	r24, 0x05	; 5
      356:	8b 83       	std	Y+3, r24	; 0x03
+	msgToSend.data[0] = abs(joystick.x_val);
      358:	30 91 87 01 	lds	r19, 0x0187	; 0x800187 <joystick>
      35c:	83 2f       	mov	r24, r19
      35e:	03 2e       	mov	r0, r19
@@ -437,6 +451,7 @@ Disassembly of section .text:
      36a:	81 95       	neg	r24
      36c:	91 09       	sbc	r25, r1
      36e:	8c 83       	std	Y+4, r24	; 0x04
+	msgToSend.data[1] = abs(joystick.y_val);
      370:	20 91 88 01 	lds	r18, 0x0188	; 0x800188 <joystick+0x1>
      374:	82 2f       	mov	r24, r18
      376:	02 2e       	mov	r0, r18
@@ -448,28 +463,39 @@ Disassembly of section .text:
      382:	81 95       	neg	r24
      384:	91 09       	sbc	r25, r1
      386:	8d 83       	std	Y+5, r24	; 0x05
+	msgToSend.data[2] = PINB & (1<< PINB1); // button pressed?
      388:	86 b3       	in	r24, 0x16	; 22
      38a:	82 70       	andi	r24, 0x02	; 2
      38c:	8e 83       	std	Y+6, r24	; 0x06
+	
+	uint8_t x_positive = (joystick.x_val < 0) ? 0x00 : 0x11;
      38e:	33 23       	and	r19, r19
      390:	14 f0       	brlt	.+4      	; 0x396 <send_stick_can+0x62>
      392:	81 e1       	ldi	r24, 0x11	; 17
      394:	01 c0       	rjmp	.+2      	; 0x398 <send_stick_can+0x64>
      396:	80 e0       	ldi	r24, 0x00	; 0
+	uint8_t y_positive = (joystick.y_val < 0) ? 0x00 : 0x11;
      398:	22 23       	and	r18, r18
      39a:	14 f0       	brlt	.+4      	; 0x3a0 <send_stick_can+0x6c>
      39c:	91 e1       	ldi	r25, 0x11	; 17
      39e:	01 c0       	rjmp	.+2      	; 0x3a2 <send_stick_can+0x6e>
      3a0:	90 e0       	ldi	r25, 0x00	; 0
+	
+	msgToSend.data[3] = x_positive;
      3a2:	8f 83       	std	Y+7, r24	; 0x07
+	msgToSend.data[4] = y_positive;
      3a4:	98 87       	std	Y+8, r25	; 0x08
+	
+	msgToSend.id = 0x0010;
      3a6:	80 e1       	ldi	r24, 0x10	; 16
      3a8:	90 e0       	ldi	r25, 0x00	; 0
      3aa:	9a 83       	std	Y+2, r25	; 0x02
      3ac:	89 83       	std	Y+1, r24	; 0x01
+	send_can_msg(&msgToSend);
      3ae:	ce 01       	movw	r24, r28
      3b0:	01 96       	adiw	r24, 0x01	; 1
      3b2:	0e 94 6f 00 	call	0xde	; 0xde <send_can_msg>
+	
      3b6:	2b 96       	adiw	r28, 0x0b	; 11
      3b8:	0f b6       	in	r0, 0x3f	; 63
      3ba:	f8 94       	cli

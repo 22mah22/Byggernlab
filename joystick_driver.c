@@ -72,12 +72,14 @@ void update_adc_values(joyVal* stick, sliderVal* slider){
 	
 	if(x>=x_offset){
 		stick->x_val = (x-x_offset)*(100)/(255-x_offset);
-		}else if(x<x_offset){
+	}
+	else if(x<x_offset){
 		stick->x_val = -(x_offset-x)*(100)/x_offset;
 	}
 	if(y>=y_offset){
 		stick->y_val = (y-y_offset)*(100)/(255-y_offset);
-		}else if(y<y_offset){
+	}
+	else if(y<y_offset){
 		stick->y_val = -(y_offset-y)*(100)/y_offset;
 	}
 	

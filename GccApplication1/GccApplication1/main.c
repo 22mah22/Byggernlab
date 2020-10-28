@@ -13,6 +13,7 @@
 #include "timer_driver.h"
 #include "adc_controller.h"
 #include "adc_interrupt.h"
+#include "dac_controller.h"
 
 int main(void)
 {
@@ -52,6 +53,21 @@ int main(void)
 	timer_change_duty(100);
 	
 	adc_init();
+	dac_init();
+	
+	
+	motor_box_init();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -68,6 +84,7 @@ int main(void)
 	volatile CAN_MESSAGE msg;
     while (1) 
     {
+		
 		PIOA->PIO_SODR = PIO_SODR_P19; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
@@ -79,10 +96,15 @@ int main(void)
 		PIOA->PIO_CODR = PIO_CODR_P20; //Clear Output Data Register,
 		
 		
+		
 		move_solenoid();
+		change_motor_speed();
+		encoder_read();
+		
+		
 		//printf("%d",ADC->ADC_ISR);
-		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
-		printf("goals : %d   \n\r", TOTAL_GOALS);
+// 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
+ 		printf("goals : %d   \n\r", TOTAL_GOALS);
 		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
 		

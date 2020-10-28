@@ -21,3 +21,6 @@ typedef struct {
 joyVal joystick;
 
 void move_solenoid();
+
+
+void change_motor_speed();

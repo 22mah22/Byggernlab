@@ -17,7 +17,7 @@
 
 #include "can_controller.h"
 
-#include "joystick.h"
+#include "motor_controller.h"
 
 
 #define DEBUG_INTERRUPT 1
