@@ -8,6 +8,8 @@ mcp2515_driver.c
 
 menu.c
 
+menuconfigs.c
+
 menu_list.c
 
 spi_driver.c

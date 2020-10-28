@@ -159,6 +159,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="adc_controller.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc_controller.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc_interrupt.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc_interrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="can_controller.c">
       <SubType>compile</SubType>
     </Compile>

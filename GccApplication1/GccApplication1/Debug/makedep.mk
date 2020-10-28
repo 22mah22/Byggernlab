@@ -2,6 +2,10 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+adc_controller.c
+
+adc_interrupt.c
+
 can_controller.c
 
 can_interrupt.c

@@ -29,6 +29,7 @@ void calc_offset(){
 
 /* no longer in use
 void calc_pos_stick(joyVal* values, char* adc){
+
 	uint8_t x = adc[0];
 	uint8_t y = adc[0];
 	if(x>=x_offset){

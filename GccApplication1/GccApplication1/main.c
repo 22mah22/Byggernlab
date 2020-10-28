@@ -11,7 +11,8 @@
 #include "uart.h"
 #include "printf-stdarg.h"
 #include "timer_driver.h"
-
+#include "adc_controller.h"
+#include "adc_interrupt.h"
 
 int main(void)
 {
@@ -50,21 +51,7 @@ int main(void)
 	timer_init();
 	timer_change_duty(100);
 	
-	
-	
-	
-	
-	PMC->PMC_PCER1 = PMC_PCER1_PID37; //enable adc controller
-	
-	ADC->ADC_CHER = 0x1 << ADC_CHER_CH0; //pin a6 på arduino due
-	ADC->ADC_MR = ADC_MR_FREERUN;
-	ADC->ADC_CR = ADC_CR_START;
-	ADC->ADC_IER = ADC_IER_COMPE;
-	ADC->ADC_EMR = ADC_EMR_CMPMODE_LOW;
-	ADC->ADC_EMR = (0x0u << 9);
-	ADC->ADC_EMR = ADC_EMR_CMPSEL(0);
-	ADC->ADC_CWR = ADC_CWR_LOWTHRES(1000);
-	ADC->ADC_EMR = ADC_EMR_CMPFILTER(0);
+	adc_init();
 	
 	
 	
@@ -93,15 +80,26 @@ int main(void)
 		
 		
 		move_solenoid();
+		//printf("%d",ADC->ADC_ISR);
+		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
+		printf("goals : %d   \n\r", TOTAL_GOALS);
+		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
-		printf("adc_input : %x ::::", ADC->ADC_CDR[0]);
-		printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
-		printf("Gååååållll %d \n\n\n\n\n\n\n\n\n\n\n\n", ADC->ADC_ISR);
+		
+		if(TO_INCREMENT){
+			printf("to_increment");
+			goal_counter();
+			for(int j = 0; j < 5*1600000; j++){
+				
+			}
+		}
+		
+		/*//printf("Gååååållll %d \n\r", ADC->ADC_ISR);
 		
 		if(ADC->ADC_ISR & (0x1 << 26)){
-			printf("Gååååållll %x \n\n\n\n\n\n\n\n\n\n\n\n", ADC->ADC_ISR);
+			printf("Gååååållll %x \r", ADC->ADC_ISR);
 			
-		}
+		}*/
 		/*if(!can_receive(&msg, 0)){
 			for(int i = 0; i < 8; i++){
 				for(int j = 0; j < 5*1600000; j++){

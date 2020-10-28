@@ -128,6 +128,7 @@ int main(void){
 		
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
+		printf("hei %d \r", 2);
 		send_stick_can(&msgToSend);
 		_delay_ms(5);
 
