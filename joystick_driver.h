@@ -14,8 +14,14 @@ typedef struct {
 	uint8_t r_val;
 } sliderVal;
 
-static joyVal joystick;
-static sliderVal slider;
+typedef enum{
+		LEFT,
+		RIGHT,
+		UP,
+		DOWN,
+		NEUTRAL,
+		WAITING
+} DIRECTION;
 
 void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider);
 
@@ -29,18 +35,8 @@ uint8_t button_check(uint8_t current);
 
 void update_adc_values(joyVal* stick, sliderVal* slider);
 
-void send_stick_can();
+void send_stick_can(joyVal joystick, sliderVal slider);
 
-
-
-typedef enum{
-		LEFT,
-		RIGHT,
-		UP,
-		DOWN,
-		NEUTRAL,
-		WAITING
-} DIRECTION;
 
 //DIRECTION joystick_direction(joyVal stick);
 

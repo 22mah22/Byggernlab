@@ -2,13 +2,9 @@
 
 
 
+
 uint8_t x_offset = 160;
 uint8_t y_offset = 160;
-
-uint8_t previous = 1;
-DIRECTION joydir = NEUTRAL;
-
-DIRECTION direction;
 
 
 void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider){
@@ -64,7 +60,7 @@ uint8_t button_check(uint8_t current){
 
 void update_adc_values(joyVal* stick, sliderVal* slider){
 	volatile char *adc = (char *) 0x1400;
-	adc[0] = 0x01; // Må skrives til for å oppdatere adc registrene.
+	adc[0] = 0x01; // Mï¿½ skrives til for ï¿½ oppdatere adc registrene.
 	uint8_t x = adc[0];
 	uint8_t y = adc[0];
 	uint8_t left = adc[0];
@@ -133,7 +129,7 @@ DIRECTION joystick_direction(DIRECTION dir, joyVal stick){
 	return WAITING;
 }
 
-void send_stick_can(){
+void send_stick_can(joyVal joystick, sliderVal slider){
 	
 	update_adc_values(&joystick, &slider);
 	

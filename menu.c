@@ -3,6 +3,7 @@
 #include <string.h>
 #include "protagonists.h"
 #include "joystick_driver.h"
+#include "system_states.h"
 #include "menuconfigs.h"
 
 char* string_list[] = {
@@ -39,7 +40,7 @@ void write_menu_to_screen(menu* menuPointer){
 
 //Husk: Funksjoner i C kan bare endre minneomr�det til pekerene som sendes inn.
 //Dvs at denne setter minneomr�det prev peker p� til minneomr�det next peker p�.
-//Har dette �nsket hensikt? Kan det l�ses med � ha en overordnet peker-til-peker?
+//Det l�ses med � ha en overordnet peker-til-peker
 void change_menu(menu* next_menu, menu** menuHead){
 	/*if (next_menu->fun_ptr != NULL){
 		(*(next_menu->fun_ptr));
@@ -134,8 +135,8 @@ void launch_menusystem(){
 
 	//RUN
 	while(1){
-		
-		update_adc_values(&joystick, &slider);
+		//Using global state variables
+		update_adc_values(&(systemState->joyvals), &(systemState->slidervals));
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
@@ -144,7 +145,7 @@ void launch_menusystem(){
 		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button<1,slider.l_val,slider.r_val,left_button>1,right_button>1);
 	
 		//_delay_ms(1);
-		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		DIRECTION current_dir = joystick_direction(current_dir, systemState->joyvals);
 		if(current_dir != NEUTRAL && current_dir != WAITING){
 			change_selected(headPointer, current_dir);
 		}
@@ -183,13 +184,13 @@ void choose_character(){
 	uint8_t chosen = 0;
 	
 	while(1){
-		update_adc_values(&joystick, &slider);
+		update_adc_values(&(systemState->joyvals), &(systemState->slidervals));
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
 		uint8_t joy_button = PINB & (1<< PINB1);
 	
-		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		DIRECTION current_dir = joystick_direction(current_dir, systemState->joyvals);
 		if(current_dir != NEUTRAL && current_dir != WAITING){
 			if (current_dir == RIGHT){
 				//INVERT RIGHT PICTURE
