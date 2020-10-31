@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 
+void start_timer();
 void ADC_Handler       ( void );
 
 extern uint8_t TO_INCREMENT;

@@ -125,7 +125,7 @@ Discarded input sections
                 0x00000000       0x68 menu.o
  .debug_ranges  0x00000000       0x58 menu.o
  .debug_line    0x00000000      0x514 menu.o
- .debug_str     0x00000000      0x44e menu.o
+ .debug_str     0x00000000      0x448 menu.o
  .comment       0x00000000       0x31 menu.o
  .debug_frame   0x00000000      0x19c menu.o
  .text          0x00000000        0x0 menuconfigs.o

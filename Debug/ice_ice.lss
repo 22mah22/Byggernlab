@@ -436,8 +436,8 @@ void send_stick_can(){
      350:	0e 94 26 01 	call	0x24c	; 0x24c <update_adc_values>
 	
 	can_message msgToSend;
-	msgToSend.data_length = 5;
-     354:	85 e0       	ldi	r24, 0x05	; 5
+	msgToSend.data_length = 7;
+     354:	87 e0       	ldi	r24, 0x07	; 7
      356:	8b 83       	std	Y+3, r24	; 0x03
 	msgToSend.data[0] = abs(joystick.x_val);
      358:	30 91 87 01 	lds	r19, 0x0187	; 0x800187 <joystick>

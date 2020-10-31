@@ -16,6 +16,8 @@
  void move_solenoid(){
 	 //printf("joystick.x_val : %d \n\r", joystick.x_val);
 	 
+	 
+	 
 	 if(joystick.x_val < 0){
 		 uint8_t val = 50-abs(joystick.x_val)*0.5;
 		 timer_change_duty(val);

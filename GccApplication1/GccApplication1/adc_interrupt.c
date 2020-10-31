@@ -12,18 +12,24 @@
 #include "sam.h"
 
 #include "printf-stdarg.h"
-
-
+#include <time.h>
 
 #define DEBUG_INTERRUPT 1
 
 uint8_t TO_INCREMENT = 0;
-uint8_t GOAL_IN_ACTION = 0;
+int8_t GOAL_IN_ACTION = 0;
 uint8_t TOTAL_GOALS = 0;
+time_t clockcycles = 84000;
+
+
 
 void ADC_Handler( void ){
 	//printf("Aa");
-
+	/*if(SysTick->VAL < clockcycles - 42000){
+		printf("Aa");
+		TOTAL_GOALS += 1;
+		clockcycles = SysTick->VAL;
+	}*/
 	TO_INCREMENT = 1; 
 	int i = ADC->ADC_ISR;
 	

@@ -54,6 +54,7 @@ int main(void)
 	timer_init();
 	timer_change_duty(100);
 	//init_interrupt_PI();
+	init_ch1_PI();
 	
 	adc_init();
 	dac_init();
@@ -117,6 +118,7 @@ int main(void)
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
  		printf("goals : %d   \n\r", TOTAL_GOALS);
+		 printf("left_slider : %d   \n\r", joystick.left_val);
 		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
 		
