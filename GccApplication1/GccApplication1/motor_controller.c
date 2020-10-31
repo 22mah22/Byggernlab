@@ -11,12 +11,12 @@
  #include "sam.h"
  
  uint8_t previous = 1;
- 
+ uint8_t y_value_pi = 0;
  
  void move_solenoid(){
 	 //printf("joystick.x_val : %d \n\r", joystick.x_val);
 	 
-	 
+	  
 	 
 	 if(joystick.x_val < 0){
 		 uint8_t val = 50-abs(joystick.x_val)*0.5;
@@ -107,6 +107,7 @@ uint8_t encoder_read(){
 	
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
+	y_value_pi = (9272-encoder_data_int)/92; //scaled so that value is 0-100;
  	printf("Encoder data: %x \n\r", encoder_data_int);
 // 	
 // 	if(encoder_data &= (1 << 15)){
