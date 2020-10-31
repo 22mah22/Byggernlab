@@ -58,6 +58,8 @@ void CAN0_Handler( void )
 			joystick.x_val = (message.data[3] == 0x11) ? message.data[0] : message.data[0]*-1;
 			joystick.y_val = (message.data[4] == 0x11) ? message.data[1] : message.data[1]*-1;
 			joystick.butt_pressed = message.data[2];
+			joystick.left_val = message.data[5];
+			joystick.right_val = message.data[6];
 			
 			/*printf("Joystick message/data incoming: \n\r");
 			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);

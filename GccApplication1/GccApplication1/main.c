@@ -14,6 +14,8 @@
 #include "adc_controller.h"
 #include "adc_interrupt.h"
 #include "dac_controller.h"
+#include "motor_controller.h"
+
 
 int main(void)
 {
@@ -51,6 +53,7 @@ int main(void)
 	
 	timer_init();
 	timer_change_duty(100);
+	//init_interrupt_PI();
 	
 	adc_init();
 	dac_init();
@@ -65,8 +68,10 @@ int main(void)
 	
 	
 	
-	
-	
+	//enable and set high, pin to controll servo shoot, pin50 on shield
+	PIOC->PIO_PER |= PIO_PER_P13; 
+	PIOC->PIO_OER |= PIO_OER_P13; 
+	PIOC->PIO_SODR |= PIO_SODR_P13;
 	
 	
 	
@@ -93,13 +98,20 @@ int main(void)
 		for(int i = 0; i < 1600000; i++){
 		}
 		//printf("%x ", tc->TC_CHANNEL[0].TC_SR);
-		PIOA->PIO_CODR = PIO_CODR_P20; //Clear Output Data Register,
+		PIOA->PIO_CODR |= PIO_CODR_P20; //Clear Output Data Register,
 		
 		
 		
 		move_solenoid();
 		change_motor_speed();
 		encoder_read();
+		
+		if(button_check(joystick.butt_pressed)){
+			PIOC->PIO_CODR |= PIO_CODR_P13;
+			for(int i = 0; i < 1600000; i++){
+			}
+			PIOC->PIO_SODR |= PIO_SODR_P13;
+		}
 		
 		
 		//printf("%d",ADC->ADC_ISR);

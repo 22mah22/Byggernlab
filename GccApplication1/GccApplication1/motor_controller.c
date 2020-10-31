@@ -10,7 +10,7 @@
  #include "uart.h"
  #include "sam.h"
  
- 
+ uint8_t previous = 1;
  
  
  void move_solenoid(){
@@ -105,7 +105,7 @@ uint8_t encoder_read(){
 	
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
-// 	printf("Encoder data: %x \n\r", encoder_data_int);
+ 	printf("Encoder data: %x \n\r", encoder_data_int);
 // 	
 // 	if(encoder_data &= (1 << 15)){
 // 		//encoder_data = (~encoder_data + 1);
@@ -114,4 +114,16 @@ uint8_t encoder_read(){
 // 	else{
 // 		printf("Data positive: %d \n\r", encoder_data);
 // 	}
+}
+
+uint8_t button_check(uint8_t current){
+	if(current == 0 && previous == 1){
+		previous = 0;
+		//printf("%s", "B");
+		return 1;
+		}else if(current != 0){
+		previous = 1;
+		//printf("%s", "C");
+	}
+	return 0;
 }

@@ -148,6 +148,8 @@ void send_stick_can(){
 	
 	msgToSend.data[3] = x_positive;
 	msgToSend.data[4] = y_positive;
+	msgToSend.data[5] = slider.l_val;
+	msgToSend.data[6] = slider.r_val;
 	
 	msgToSend.id = 0x0010;
 	send_can_msg(&msgToSend);

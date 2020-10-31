@@ -81,7 +81,7 @@ main.d main.o: .././main.c \
  C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.50\include/pio/sam3x8e.h \
  .././can_controller.h .././uart.h .././printf-stdarg.h \
  .././timer_driver.h .././adc_controller.h .././adc_interrupt.h \
- .././dac_controller.h
+ .././dac_controller.h .././motor_controller.h
 
 C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.50\include/sam.h:
 
@@ -256,3 +256,5 @@ C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\SAM3X_DFP\1.0.50\include/p
 .././adc_interrupt.h:
 
 .././dac_controller.h:
+
+.././motor_controller.h:

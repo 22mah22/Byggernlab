@@ -14,6 +14,8 @@ typedef struct {
 	int8_t x_val;
 	int8_t y_val;
 	int8_t butt_pressed;
+	int8_t left_val;
+	int8_t right_val;
 } joyVal;
 
 
@@ -24,3 +26,9 @@ void move_solenoid();
 
 
 void change_motor_speed();
+
+void motor_box_init();
+
+uint8_t encoder_read();
+
+uint8_t button_check(uint8_t current);
