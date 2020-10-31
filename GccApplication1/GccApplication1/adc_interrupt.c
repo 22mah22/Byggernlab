@@ -19,15 +19,15 @@
 uint8_t TO_INCREMENT = 0;
 int8_t GOAL_IN_ACTION = 0;
 uint8_t TOTAL_GOALS = 0;
-static uint16_t last_goal_time = 0;
+static uint32_t last_goal_time = 0;
 
 
 
 void ADC_Handler( void ){
 	//printf("Aa");
-	if(last_goal_time + 84000 < time_running_ms()){
+	if(last_goal_time + 800 < return_milliseconds()){
 		TOTAL_GOALS += 1;
-		last_goal_time = time_running_ms();
+		last_goal_time = return_milliseconds();
 	}
 
 	//TO_INCREMENT = 1; 

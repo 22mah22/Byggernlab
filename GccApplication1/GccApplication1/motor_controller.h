@@ -27,6 +27,8 @@ void move_solenoid();
 
 void change_motor_speed();
 
+void change_motor_speed_using_paadrag(int paadrag);
+
 void motor_box_init();
 
 uint8_t encoder_read();

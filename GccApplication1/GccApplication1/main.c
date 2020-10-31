@@ -15,7 +15,7 @@
 #include "adc_interrupt.h"
 #include "dac_controller.h"
 #include "motor_controller.h"
-
+#include "timer.h"
 
 int main(void)
 {
@@ -88,6 +88,7 @@ int main(void)
 	PIOA->PIO_PER |= PIO_PER_P9; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P9; //Output Enable Register, Output Enable*/
 	volatile CAN_MESSAGE msg;
+	SysTick_init();
     while (1) 
     {
 		
@@ -118,13 +119,13 @@ int main(void)
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
  		printf("goals : %d   \n\r", TOTAL_GOALS);
-		 printf("left_slider : %d   \n\r", joystick.left_val);
+		//printf("left_slider : %d   \n\r", joystick.left_val);
 		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
 		
 		if(TO_INCREMENT){
 			printf("to_increment");
-			goal_counter();
+			//goal_counter();
 			for(int j = 0; j < 5*1600000; j++){
 				
 			}

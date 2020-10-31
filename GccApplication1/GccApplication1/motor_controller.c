@@ -47,6 +47,20 @@
 		 DACC->DACC_CDR = 0;
 	 }
  }
+
+void change_motor_speed_using_paadrag(int paadrag){
+	//printf("joystick.y_val : %d \n\r", joystick.y_val);
+	
+	if(paadrag < 0){
+		PIOD->PIO_CODR = PIO_CODR_P10; //set direction left
+		uint16_t val = abs(paadrag);
+		DACC->DACC_CDR = val;
+	}else{
+		PIOD->PIO_SODR = PIO_SODR_P10; //set direction right
+		uint16_t val2 = abs(paadrag);
+		DACC->DACC_CDR = val2;
+	}
+}
  
 
 void motor_box_init(){

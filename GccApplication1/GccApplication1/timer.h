@@ -1,8 +1,10 @@
 #pragma once
 #include <stdint.h>
 
-void timer_init();
+void SysTick_init();
 
 void SysTick_Handler       ( void );
 
-uint16_t time_running_ms();
+//uint32_t time_running_ms();
+
+uint32_t return_milliseconds();

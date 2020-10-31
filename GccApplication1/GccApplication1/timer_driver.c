@@ -48,18 +48,19 @@ void timer_change_duty(uint8_t dutyCycle){
 	
 }
 
-int error = 0;
+double error = 0;
 int paadrag = 0;
-int kp = 5;
-int ki = 1;
-int sum_error = 0;
-int T_periode = 1/50;
+double kp = 15;
+double ki = 7;
+double sum_error = 0;
+double T_periode = 0.02;
 
 void TC1_Handler( void ){
 	
 	error = joystick.left_val - y_value_pi;
 	sum_error += error;
 	paadrag = kp*error+T_periode*ki*sum_error;
+	change_motor_speed_using_paadrag(paadrag);
 	printf("e: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC1);
@@ -76,7 +77,7 @@ void init_ch1_PI(){
 	PIOB->PIO_ABSR |= PIO_ABSR_P0; //PIO set peripheral b on pinb 0*/
 	
 	tc->TC_CHANNEL[1].TC_CMR = 0x0009C000;
-	tc->TC_CHANNEL[1].TC_RC = 0x005CD140;
+	tc->TC_CHANNEL[1].TC_RC = 0x000CD140;
 	
 	tc->TC_CHANNEL[1].TC_IER |= TC_IER_CPCS; // enable interrupt on compare with RC
 	

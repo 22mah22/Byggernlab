@@ -1,17 +1,22 @@
 #include "timer.h"
 #include <stdint.h>
+#include "sam.h"
 
-static uint16_t seconds;
+static uint32_t milliseconds;
+//SysTick_Type* SysTick = SysTick_BASE;
 
-void timer_init(){
-    SysTick->CTRL = 0b111;
-    SysTick->LOAD = 84000;
+void SysTick_init(){
+    SysTick->CTRL = 0b011;
+    SysTick->LOAD = 0x2904;
 }
 
 void SysTick_Handler       ( void ){
-    seconds++;
+    milliseconds++;
 }
 
-uint16_t time_running_ms(){
-    return (seconds*1000)+(SysTick->VAL)/84;
+uint32_t return_milliseconds(){
+	return milliseconds;
 }
+/*uint32_t time_running_ms(){*/
+  //  return (seconds*1000)+(SysTick->VAL)/(0xa037a0/1000);
+//}
