@@ -55,6 +55,8 @@ void CAN0_Handler( void )
 		
 		if(message.id < 0x00ff && message.id > 0x000f){
 			//interpret_joystick
+			printf("Joystick %d \n\r", message.id);
+			printf("Joystick %d \n\r", message.data[5]);
 			joystick.x_val = (message.data[3] == 0x11) ? message.data[0] : message.data[0]*-1;
 			joystick.y_val = (message.data[4] == 0x11) ? message.data[1] : message.data[1]*-1;
 			joystick.butt_pressed = message.data[2];

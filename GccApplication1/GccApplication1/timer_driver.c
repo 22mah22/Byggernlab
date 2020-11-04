@@ -24,8 +24,6 @@ void timer_init(){
 	
 	
 	
-	//tc->TC_CHANNEL[0].TC_IER |= TC_IER_CPCS; // enable interrupt on compare with RC
-	
 	tc->TC_CHANNEL[0].TC_CCR = 0x00000001; //enables the clock
 	tc->TC_CHANNEL[0].TC_CCR |= 0x1 << 2;
 }

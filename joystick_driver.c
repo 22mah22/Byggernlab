@@ -154,7 +154,7 @@ void send_stick_can(){
 	printf("button data: %d \n\r",msgToSend.data[7]);
 	printf("button data: %d \n\r",msgToSend.data[5]);
 	
-	msgToSend.id = 0x0010;
+	msgToSend.id = 0x0015;
 	send_can_msg(&msgToSend);
 	
 }

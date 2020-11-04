@@ -19,6 +19,8 @@ uint8_t spi_read(){
 void spi_init(){
 	DDRB = (1<<DDB4)|(1<<DDB5)|(1<<DDB7); //chip select, mosi, clock
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+	
+	PORTB |= 1<<PB4; //cooked from jentene
 }
 
 void spi_write(char data){

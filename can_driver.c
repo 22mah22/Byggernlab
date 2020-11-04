@@ -23,6 +23,20 @@ void can_init(){
 	
 	mcp2515_bit_modify(MCP_CANINTE,0b00000111,0b00000111);
 	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
+	
+	
+	
+	
+	/*mcp2515_bit_modify(MCP_CNF3, 0b00000111, 0x01);		//PS2: 2*Tq
+	
+	mcp2515_bit_modify(MCP_CNF2, 0b00000111, 0x05);		//PRSEG: 6*Tq
+	mcp2515_bit_modify(MCP_CNF2, 0b00111000, 0x06<<3);	//PHSEG1: 7*Tq
+	mcp2515_bit_modify(MCP_CNF2, 0b01000000, 0x00<<6);	//SAM: 0 Busline sample once
+	mcp2515_bit_modify(MCP_CNF2, 0b10000000, 0x01<<7);	//BTLMODE: Length of PS2 determined by PHSEG2 bits in CNF3
+	
+	mcp2515_bit_modify(MCP_CNF1, 0b11000000, 0x00<<6);	//SJW: 1*Tq
+	mcp2515_bit_modify(MCP_CNF1, 0b00111111, 0x03);*/
+	
 	mcp2515_write(MCP_CNF3, 0x01); //0x01 // 0b00000010
 	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010
 	mcp2515_write(MCP_CNF1, 0x43); //0x43 // 0b01000000
@@ -30,6 +44,7 @@ void can_init(){
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
 	
+	uint8_t fisk = mcp2515_read(MCP_CANSTAT);
 	
 // 	cli();
 // 	

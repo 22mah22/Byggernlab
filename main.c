@@ -6,6 +6,7 @@
  */ 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "DEFINITIONS.h"
 #include <util/delay.h>
 #include "USART.h"
@@ -77,6 +78,9 @@ int main(void){
 	
 	//calc_offset(atmelMap);
 	
+	
+	
+	
 	/*
 	PORTB |= (1<<DDB1);
 	TCCR2 |= (1<<WGM20);
@@ -135,7 +139,7 @@ int main(void){
 		//send_can_msg(&msgToSend);
 		printf("Program running %d \r\n", 2);
 		send_stick_can(&msgToSend);
-		_delay_ms(5);
+		_delay_ms(100);
 
 		/*for(int i = 0; i < 8; i++){
 			printf("\r   %c | %d | %d   \n\r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
