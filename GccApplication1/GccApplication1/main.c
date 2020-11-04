@@ -119,7 +119,8 @@ int main(void)
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
  		printf("goals : %d   \n\r", TOTAL_GOALS);
-		//printf("left_slider : %d   \n\r", joystick.left_val);
+// 		printf("\n left_butt : %d   \n\r", joystick.left_button);
+// 		printf("\n right_butt : %d   \n\r", joystick.right_button);
 		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
 		

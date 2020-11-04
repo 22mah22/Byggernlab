@@ -16,7 +16,7 @@
 uint8_t buffer_number = 0;
 
 
-uint8_t can_init(){
+void can_init(){
 	
 	mcp2515_init();
 	

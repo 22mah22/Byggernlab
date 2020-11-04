@@ -13,11 +13,9 @@ static Tc *tc = 0x40080000;
 #define DEBUG_INTERRUPT 1
 
 void timer_init(){
-	
-	
+		
 	PMC->PMC_PCER0 |= PMC_PCER0_PID27; //enable timer counter channel 0
-	
-	
+		
 	PIOB->PIO_PDR |= PIO_PDR_P25; //disable io on pinb 25
 	PIOB->PIO_ABSR |= PIO_ABSR_P25; //PIO set peripheral b on pinb 25*/
 	
@@ -60,9 +58,12 @@ void TC1_Handler( void ){
 	error = joystick.left_val - y_value_pi;
 	sum_error += error;
 	paadrag = kp*error+T_periode*ki*sum_error;
+	if(joystick.left_button){
+		sum_error = 0; 
+	}
 	change_motor_speed_using_paadrag(paadrag);
-	//printf("x: %d \n\r",paadrag);
-	int a = tc->TC_CHANNEL[1].TC_SR;
+	printf("x: %d \n\r",paadrag);
+	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
 }
 
@@ -83,4 +84,4 @@ void init_ch1_PI(){
 	
 	tc->TC_CHANNEL[1].TC_CCR = 0x00000001; //enables the clock
 	tc->TC_CHANNEL[1].TC_CCR |= 0x1 << 2;
-}
+} 
