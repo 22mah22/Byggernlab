@@ -22,6 +22,8 @@ void timer_init(){
 	tc->TC_CHANNEL[0].TC_CMR = 0x0009C000;
 	tc->TC_CHANNEL[0].TC_RC = 0x000CD140;
 	
+	
+	
 	//tc->TC_CHANNEL[0].TC_IER |= TC_IER_CPCS; // enable interrupt on compare with RC
 	
 	tc->TC_CHANNEL[0].TC_CCR = 0x00000001; //enables the clock
@@ -46,23 +48,26 @@ void timer_change_duty(uint8_t dutyCycle){
 	
 }
 
+double prev_error = 0;
 double error = 0;
 int paadrag = 0;
-double kp = 20;
-double ki = 15;
+double kp = 30;
+double ki = 20;
+double kd = 1;
 double sum_error = 0;
 double T_periode = 0.02;
 
 void TC1_Handler( void ){
 	
+	prev_error = error;
 	error = joystick.left_val - y_value_pi;
 	sum_error += error;
-	paadrag = kp*error+T_periode*ki*sum_error;
+	paadrag = kp*error+T_periode*ki*sum_error+(kd/T_periode)*(error-prev_error);
 	if(joystick.left_button){
 		sum_error = 0; 
 	}
 	change_motor_speed_using_paadrag(paadrag);
-	printf("x: %d \n\r",paadrag);
+	//printf("x: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
 }
