@@ -100,8 +100,8 @@ int main(void){
 	SRAM_test(); _delay_ms(1000);
 		
 		
-	oled_init();
-	clear_oled();
+	//Check if the whole thing just works from up here:
+	launch_menusystem();
 	
 		
 	go_to_line(7);
@@ -137,7 +137,7 @@ int main(void){
 	}*/
 	
 	
-	//launch_menusystem();
+	
 	calc_offset();
 	while(1){
 		// CAN BUS TEST
