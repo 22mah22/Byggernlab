@@ -49,6 +49,7 @@ void mcp2515_request_to_send(uint8_t command){
 	
 	spi_write(command);
 	
+	
 	PORTB |= (1<<PB4);
 }
 void mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data){

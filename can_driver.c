@@ -19,9 +19,9 @@ uint8_t buffer_number = 0;
 void can_init(){
 	
 	mcp2515_init();
+	mcp2515_reset();
 	
-	
-	mcp2515_bit_modify(MCP_CANINTE,0b00000111,0b00000111);
+	//mcp2515_bit_modify(MCP_CANINTE,0b11111111,0b11111111);
 	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
 	
 	
@@ -38,13 +38,16 @@ void can_init(){
 	mcp2515_bit_modify(MCP_CNF1, 0b00111111, 0x03);*/
 	
 	mcp2515_write(MCP_CNF3, 0x01); //0x01 // 0b00000010
-	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010
+	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010 original
 	mcp2515_write(MCP_CNF1, 0x43); //0x43 // 0b01000000
 	
+	mcp2515_bit_modify(MCP_RX_INT, 0b00000011, MCP_CANINTE);
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
+	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
 	
-	uint8_t fisk = mcp2515_read(MCP_CANSTAT);
+	
+	
 	
 // 	cli();
 // 	
@@ -56,6 +59,7 @@ void can_init(){
 // 	sei();
 	
 }
+
 
 void send_can_msg(can_message *msg){
 	
@@ -74,6 +78,7 @@ void send_can_msg(can_message *msg){
 	uint8_t regvalue = mcp2515_read(0x35);
 	mcp2515_write(dataLengthBufferAddress+16*buffer_number, (regvalue&0b11110000) | msg->data_length);
 	
+	
 	for(uint8_t m = 0; m < msg->data_length; m++){
 		mcp2515_write(dataBufferAddress+m+16*buffer_number, msg->data[m]);
 	}
@@ -89,6 +94,7 @@ void send_can_msg(can_message *msg){
 }
 
 can_message* receive_can_msg(uint8_t buffer_number){
+	uint8_t status = mcp2515_read_status();
 	static can_message msg;
 	msg.id = 0x00;
 	uint16_t idHigh = mcp2515_read(idBufferHighAddress+16*buffer_number);
@@ -102,7 +108,8 @@ can_message* receive_can_msg(uint8_t buffer_number){
 	msg.data_length = length;
 	
 	for(uint8_t m = 0; m < length; m++){
-		msg.data[m] = mcp2515_read(dataBufferAddress+m+16*buffer_number);
+		//msg.data[m] = mcp2515_read(dataBufferAddress+m+16*buffer_number);
+		msg.data[m] = mcp2515_read(0x66+m+16*buffer_number);
 	}
 	
 	//flag recieved

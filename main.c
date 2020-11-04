@@ -60,14 +60,10 @@ int main(void){
 //  	sliderVal slider; 
 //	volatile amap* atmelMap = (amap*) BASE;
 	
-	
+	USART_Init ( MYUBRR );
 	
 	//enable external memory interface
 	MCUCR |= (1<<SRE);
-	
-	//DDRC = 0xFF;
-	//PORTC = 0x00;
-	
 	
 	//select which c pins on atmega to be released for normal use, the rest is used for high address bytes
 	SFIOR &= ~(1<<XMM0);
@@ -75,6 +71,17 @@ int main(void){
 	SFIOR |= (1<<XMM2);
 	
 	DDRA |= 0x18;
+	
+	
+	
+	can_init();
+	
+	
+	//DDRC = 0xFF;
+	//PORTC = 0x00;
+	
+	
+	
 	
 	//calc_offset(atmelMap);
 	
@@ -89,7 +96,7 @@ int main(void){
 	TCCR2 |= (1<<COM20);
 	*/
 
-	USART_Init ( MYUBRR );
+	
 	SRAM_test(); _delay_ms(1000);
 		
 		
@@ -108,12 +115,12 @@ int main(void){
 		
 	}
 	
-	can_init();
+	
 	
 	can_message msgToSend;
 	msgToSend.data_length = 8;
 	for(int i = 0; i < 8; i++){
-		msgToSend.data[i] = 97+i;
+		msgToSend.data[i] = 255;
 	}
 	msgToSend.id = 0x0006;
 	
@@ -134,18 +141,18 @@ int main(void){
 	calc_offset();
 	while(1){
 		// CAN BUS TEST
-		
+		//msgToReceive = receive_can_msg(0);
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
 		printf("Program running %d \r\n", 2);
-		send_stick_can(&msgToSend);
-		_delay_ms(100);
+		send_stick_can();
+		_delay_ms(5);
 
-		/*for(int i = 0; i < 8; i++){
-			printf("\r   %c | %d | %d   \n\r",msgToSend.data[i],msgToSend.data_length,msgToSend.id);
-			_delay_ms(200);
-		}*/
-		
+	/*	for(int i = 0; i < 8; i++){
+			printf("\r   %c | %d | %d   \n\r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
+			_delay_ms(50);
+		}
+		*/
 	}
 
 		/*

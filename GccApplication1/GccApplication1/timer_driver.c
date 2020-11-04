@@ -49,7 +49,7 @@ void timer_change_duty(uint8_t dutyCycle){
 double prev_error = 0;
 double error = 0;
 int paadrag = 0;
-double kp = 30;
+double kp = 20;
 double ki = 20;
 double kd = 1;
 double sum_error = 0;
