@@ -107,7 +107,11 @@ int main(void)
 		move_solenoid();
 		//change_motor_speed();
 		encoder_read();
-		
+		can_message msgToSend;
+		msgToSend.data_length = 7;
+		msgToSend.data[0] = joystick.left_val;
+		msgToSend.id = 0x0007;
+
 		if(button_check(joystick.butt_pressed)){
 			PIOC->PIO_CODR |= PIO_CODR_P13;
 			for(int i = 0; i < 1600000; i++){
@@ -131,10 +135,10 @@ int main(void)
 			}
 		}
 		
-		/*//printf("Gååååållll %d \n\r", ADC->ADC_ISR);
+		/*//printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %d \n\r", ADC->ADC_ISR);
 		
 		if(ADC->ADC_ISR & (0x1 << 26)){
-			printf("Gååååållll %x \r", ADC->ADC_ISR);
+			printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %x \r", ADC->ADC_ISR);
 			
 		}*/
 		/*if(!can_receive(&msg, 0)){
