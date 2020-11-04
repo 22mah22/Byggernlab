@@ -28,7 +28,7 @@ void adc_init(){
 
 	//ADC->ADC_EMR = (0x0u << 9);
 	ADC->ADC_EMR |= ADC_EMR_CMPSEL(1);
-	ADC->ADC_CWR = ADC_CWR_LOWTHRES(0x0ff);
+	ADC->ADC_CWR = ADC_CWR_LOWTHRES(0x00f);
 	//ADC->ADC_EMR |= ADC_EMR_CMPFILTER(0);
 	
 	

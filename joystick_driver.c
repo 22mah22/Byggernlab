@@ -138,7 +138,7 @@ void send_stick_can(){
 	update_adc_values(&joystick, &slider);
 	
 	can_message msgToSend;
-	msgToSend.data_length = 7;
+	msgToSend.data_length = 8;
 	msgToSend.data[0] = abs(joystick.x_val);
 	msgToSend.data[1] = abs(joystick.y_val);
 	msgToSend.data[2] = PINB & (1<< PINB1); // button pressed?
@@ -150,6 +150,7 @@ void send_stick_can(){
 	msgToSend.data[4] = y_positive;
 	msgToSend.data[5] = slider.l_val;
 	msgToSend.data[6] = slider.r_val;
+	msgToSend.data[7] = (PIND & (1<< PIND4)) << 1 | (PIND & (1<< PIND5)) << 0; //left and right button
 	
 	msgToSend.id = 0x0010;
 	send_can_msg(&msgToSend);

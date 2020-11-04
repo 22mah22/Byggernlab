@@ -50,8 +50,8 @@ void timer_change_duty(uint8_t dutyCycle){
 
 double error = 0;
 int paadrag = 0;
-double kp = 15;
-double ki = 7;
+double kp = 20;
+double ki = 15;
 double sum_error = 0;
 double T_periode = 0.02;
 
@@ -61,7 +61,7 @@ void TC1_Handler( void ){
 	sum_error += error;
 	paadrag = kp*error+T_periode*ki*sum_error;
 	change_motor_speed_using_paadrag(paadrag);
-	printf("e: %d \n\r",paadrag);
+	//printf("x: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC1);
 }

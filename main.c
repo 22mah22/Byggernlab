@@ -59,11 +59,16 @@ int main(void){
 //  	sliderVal slider; 
 //	volatile amap* atmelMap = (amap*) BASE;
 	
+	
+	
+	//enable external memory interface
 	MCUCR |= (1<<SRE);
 	
 	//DDRC = 0xFF;
 	//PORTC = 0x00;
 	
+	
+	//select which c pins on atmega to be released for normal use, the rest is used for high address bytes
 	SFIOR &= ~(1<<XMM0);
 	SFIOR &= ~(1<<XMM1);
 	SFIOR |= (1<<XMM2);
@@ -128,7 +133,7 @@ int main(void){
 		
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
-		printf("hei %d \r", 2);
+		printf("Program running %d \r\n", 2);
 		send_stick_can(&msgToSend);
 		_delay_ms(5);
 

@@ -6,6 +6,7 @@
  */ 
 
 #include "adc_interrupt.h"
+#include "motor_controller.h"
 
 
 #include <stdio.h>
@@ -30,6 +31,8 @@ void ADC_Handler( void ){
 		last_goal_time = return_milliseconds();
 	}
 
+	change_motor_speed_using_paadrag(0);
+	
 	//TO_INCREMENT = 1; 
 	int i = ADC->ADC_ISR;
 	

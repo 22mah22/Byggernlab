@@ -105,7 +105,7 @@ int main(void)
 		
 		
 		move_solenoid();
-		change_motor_speed();
+		//change_motor_speed();
 		encoder_read();
 		
 		if(button_check(joystick.butt_pressed)){

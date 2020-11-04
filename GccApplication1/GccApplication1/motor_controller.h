@@ -16,6 +16,8 @@ typedef struct {
 	int8_t butt_pressed;
 	int8_t left_val;
 	int8_t right_val;
+	int8_t left_button;
+	int8_t right_button;
 } joyVal;
 
 extern uint8_t y_value_pi; // value for use in pi controller
