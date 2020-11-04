@@ -94,6 +94,8 @@ void button_pressed(menu** menuHead){
 void launch_menusystem(){
 	
 	//INITIATE
+	oled_init();
+	clear_oled();
 	menu** headPointer = NULL;
 	
 		static menu* mainMenu;
@@ -108,7 +110,8 @@ void launch_menusystem(){
 		mainMenu->labels[3] = "Write greeting";
 		mainMenu->f[3] = hello_world;
 		mainMenu->labels[4] = "Default submenu";
-		mainMenu->labels[5] = "";
+		mainMenu->labels[5] = "Play ping-pong";
+		mainMenu->f[5] = play_game;
 		mainMenu->labels[6] = "";
 		mainMenu->labels[7] = "";
 		mainMenu->links[0] = submenu;
@@ -222,4 +225,7 @@ void choose_character(){
 			return;
 		}
 	}
+}
+void play_game(){
+	clear_oled();
 }
