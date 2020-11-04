@@ -87,10 +87,11 @@ int main(void){
 
 	USART_Init ( MYUBRR );
 	SRAM_test(); _delay_ms(1000);
-		
+	can_init();
+	launch_menusystem();
 		
 	//Check if the whole thing just works from up here:
-	launch_menusystem();
+	
 	
 		
 	go_to_line(7);
@@ -104,7 +105,7 @@ int main(void){
 		
 	}
 	
-	can_init();
+	
 	
 	can_message msgToSend;
 	msgToSend.data_length = 8;
