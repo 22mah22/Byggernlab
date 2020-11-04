@@ -110,7 +110,11 @@ int main(void)
 		move_solenoid();
 		//change_motor_speed();
 		encoder_read();
-		
+		can_message msgToSend;
+		msgToSend.data_length = 7;
+		msgToSend.data[0] = joystick.left_val;
+		msgToSend.id = 0x0007;
+
 		if(button_check(joystick.butt_pressed)){
 			PIOC->PIO_CODR |= PIO_CODR_P13;
 			for(int i = 0; i < 1600000; i++){
