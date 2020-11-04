@@ -228,4 +228,10 @@ void choose_character(){
 }
 void play_game(){
 	clear_oled();
+	calc_offset();
+	while(!(PIND & (1<< PIND4))){ //left button to exit game
+		send_stick_can();
+		_delay_ms(5);
+	}
+	return;
 }
