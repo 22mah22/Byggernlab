@@ -8,3 +8,5 @@ void SysTick_Handler       ( void );
 //uint32_t time_running_ms();
 
 uint32_t return_milliseconds();
+
+uint8_t return_seconds();

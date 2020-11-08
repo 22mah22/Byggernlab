@@ -13,3 +13,7 @@ typedef struct {
 	uint8_t ADC[1024];
 	uint8_t SRAM[2048];
 } amap;
+
+#define set_bit( reg, bit ) (reg |= (1 << bit))
+#define clear_bit( reg, bit ) (reg &= ~(1 << bit))
+#define test_bit( reg, bit ) (reg & (1 << bit))

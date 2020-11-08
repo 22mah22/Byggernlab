@@ -5,8 +5,9 @@
  *  Author: magneah
  */ 
 #include "can_driver.h"
-
+#include "DEFINITIONS.h"
 #include <avr/interrupt.h>
+#include <avr/io.h>
 
 #define idBufferHighAddress 0x31
 #define idBufferLowAddress 0x32
@@ -15,6 +16,28 @@
 
 uint8_t buffer_number = 0;
 
+volatile uint8_t can_flag = 0;
+
+ISR(INT0_vect){
+	can_flag = 1;
+}
+
+uint8_t can_interrupted(){
+	if (can_flag){	
+		can_flag = 0;
+		return 1;
+	}
+	return 0;
+}
+
+void can_interrupt_enable(){
+	cli();
+	set_bit(MCUCR, ISC01);
+	clear_bit(MCUCR, ISC00);
+	// Enable interrupt on PD2
+	set_bit(GICR,INT0);
+	sei();
+}
 
 void can_init(){
 	

@@ -88,6 +88,9 @@ int main(void)
 	PIOA->PIO_PER |= PIO_PER_P9; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P9; //Output Enable Register, Output Enable*/
 	volatile CAN_MESSAGE msg;
+	volatile CAN_MESSAGE msgToSend;
+	msgToSend.id = 0;
+	msgToSend.data_length = 8;
 	SysTick_init();
     while (1) 
     {
@@ -135,11 +138,17 @@ int main(void)
 				
 			}
 		}
+
+		msgToSend.data = return_seconds();
+		if(!(return_milliseconds()%100)){
+			can_send(&msgToSend, 0);
+		}
+	
 		
-		/*//printf("Gååååållll %d \n\r", ADC->ADC_ISR);
+		/*//printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %d \n\r", ADC->ADC_ISR);
 		
 		if(ADC->ADC_ISR & (0x1 << 26)){
-			printf("Gååååållll %x \r", ADC->ADC_ISR);
+			printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %x \r", ADC->ADC_ISR);
 			
 		}*/
 		/*if(!can_receive(&msg, 0)){

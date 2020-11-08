@@ -98,10 +98,11 @@ int main(void){
 
 	
 	SRAM_test(); _delay_ms(1000);
-		
+	can_init();
+	launch_menusystem();
 		
 	//Check if the whole thing just works from up here:
-	launch_menusystem();
+	
 	
 		
 	go_to_line(7);
@@ -137,7 +138,8 @@ int main(void){
 	}*/
 	
 	
-	
+	can_interrupt_enable();
+	can_message* receivedMsg;
 	calc_offset();
 	while(1){
 		// CAN BUS TEST
@@ -147,6 +149,12 @@ int main(void){
 		printf("Program running %d \r\n", 2);
 		send_stick_can();
 		_delay_ms(5);
+
+
+		if(can_interrupted()){
+			receivedMsg = receive_can_msg(0);
+			printf("%d", receivedMsg->data);
+		}
 
 	/*	for(int i = 0; i < 8; i++){
 			printf("\r   %c | %d | %d   \n\r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
