@@ -110,7 +110,6 @@ int main(void)
 		move_solenoid();
 		//change_motor_speed();
 		encoder_read();
-		can_message msgToSend;
 		msgToSend.data_length = 7;
 		msgToSend.data[0] = joystick.left_val;
 		msgToSend.id = 0x0007;
@@ -143,7 +142,7 @@ int main(void)
 			}
 		}
 
-		msgToSend.data = return_seconds();
+		msgToSend.data[0] = return_seconds();
 		if(!(return_milliseconds()%100)){
 			can_send(&msgToSend, 0);
 		}
