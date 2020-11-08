@@ -4,6 +4,7 @@ ice_ice.elf:     file format elf32-avr
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
 <<<<<<< HEAD
+<<<<<<< HEAD
   0 .data         000000a4  00800100  00001154  000011e8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00001154  00000000  00000000  00000094  2**1
@@ -56,11 +57,39 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 00000330  00000000  00000000  0000d0a6  2**0
 >>>>>>> bugfixed, worksgit add *
+=======
+  0 .data         0000021e  00800100  000035bc  00003650  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000035bc  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000015  0080031e  0080031e  0000386e  2**0
+                  ALLOC
+  3 .comment      0000005c  00000000  00000000  0000386e  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000038cc  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000288  00000000  00000000  00003908  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000359f  00000000  00000000  00003b90  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00001497  00000000  00000000  0000712f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000017fd  00000000  00000000  000085c6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000704  00000000  00000000  00009dc4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000aae  00000000  00000000  0000a4c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00002130  00000000  00000000  0000af76  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000330  00000000  00000000  0000d0a6  2**0
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
+<<<<<<< HEAD
 <<<<<<< HEAD
        0:	0c 94 38 00 	jmp	0x70	; 0x70 <__ctors_end>
        4:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
@@ -463,6 +492,8 @@ uint8_t spi_read(){
 
 0000023c <calc_offset>:
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
        0:	0c 94 60 0d 	jmp	0x1ac0	; 0x1ac0 <__ctors_end>
        4:	0c 94 7d 0d 	jmp	0x1afa	; 0x1afa <__bad_interrupt>
        8:	0c 94 7d 0d 	jmp	0x1afa	; 0x1afa <__bad_interrupt>
@@ -2480,7 +2511,10 @@ DIRECTION joystick_direction(DIRECTION dir, joyVal stick){
     23b4:	08 95       	ret
 		}
 		if(stick.y_val > 95){
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 			return UP;
     23b6:	82 e0       	ldi	r24, 0x02	; 2
 		}
@@ -2488,6 +2522,7 @@ DIRECTION joystick_direction(DIRECTION dir, joyVal stick){
 	}
 	return WAITING;
 }
+<<<<<<< HEAD
 <<<<<<< HEAD
      23c:	e0 e0       	ldi	r30, 0x00	; 0
      23e:	f4 e1       	ldi	r31, 0x14	; 20
@@ -2843,6 +2878,91 @@ void send_stick_can(){
     2436:	8a 87       	std	Y+10, r24	; 0x0a
 	msgToSend.data[7] = (PIND & (1<< PIND4)) << 1 | (PIND & (1<< PIND5)) << 0; //left and right button
 	
+=======
+    23b8:	08 95       	ret
+
+000023ba <send_stick_can>:
+
+void send_stick_can(){
+    23ba:	cf 93       	push	r28
+    23bc:	df 93       	push	r29
+    23be:	cd b7       	in	r28, 0x3d	; 61
+    23c0:	de b7       	in	r29, 0x3e	; 62
+    23c2:	2b 97       	sbiw	r28, 0x0b	; 11
+    23c4:	0f b6       	in	r0, 0x3f	; 63
+    23c6:	f8 94       	cli
+    23c8:	de bf       	out	0x3e, r29	; 62
+    23ca:	0f be       	out	0x3f, r0	; 63
+    23cc:	cd bf       	out	0x3d, r28	; 61
+	
+	update_adc_values(&joystick, &slider);
+    23ce:	65 e2       	ldi	r22, 0x25	; 37
+    23d0:	73 e0       	ldi	r23, 0x03	; 3
+    23d2:	87 e2       	ldi	r24, 0x27	; 39
+    23d4:	93 e0       	ldi	r25, 0x03	; 3
+    23d6:	0e 94 4b 11 	call	0x2296	; 0x2296 <update_adc_values>
+	
+	can_message msgToSend;
+	msgToSend.data_length = 8;
+    23da:	87 e0       	ldi	r24, 0x07	; 7
+    23dc:	8b 83       	std	Y+3, r24	; 0x03
+	msgToSend.data[0] = abs(joystick.x_val);
+    23de:	30 91 27 03 	lds	r19, 0x0327	; 0x800327 <joystick>
+    23e2:	83 2f       	mov	r24, r19
+    23e4:	03 2e       	mov	r0, r19
+    23e6:	00 0c       	add	r0, r0
+    23e8:	99 0b       	sbc	r25, r25
+    23ea:	99 23       	and	r25, r25
+    23ec:	1c f4       	brge	.+6      	; 0x23f4 <send_stick_can+0x3a>
+    23ee:	91 95       	neg	r25
+    23f0:	81 95       	neg	r24
+    23f2:	91 09       	sbc	r25, r1
+    23f4:	8c 83       	std	Y+4, r24	; 0x04
+	msgToSend.data[1] = abs(joystick.y_val);
+    23f6:	20 91 28 03 	lds	r18, 0x0328	; 0x800328 <joystick+0x1>
+    23fa:	82 2f       	mov	r24, r18
+    23fc:	02 2e       	mov	r0, r18
+    23fe:	00 0c       	add	r0, r0
+    2400:	99 0b       	sbc	r25, r25
+    2402:	99 23       	and	r25, r25
+    2404:	1c f4       	brge	.+6      	; 0x240c <send_stick_can+0x52>
+    2406:	91 95       	neg	r25
+    2408:	81 95       	neg	r24
+    240a:	91 09       	sbc	r25, r1
+    240c:	8d 83       	std	Y+5, r24	; 0x05
+	msgToSend.data[2] = PINB & (1<< PINB1); // button pressed?
+    240e:	86 b3       	in	r24, 0x16	; 22
+    2410:	82 70       	andi	r24, 0x02	; 2
+    2412:	8e 83       	std	Y+6, r24	; 0x06
+	
+	uint8_t x_positive = (joystick.x_val < 0) ? 0x00 : 0x11;
+    2414:	33 23       	and	r19, r19
+    2416:	14 f0       	brlt	.+4      	; 0x241c <send_stick_can+0x62>
+    2418:	81 e1       	ldi	r24, 0x11	; 17
+    241a:	01 c0       	rjmp	.+2      	; 0x241e <send_stick_can+0x64>
+    241c:	80 e0       	ldi	r24, 0x00	; 0
+	uint8_t y_positive = (joystick.y_val < 0) ? 0x00 : 0x11;
+    241e:	22 23       	and	r18, r18
+    2420:	14 f0       	brlt	.+4      	; 0x2426 <send_stick_can+0x6c>
+    2422:	91 e1       	ldi	r25, 0x11	; 17
+    2424:	01 c0       	rjmp	.+2      	; 0x2428 <send_stick_can+0x6e>
+    2426:	90 e0       	ldi	r25, 0x00	; 0
+	
+	msgToSend.data[3] = x_positive;
+    2428:	8f 83       	std	Y+7, r24	; 0x07
+	msgToSend.data[4] = y_positive;
+    242a:	98 87       	std	Y+8, r25	; 0x08
+	msgToSend.data[5] = slider.l_val;
+    242c:	e5 e2       	ldi	r30, 0x25	; 37
+    242e:	f3 e0       	ldi	r31, 0x03	; 3
+    2430:	80 81       	ld	r24, Z
+    2432:	89 87       	std	Y+9, r24	; 0x09
+	msgToSend.data[6] = slider.r_val;
+    2434:	81 81       	ldd	r24, Z+1	; 0x01
+    2436:	8a 87       	std	Y+10, r24	; 0x0a
+	msgToSend.data[7] = (PIND & (1<< PIND4)) << 1 | (PIND & (1<< PIND5)) << 0; //left and right button
+	
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     2438:	80 e1       	ldi	r24, 0x10	; 16
     243a:	90 e0       	ldi	r25, 0x00	; 0
     243c:	9a 83       	std	Y+2, r25	; 0x02
@@ -2895,6 +3015,7 @@ int main(void){
 	//enable external memory interface
 	MCUCR |= (1<<SRE);
 <<<<<<< HEAD
+<<<<<<< HEAD
      442:	85 b7       	in	r24, 0x35	; 53
      444:	80 68       	ori	r24, 0x80	; 128
      446:	85 bf       	out	0x35, r24	; 53
@@ -2923,6 +3044,8 @@ int main(void){
 	can_init();
      460:	0e 94 57 00 	call	0xae	; 0xae <can_init>
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     246e:	85 b7       	in	r24, 0x35	; 53
     2470:	80 68       	ori	r24, 0x80	; 128
     2472:	85 bf       	out	0x35, r24	; 53
@@ -2965,13 +3088,17 @@ int main(void){
     2490:	0e 94 41 15 	call	0x2a82	; 0x2a82 <USART_Init>
 	SRAM_test(); _delay_ms(1000);
     2494:	0e 94 ed 14 	call	0x29da	; 0x29da <SRAM_test>
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
+<<<<<<< HEAD
 <<<<<<< HEAD
      468:	2f ef       	ldi	r18, 0xFF	; 255
      46a:	8f ef       	ldi	r24, 0xFF	; 255
@@ -3015,11 +3142,35 @@ int main(void){
 	
 		
 	go_to_line(7);
+=======
+    2498:	2f ef       	ldi	r18, 0xFF	; 255
+    249a:	8f ef       	ldi	r24, 0xFF	; 255
+    249c:	9e e0       	ldi	r25, 0x0E	; 14
+    249e:	21 50       	subi	r18, 0x01	; 1
+    24a0:	80 40       	sbci	r24, 0x00	; 0
+    24a2:	90 40       	sbci	r25, 0x00	; 0
+    24a4:	e1 f7       	brne	.-8      	; 0x249e <main+0x44>
+    24a6:	00 c0       	rjmp	.+0      	; 0x24a8 <main+0x4e>
+    24a8:	00 00       	nop
+	can_init();
+    24aa:	0e 94 7f 0d 	call	0x1afe	; 0x1afe <can_init>
+	launch_menusystem();
+    24ae:	0e 94 47 10 	call	0x208e	; 0x208e <launch_menusystem>
+		
+	//Check if the whole thing just works from up here:
+	
+	
+		
+	go_to_line(7);
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     24b2:	87 e0       	ldi	r24, 0x07	; 7
     24b4:	0e 94 c5 12 	call	0x258a	; 0x258a <go_to_line>
     24b8:	0c e5       	ldi	r16, 0x5C	; 92
     24ba:	10 e0       	ldi	r17, 0x00	; 0
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
 	//character_printer(wojak, 64, 40);
 	//_delay_ms(60000);
@@ -3027,17 +3178,23 @@ int main(void){
 	for(int i = 0; i < 92; i++){
 		printf("\n");
 <<<<<<< HEAD
+<<<<<<< HEAD
      48c:	8a e0       	ldi	r24, 0x0A	; 10
      48e:	90 e0       	ldi	r25, 0x00	; 0
      490:	0e 94 23 05 	call	0xa46	; 0xa46 <putchar>
      494:	21 97       	sbiw	r28, 0x01	; 1
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     24bc:	8a e0       	ldi	r24, 0x0A	; 10
     24be:	90 e0       	ldi	r25, 0x00	; 0
     24c0:	0e 94 57 17 	call	0x2eae	; 0x2eae <putchar>
     24c4:	01 50       	subi	r16, 0x01	; 1
     24c6:	11 09       	sbc	r17, r1
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	go_to_line(7);
 	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
 	//character_printer(wojak, 64, 40);
@@ -3045,8 +3202,11 @@ int main(void){
 
 	for(int i = 0; i < 92; i++){
 <<<<<<< HEAD
+<<<<<<< HEAD
      496:	d1 f7       	brne	.-12     	; 0x48c <main+0x52>
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     24c8:	c9 f7       	brne	.-14     	; 0x24bc <main+0x62>
 	}
 	
@@ -3080,7 +3240,10 @@ int main(void){
     24f0:	90 e0       	ldi	r25, 0x00	; 0
     24f2:	9a 83       	std	Y+2, r25	; 0x02
     24f4:	89 83       	std	Y+1, r24	; 0x01
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 		}
 	}*/
 	
@@ -3088,16 +3251,21 @@ int main(void){
 	
 	calc_offset();
 <<<<<<< HEAD
+<<<<<<< HEAD
      498:	0e 94 1e 01 	call	0x23c	; 0x23c <calc_offset>
 =======
     24f6:	0e 94 29 11 	call	0x2252	; 0x2252 <calc_offset>
 >>>>>>> bugfixed, worksgit add *
+=======
+    24f6:	0e 94 29 11 	call	0x2252	; 0x2252 <calc_offset>
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	while(1){
 		// CAN BUS TEST
 		//msgToReceive = receive_can_msg(0);
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
 		printf("Program running %d \r\n", 2);
+<<<<<<< HEAD
 <<<<<<< HEAD
      49c:	12 e0       	ldi	r17, 0x02	; 2
      49e:	cf e1       	ldi	r28, 0x1F	; 31
@@ -3283,6 +3451,8 @@ int main(void){
 
 00000608 <USART_Transmit>:
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     24fa:	68 94       	set
     24fc:	ff 24       	eor	r15, r15
     24fe:	f1 f8       	bld	r15, 1
@@ -3977,13 +4147,17 @@ int main(void){
     2a6e:	08 95       	ret
 
 00002a70 <USART_Transmit>:
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
 	clear_bit(UCSR0C, 0); // Clock polarity
 	fdevopen(USART_Transmit, USART_Receive);
 }
 void USART_Transmit(unsigned char data){
 	while (!(UCSR0A & (1<<UDRE0)));
+<<<<<<< HEAD
 <<<<<<< HEAD
      608:	5d 9b       	sbis	0x0b, 5	; 11
      60a:	fe cf       	rjmp	.-4      	; 0x608 <USART_Transmit>
@@ -3994,6 +4168,8 @@ void USART_Transmit(unsigned char data){
 
 00000610 <USART_Receive>:
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     2a70:	5d 9b       	sbis	0x0b, 5	; 11
     2a72:	fe cf       	rjmp	.-4      	; 0x2a70 <USART_Transmit>
 	
@@ -4002,13 +4178,17 @@ void USART_Transmit(unsigned char data){
     2a76:	08 95       	ret
 
 00002a78 <USART_Receive>:
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 }
 
 unsigned int USART_Receive(void)
 {
 	
 	while (!(UCSR0A & (1<<RXC0)));
+<<<<<<< HEAD
 <<<<<<< HEAD
      610:	5f 9b       	sbis	0x0b, 7	; 11
      612:	fe cf       	rjmp	.-4      	; 0x610 <USART_Receive>
@@ -4021,6 +4201,8 @@ unsigned int USART_Receive(void)
 
 0000061a <USART_Init>:
 =======
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     2a78:	5f 9b       	sbis	0x0b, 7	; 11
     2a7a:	fe cf       	rjmp	.-4      	; 0x2a78 <USART_Receive>
 	
@@ -4031,13 +4213,17 @@ unsigned int USART_Receive(void)
     2a80:	08 95       	ret
 
 00002a82 <USART_Init>:
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 #include <stdio.h>
 #define clear_bit( reg, bit ) (reg &= ~(1 << bit))
 
 void USART_Init (unsigned int ubrr ){
 	
 	UBRR0H = (unsigned char)(ubrr>>8);
+<<<<<<< HEAD
 <<<<<<< HEAD
      61a:	90 bd       	out	0x20, r25	; 32
 	UBRR0L = (unsigned char)ubrr;
@@ -5485,6 +5671,24 @@ void USART_Init (unsigned int ubrr ){
     2a90:	8e 7f       	andi	r24, 0xFE	; 254
     2a92:	80 bd       	out	0x20, r24	; 32
 	fdevopen(USART_Transmit, USART_Receive);
+=======
+    2a82:	90 bd       	out	0x20, r25	; 32
+	UBRR0L = (unsigned char)ubrr;
+    2a84:	89 b9       	out	0x09, r24	; 9
+	
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+    2a86:	88 e1       	ldi	r24, 0x18	; 24
+    2a88:	8a b9       	out	0x0a, r24	; 10
+	
+	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
+    2a8a:	8e e8       	ldi	r24, 0x8E	; 142
+    2a8c:	8c bf       	out	0x3c, r24	; 60
+	clear_bit(UCSR0C, 0); // Clock polarity
+    2a8e:	80 b5       	in	r24, 0x20	; 32
+    2a90:	8e 7f       	andi	r24, 0xFE	; 254
+    2a92:	80 bd       	out	0x20, r24	; 32
+	fdevopen(USART_Transmit, USART_Receive);
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
     2a94:	6c e3       	ldi	r22, 0x3C	; 60
     2a96:	75 e1       	ldi	r23, 0x15	; 21
     2a98:	88 e3       	ldi	r24, 0x38	; 56
@@ -6898,4 +7102,7 @@ void USART_Init (unsigned int ubrr ){
 
 000035ba <__stop_program>:
     35ba:	ff cf       	rjmp	.-2      	; 0x35ba <__stop_program>
+<<<<<<< HEAD
 >>>>>>> bugfixed, worksgit add *
+=======
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037

@@ -138,8 +138,12 @@ int main(void){
 	}*/
 	
 	
+<<<<<<< HEAD
 	can_interrupt_enable();
 	can_message* receivedMsg;
+=======
+	
+>>>>>>> 59142b87b0d66f5aa94172bbda48f38f20c5d037
 	calc_offset();
 	while(1){
 		// CAN BUS TEST
