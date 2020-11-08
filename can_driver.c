@@ -41,7 +41,7 @@ void can_init(){
 	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010 original
 	mcp2515_write(MCP_CNF1, 0x43); //0x43 // 0b01000000
 	
-	mcp2515_bit_modify(MCP_RX_INT, 0b00000011, MCP_CANINTE);
+	mcp2515_bit_modify(MCP_CANINTE, 0b00000011, MCP_RX_INT);
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
 	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
