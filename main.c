@@ -147,7 +147,6 @@ int main(void){
 		//msgToReceive = receive_can_msg(0);
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
-		//printf("Program running %d \r\n", 2);
 		send_stick_can();
 		_delay_ms(5);
 

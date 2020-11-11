@@ -122,6 +122,8 @@ int main(void)
 		}
 		
 		
+
+
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
 //		printf("goals : %d   \n\r", TOTAL_GOALS);

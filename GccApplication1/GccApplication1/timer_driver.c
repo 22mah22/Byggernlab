@@ -65,7 +65,7 @@ void TC1_Handler( void ){
 		sum_error = 0; 
 	}
 	change_motor_speed_using_paadrag(paadrag);
-	printf("x: %d \n\r",paadrag);
+	//printf("x: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
 }

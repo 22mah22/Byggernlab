@@ -20,12 +20,10 @@
 	 
 	 if(joystick.x_val < 0){
 		 uint8_t val = 45-abs(joystick.x_val)*0.5; //using 45 instead of 50 since motor is skeiv
-		 printf("vaaaaaal111111111 : %d \n\r", val);
 		 timer_change_duty(val);
 	 }
 	 if(joystick.x_val >= 0){
 		 uint8_t val2 = 45+joystick.x_val*0.5; //using 45 instead of 50 since motor is skeiv
-		 printf("vaaaaaaaaaaallllll2222222222 : %d \n\r", val2);
 		 timer_change_duty(val2);
 	 }
  }
@@ -124,7 +122,7 @@ uint8_t encoder_read(){
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
 	y_value_pi = (8888-encoder_data_int)/88; //scaled so that value is 0-100;
- 	//printf("Encoder data: %x \n\r", encoder_data_int);
+ //printf("Encoder data: %x \n\r", encoder_data_int);
 // 	
 // 	if(encoder_data &= (1 << 15)){
 // 		//encoder_data = (~encoder_data + 1);
