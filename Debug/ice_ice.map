@@ -125,7 +125,7 @@ Discarded input sections
                 0x00000000       0x68 menu.o
  .debug_ranges  0x00000000       0x58 menu.o
  .debug_line    0x00000000      0x514 menu.o
- .debug_str     0x00000000      0x448 menu.o
+ .debug_str     0x00000000      0x44e menu.o
  .comment       0x00000000       0x31 menu.o
  .debug_frame   0x00000000      0x19c menu.o
  .text          0x00000000        0x0 menuconfigs.o
@@ -146,7 +146,7 @@ Discarded input sections
                 0x00000000       0x28 menuconfigs.o
  .debug_ranges  0x00000000       0x18 menuconfigs.o
  .debug_line    0x00000000      0x165 menuconfigs.o
- .debug_str     0x00000000      0x215 menuconfigs.o
+ .debug_str     0x00000000      0x21b menuconfigs.o
  .comment       0x00000000       0x31 menuconfigs.o
  .debug_frame   0x00000000       0x40 menuconfigs.o
  .text          0x00000000        0x0 menu_list.o
@@ -199,7 +199,7 @@ Discarded input sections
                 0x00000000       0x68 menu_list.o
  .debug_ranges  0x00000000       0x58 menu_list.o
  .debug_line    0x00000000      0x3df menu_list.o
- .debug_str     0x00000000      0x397 menu_list.o
+ .debug_str     0x00000000      0x39d menu_list.o
  .comment       0x00000000       0x31 menu_list.o
  .debug_frame   0x00000000      0x158 menu_list.o
  COMMON         0x00000000        0x4 menu_list.o
@@ -1097,21 +1097,21 @@ END GROUP
 .debug_str      0x00000000      0x952
  *(.debug_str)
  .debug_str     0x00000000      0x1f6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_str     0x000001f6      0x265 can_driver.o
-                                0x2b8 (size before relaxing)
- .debug_str     0x0000045b       0x3f mcp2515_driver.o
-                                0x22d (size before relaxing)
- .debug_str     0x0000049a       0x12 spi_driver.o
-                                0x18e (size before relaxing)
- .debug_str     0x000004ac      0x161 joystick_driver.o
-                                0x31e (size before relaxing)
- .debug_str     0x0000060d       0xbb main.o
-                                0x2d4 (size before relaxing)
- .debug_str     0x000006c8      0x1b8 OLED_driver.o
+ .debug_str     0x000001f6      0x26b can_driver.o
+                                0x2be (size before relaxing)
+ .debug_str     0x00000461       0x3f mcp2515_driver.o
+                                0x233 (size before relaxing)
+ .debug_str     0x000004a0       0x12 spi_driver.o
+                                0x194 (size before relaxing)
+ .debug_str     0x000004b2      0x161 joystick_driver.o
+                                0x324 (size before relaxing)
+ .debug_str     0x00000613       0xbb main.o
+                                0x2da (size before relaxing)
+ .debug_str     0x000006ce      0x176 OLED_driver.o
                                 0x35d (size before relaxing)
- .debug_str     0x00000880       0x71 sram_test.o
+ .debug_str     0x00000844       0x71 sram_test.o
                                 0x1fe (size before relaxing)
- .debug_str     0x000008f1       0x61 USART.o
+ .debug_str     0x000008b5       0x9d USART.o
                                 0x1dc (size before relaxing)
 
 .debug_loc      0x00000000     0x1994

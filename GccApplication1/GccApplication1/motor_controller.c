@@ -19,11 +19,13 @@
 	  
 	 
 	 if(joystick.x_val < 0){
-		 uint8_t val = 50-abs(joystick.x_val)*0.5;
+		 uint8_t val = 45-abs(joystick.x_val)*0.5; //using 45 instead of 50 since motor is skeiv
+		 printf("vaaaaaal111111111 : %d \n\r", val);
 		 timer_change_duty(val);
 	 }
 	 if(joystick.x_val >= 0){
-		 uint8_t val2 = 50+joystick.x_val*0.5;
+		 uint8_t val2 = 45+joystick.x_val*0.5; //using 45 instead of 50 since motor is skeiv
+		 printf("vaaaaaaaaaaallllll2222222222 : %d \n\r", val2);
 		 timer_change_duty(val2);
 	 }
  }

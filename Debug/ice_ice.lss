@@ -130,10 +130,10 @@ void can_init(){
       c8:	8a e2       	ldi	r24, 0x2A	; 42
       ca:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
 	
-	mcp2515_bit_modify(MCP_RX_INT, 0b00000011, MCP_CANINTE);
-      ce:	4b e2       	ldi	r20, 0x2B	; 43
+	mcp2515_bit_modify(MCP_CANINTE, 0b00000011, MCP_RX_INT);
+      ce:	43 e0       	ldi	r20, 0x03	; 3
       d0:	63 e0       	ldi	r22, 0x03	; 3
-      d2:	83 e0       	ldi	r24, 0x03	; 3
+      d2:	8b e2       	ldi	r24, 0x2B	; 43
       d4:	0e 94 ec 00 	call	0x1d8	; 0x1d8 <mcp2515_bit_modify>
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
@@ -836,6 +836,12 @@ void send_stick_can(){
      4c6:	ed cf       	rjmp	.-38     	; 0x4a2 <main+0x68>
 
 000004c8 <oled_init>:
+	atmelMap->OLED_CMD[1] = 0xB1;
+	atmelMap->OLED_CMD[1] = 0x00;
+	atmelMap->OLED_CMD[1] = 0x10;
+}
+void oled_write(amap* atmelMap){
+	atmelMap->OLED_DATA[1] = 0x0F;
      4c8:	e0 e0       	ldi	r30, 0x00	; 0
      4ca:	f0 e1       	ldi	r31, 0x10	; 16
      4cc:	8e ea       	ldi	r24, 0xAE	; 174
@@ -902,76 +908,187 @@ void send_stick_can(){
      540:	08 95       	ret
 
 00000542 <clear_oled>:
+}
+
+void clear_oled(){
      542:	1f 93       	push	r17
      544:	cf 93       	push	r28
      546:	df 93       	push	r29
      548:	10 e0       	ldi	r17, 0x00	; 0
+	ext_ram[0] = c;
+}
+void oled_write_data(char c)
+{
+	volatile char *ext_ram = (char *) 0x1200;
+	ext_ram[0] = c;
      54a:	c0 e0       	ldi	r28, 0x00	; 0
      54c:	d2 e1       	ldi	r29, 0x12	; 18
+	atmelMap->OLED_DATA[1] = 0x0F;
+}
+
+void clear_oled(){
+	for(int i = 0; i < 8 ; i++){
+		go_to_line(i);
      54e:	81 2f       	mov	r24, r17
      550:	0e 94 92 02 	call	0x524	; 0x524 <go_to_line>
+		
+		go_to_column(0);
      554:	80 e0       	ldi	r24, 0x00	; 0
      556:	0e 94 97 02 	call	0x52e	; 0x52e <go_to_column>
      55a:	80 e8       	ldi	r24, 0x80	; 128
      55c:	90 e0       	ldi	r25, 0x00	; 0
+	ext_ram[0] = c;
+}
+void oled_write_data(char c)
+{
+	volatile char *ext_ram = (char *) 0x1200;
+	ext_ram[0] = c;
      55e:	18 82       	st	Y, r1
      560:	01 97       	sbiw	r24, 0x01	; 1
+void clear_oled(){
+	for(int i = 0; i < 8 ; i++){
+		go_to_line(i);
+		
+		go_to_column(0);
+		for(int j = 0; j < 128; j++){
      562:	e9 f7       	brne	.-6      	; 0x55e <clear_oled+0x1c>
      564:	1f 5f       	subi	r17, 0xFF	; 255
+void oled_write(amap* atmelMap){
+	atmelMap->OLED_DATA[1] = 0x0F;
+}
+
+void clear_oled(){
+	for(int i = 0; i < 8 ; i++){
      566:	18 30       	cpi	r17, 0x08	; 8
      568:	91 f7       	brne	.-28     	; 0x54e <clear_oled+0xc>
+		for(int j = 0; j < 128; j++){
+			
+			oled_write_data(0x00);
+		}
+	}
+}
      56a:	df 91       	pop	r29
      56c:	cf 91       	pop	r28
      56e:	1f 91       	pop	r17
      570:	08 95       	ret
 
 00000572 <SRAM_test>:
+#include "sram_test.h"
+    void SRAM_test(void)
+    {
      572:	ef 92       	push	r14
      574:	ff 92       	push	r15
      576:	0f 93       	push	r16
      578:	1f 93       	push	r17
      57a:	cf 93       	push	r28
      57c:	df 93       	push	r29
+		volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
+        uint16_t ext_ram_size = 0x800;
+        uint16_t write_errors = 0;
+        uint16_t retrieval_errors = 0;
+        printf("Starting SRAM test...\n");
      57e:	85 e3       	ldi	r24, 0x35	; 53
      580:	91 e0       	ldi	r25, 0x01	; 1
      582:	0e 94 2a 05 	call	0xa54	; 0xa54 <puts>
+        // rand() stores some internal state, so calling this function in a loop will
+        // yield different seeds each time (unless srand() is called before this function)
+        uint16_t seed = rand();
      586:	0e 94 b2 04 	call	0x964	; 0x964 <rand>
      58a:	7c 01       	movw	r14, r24
+        // Write phase: Immediately check that the correct value was stored
+        srand(seed);
      58c:	0e 94 b7 04 	call	0x96e	; 0x96e <srand>
      590:	c0 e0       	ldi	r28, 0x00	; 0
      592:	d8 e1       	ldi	r29, 0x18	; 24
+#include "sram_test.h"
+    void SRAM_test(void)
+    {
+		volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
+        uint16_t ext_ram_size = 0x800;
+        uint16_t write_errors = 0;
      594:	00 e0       	ldi	r16, 0x00	; 0
      596:	10 e0       	ldi	r17, 0x00	; 0
+        // yield different seeds each time (unless srand() is called before this function)
+        uint16_t seed = rand();
+        // Write phase: Immediately check that the correct value was stored
+        srand(seed);
+        for (uint16_t i = 0; i < ext_ram_size; i++) {
+            uint8_t some_value = rand();
      598:	0e 94 b2 04 	call	0x964	; 0x964 <rand>
+            ext_ram[i] = some_value;
      59c:	88 83       	st	Y, r24
+            uint8_t retreived_value = ext_ram[i];
      59e:	98 81       	ld	r25, Y
+            if (retreived_value != some_value) {
      5a0:	89 17       	cp	r24, r25
      5a2:	11 f0       	breq	.+4      	; 0x5a8 <SRAM_test+0x36>
+                //printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
+                write_errors++;
      5a4:	0f 5f       	subi	r16, 0xFF	; 255
      5a6:	1f 4f       	sbci	r17, 0xFF	; 255
      5a8:	21 96       	adiw	r28, 0x01	; 1
+        // rand() stores some internal state, so calling this function in a loop will
+        // yield different seeds each time (unless srand() is called before this function)
+        uint16_t seed = rand();
+        // Write phase: Immediately check that the correct value was stored
+        srand(seed);
+        for (uint16_t i = 0; i < ext_ram_size; i++) {
      5aa:	c1 15       	cp	r28, r1
      5ac:	80 e2       	ldi	r24, 0x20	; 32
      5ae:	d8 07       	cpc	r29, r24
      5b0:	99 f7       	brne	.-26     	; 0x598 <SRAM_test+0x26>
+                //printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
+                write_errors++;
+            }
+        }
+        // Retrieval phase: Check that no values were changed during or after the write phase
+        srand(seed);
      5b2:	c7 01       	movw	r24, r14
      5b4:	0e 94 b7 04 	call	0x96e	; 0x96e <srand>
      5b8:	c0 e0       	ldi	r28, 0x00	; 0
      5ba:	d8 e1       	ldi	r29, 0x18	; 24
+    void SRAM_test(void)
+    {
+		volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
+        uint16_t ext_ram_size = 0x800;
+        uint16_t write_errors = 0;
+        uint16_t retrieval_errors = 0;
      5bc:	e1 2c       	mov	r14, r1
      5be:	f1 2c       	mov	r15, r1
+        }
+        // Retrieval phase: Check that no values were changed during or after the write phase
+        srand(seed);
+        // reset the PRNG to the state it had before the write phase
+        for (uint16_t i = 0; i < ext_ram_size; i++) {
+            uint8_t some_value = rand();
      5c0:	0e 94 b2 04 	call	0x964	; 0x964 <rand>
+            uint8_t retreived_value = ext_ram[i];
      5c4:	98 81       	ld	r25, Y
+            if (retreived_value != some_value) {
      5c6:	98 17       	cp	r25, r24
      5c8:	19 f0       	breq	.+6      	; 0x5d0 <SRAM_test+0x5e>
+               // printf("Retrieval phase error: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
+                retrieval_errors++;
      5ca:	8f ef       	ldi	r24, 0xFF	; 255
      5cc:	e8 1a       	sub	r14, r24
      5ce:	f8 0a       	sbc	r15, r24
      5d0:	21 96       	adiw	r28, 0x01	; 1
+            }
+        }
+        // Retrieval phase: Check that no values were changed during or after the write phase
+        srand(seed);
+        // reset the PRNG to the state it had before the write phase
+        for (uint16_t i = 0; i < ext_ram_size; i++) {
      5d2:	c1 15       	cp	r28, r1
      5d4:	80 e2       	ldi	r24, 0x20	; 32
      5d6:	d8 07       	cpc	r29, r24
      5d8:	99 f7       	brne	.-26     	; 0x5c0 <SRAM_test+0x4e>
+            if (retreived_value != some_value) {
+               // printf("Retrieval phase error: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
+                retrieval_errors++;
+            }
+        }
+        printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
      5da:	ff 92       	push	r15
      5dc:	ef 92       	push	r14
      5de:	1f 93       	push	r17
@@ -996,58 +1113,28 @@ void send_stick_can(){
      606:	08 95       	ret
 
 00000608 <USART_Transmit>:
-	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
-	clear_bit(UCSR0C, 0); // Clock polarity
-	fdevopen(USART_Transmit, USART_Receive);
-}
-void USART_Transmit(unsigned char data){
-	while (!(UCSR0A & (1<<UDRE0)));
      608:	5d 9b       	sbis	0x0b, 5	; 11
      60a:	fe cf       	rjmp	.-4      	; 0x608 <USART_Transmit>
-	
-	UDR0 = data;
      60c:	8c b9       	out	0x0c, r24	; 12
      60e:	08 95       	ret
 
 00000610 <USART_Receive>:
-}
-
-unsigned int USART_Receive(void)
-{
-	
-	while (!(UCSR0A & (1<<RXC0)));
      610:	5f 9b       	sbis	0x0b, 7	; 11
      612:	fe cf       	rjmp	.-4      	; 0x610 <USART_Receive>
-	
-
-	return UDR0;
      614:	8c b1       	in	r24, 0x0c	; 12
      616:	90 e0       	ldi	r25, 0x00	; 0
      618:	08 95       	ret
 
 0000061a <USART_Init>:
-#include <stdio.h>
-#define clear_bit( reg, bit ) (reg &= ~(1 << bit))
-
-void USART_Init (unsigned int ubrr ){
-	
-	UBRR0H = (unsigned char)(ubrr>>8);
      61a:	90 bd       	out	0x20, r25	; 32
-	UBRR0L = (unsigned char)ubrr;
      61c:	89 b9       	out	0x09, r24	; 9
-	
-	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
      61e:	88 e1       	ldi	r24, 0x18	; 24
      620:	8a b9       	out	0x0a, r24	; 10
-	
-	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
      622:	8e e8       	ldi	r24, 0x8E	; 142
      624:	8c bf       	out	0x3c, r24	; 60
-	clear_bit(UCSR0C, 0); // Clock polarity
      626:	80 b5       	in	r24, 0x20	; 32
      628:	8e 7f       	andi	r24, 0xFE	; 254
      62a:	80 bd       	out	0x20, r24	; 32
-	fdevopen(USART_Transmit, USART_Receive);
      62c:	68 e0       	ldi	r22, 0x08	; 8
      62e:	73 e0       	ldi	r23, 0x03	; 3
      630:	84 e0       	ldi	r24, 0x04	; 4
