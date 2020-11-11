@@ -53,7 +53,6 @@ typedef struct{
 
 
 
-
 int main(void){
 	
 //  	joyVal joystick; 
@@ -71,11 +70,19 @@ int main(void){
 	SFIOR |= (1<<XMM2);
 	
 	DDRA |= 0x18;
+	/*
+	_delay_ms(1000);
+	volatile char * ext_ram = (char *) 0x1800;
+	uint8_t value5 = 5;
 	
-	
-	
+	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[15]);
+	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[16]);
+	_delay_ms(1000);
+	*/
 	can_init();
 	
+
+
 	
 	//DDRC = 0xFF;
 	//PORTC = 0x00;
@@ -96,10 +103,10 @@ int main(void){
 	TCCR2 |= (1<<COM20);
 	*/
 
+	can_interrupt_enable();
 	
-	SRAM_test(); _delay_ms(1000);
-	can_init();
-	//launch_menusystem();
+	//SRAM_test(); _delay_ms(1000);
+	launch_menusystem();
 		
 	//Check if the whole thing just works from up here:
 	
@@ -138,23 +145,22 @@ int main(void){
 	}*/
 	
 	
-	can_interrupt_enable();
-	can_message* receivedMsg;
 	
+	can_message* receivedMsg;
 	calc_offset();
 	while(1){
 		// CAN BUS TEST
 		//msgToReceive = receive_can_msg(0);
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
+		printf("Program running %d \r\n", 2);
 		send_stick_can();
 		_delay_ms(50);
 
 
 		if(can_interrupted()){
 			receivedMsg = receive_can_msg(0);
-			uint8_t myTime = receivedMsg->data[0];
-			printf("time running: %d", myTime);
+			printf("%d", receivedMsg->data);
 		}
 
 	/*	for(int i = 0; i < 8; i++){

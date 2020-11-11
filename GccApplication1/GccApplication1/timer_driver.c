@@ -9,8 +9,17 @@
 #include "motor_controller.h"
 	
 static Tc *tc = 0x40080000;
+uint8_t ti_counter = 0;
 	
 #define DEBUG_INTERRUPT 1
+
+uint8_t get_controller_runs(){
+	return ti_counter;
+}
+
+void reset_controller_runs(){
+	ti_counter = 0;
+}
 
 void timer_init(){
 		
@@ -89,6 +98,7 @@ void TC1_Handler( void ){
 	//printf("x: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
+	ti_counter++;
 }
 
 void TC2_Handler( void ){

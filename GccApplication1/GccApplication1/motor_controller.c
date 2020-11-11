@@ -9,9 +9,19 @@
  #include "printf-stdarg.h"
  #include "uart.h"
  #include "sam.h"
+ #include "timer.h"
  
  uint8_t previous = 1;
  uint8_t y_value_pi = 0;
+ uint8_t solenoide_status = 0;
+
+ uint8_t get_solenoid_status(){
+	 return solenoide_status;
+ }
+
+void reset_solenoid_status(){
+	solenoide_status = 0;
+ }
  
  void move_solenoid(){
 	 //printf("joystick.x_val : %d \n\r", joystick.x_val);
@@ -27,7 +37,21 @@
 		 timer_change_duty(val2);
 	 }
  }
- 
+
+ void check_solenoid_shot(){
+	static uint32_t last_time_pressed = 0;
+	if(button_check(joystick.butt_pressed)){
+		last_time_pressed = return_milliseconds();
+		PIOC->PIO_CODR |= PIO_CODR_P13;
+		solenoide_status = 1;
+	}
+	else{
+		if(return_milliseconds() > (last_time_pressed + 10)){
+			PIOC->PIO_SODR |= PIO_SODR_P13;
+			solenoide_status = 0;
+		}
+	}
+ }
  
  void change_motor_speed(){
 	 //printf("joystick.y_val : %d \n\r", joystick.y_val);
@@ -122,7 +146,7 @@ uint8_t encoder_read(){
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
 	y_value_pi = (8888-encoder_data_int)/88; //scaled so that value is 0-100;
- //printf("Encoder data: %x \n\r", encoder_data_int);
+ 	printf("Encoder             data: %x \n\r", y_value_pi);
 // 	
 // 	if(encoder_data &= (1 << 15)){
 // 		//encoder_data = (~encoder_data + 1);

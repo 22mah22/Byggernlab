@@ -123,16 +123,15 @@ can_message* receive_can_msg(uint8_t buffer_number){
 	uint8_t status = mcp2515_read_status();
 	static can_message msg;
 	msg.id = 0x00;
-	uint16_t idHigh = mcp2515_read(idBufferHighAddress+16*buffer_number);
-	uint16_t idLow = mcp2515_read(idBufferLowAddress+16*buffer_number);
+	uint16_t idHigh = mcp2515_read(0x61+16*buffer_number);
+	uint16_t idLow = mcp2515_read(0x62+16*buffer_number);
 	
 	msg.id |= idLow>>5;
 	msg.id |= idHigh<<3;
 	
 	uint8_t length;
-	length = 0b00001111 & mcp2515_read(dataLengthBufferAddress);
+	length = 0b00001111 & mcp2515_read(0x65);
 	msg.data_length = length;
-	
 	for(uint8_t m = 0; m < length; m++){
 		//msg.data[m] = mcp2515_read(dataBufferAddress+m+16*buffer_number);
 		msg.data[m] = mcp2515_read(0x66+m+16*buffer_number);

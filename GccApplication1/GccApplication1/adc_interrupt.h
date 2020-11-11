@@ -11,13 +11,15 @@
 
 #include <stdint.h>
 
+uint8_t get_total_goals();
+
+uint8_t get_goal_flag();
+
+ void reset_goal_flag();
 /*void start_timer();*/
 void ADC_Handler       ( void );
 
-extern uint8_t TO_INCREMENT;
-extern uint8_t TOTAL_GOALS;
 
-//void goal_counter();
 
 
 #endif /* ADC_INTERRUPT_H_ */

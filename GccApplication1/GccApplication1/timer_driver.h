@@ -15,6 +15,9 @@ void timer_change_duty_buzzer(uint8_t dutyCycle);
 void init_ch1_PI();
 void init_ch2();
 
+uint8_t get_controller_runs();
+
+void reset_controller_runs();
 
 void TC1_Handler       ( void );
 void TC2_Handler( void );

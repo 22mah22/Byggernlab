@@ -4,6 +4,7 @@
 #include "protagonists.h"
 #include "joystick_driver.h"
 #include "menuconfigs.h"
+#include "can_driver.h"
 
 char* string_list[] = {
 	"Option 1",
@@ -229,13 +230,56 @@ void choose_character(){
 void play_game(){
 	clear_oled();
 	calc_offset();
-	printf("outwhile");
-	while(!(PIND & (1<< PIND4))){ //left button to exit game
-		
-		printf("inwhilebefore");
+	can_message* msgToReceive;
+	uint8_t position = 0;
+	while(!(PIND & (1<< PIND5))){ //right button to exit game
+		//Sending joystick data to node 2
 		send_stick_can();
-		printf("inwhile");
-		_delay_ms(5);
+		//Checking for messages from node 2
+		if(can_interrupted()){
+			msgToReceive = receive_can_msg(0);
+			uint16_t id = msgToReceive->id;
+			printf("\r fake id and data: %d  %d \r\n",id, msgToReceive->data[0]);
+			printf("\r id and length: %d  %d \r\n",msgToReceive->id, msgToReceive->data_length);
+			switch (id){
+			case 0x1:
+      			// 0x1 means: Goal scored
+				clear_oled();
+				oled_write_string(3, "GAME OVER!", 8);
+				_delay_ms(3500);
+				return;
+      			break;
+
+			case 0x4:
+				// 0x4 means: Motor position
+				//clear_oled();
+				//character_printer(smol_wojak, 8, 8, (((msgToReceive->data[0]) * (128-40))/100), 24, 0);
+				go_to_line(1);
+				for (uint8_t i = 0; i < 5; i++){
+					go_to_column(position + i);
+					oled_write_data(0b00000000);
+				}
+				position = msgToReceive->data[0] * (128-8)/100;
+				for (uint8_t i = 0; i < 5; i++){
+					go_to_column(position + i);
+					oled_write_data(0b11110000);
+				}
+
+				if(msgToReceive->data[1]){
+					oled_write_string(3, "SHOT", 8);
+				}
+				break;
+			
+			case 0x7:
+				// 0x7 means: Time gone by
+				oled_write_string(0, msgToReceive->data[0], 8);
+				break;
+			
+			default:
+				;
+				//oled_write_string(1, "unknown CAN", 8);
+			}
+		}
 	}
 	return;
 }
