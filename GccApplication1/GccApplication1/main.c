@@ -56,6 +56,7 @@ int main(void)
 	//init_interrupt_PI();
 	init_ch1_PI();
 	
+	
 	adc_init();
 	dac_init();
 	
@@ -126,7 +127,7 @@ int main(void)
 
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
-//		printf("goals : %d   \n\r", TOTAL_GOALS);
+		printf("goals : %d   \n\r", TOTAL_GOALS);
 		/*printf("left_butt : %d   \n\r", joystick.left_button);
 		printf("right_butt : %d   \n\r", joystick.right_button);
 		printf("left_slider : %d   \n\r", joystick.left_val);

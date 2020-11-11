@@ -14,7 +14,7 @@
 
 #include "printf-stdarg.h"
 
-
+#include "timer.h"
 
 /**
  * \brief Initialize can bus with predefined number of rx and tx mailboxes, 
@@ -167,7 +167,8 @@ uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id)
  * \retval Success(0) or failure(1)
  */
 uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
-{
+{	
+	
 	//Check that mailbox is ready
 	if(CAN0->CAN_MB[rx_mb_id].CAN_MSR & CAN_MSR_MRDY)
 	{

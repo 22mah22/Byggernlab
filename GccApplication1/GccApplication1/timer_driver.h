@@ -11,10 +11,13 @@
 
 void timer_init();
 void timer_change_duty(uint8_t dutyCycle);
+void timer_change_duty_buzzer(uint8_t dutyCycle);
 void init_ch1_PI();
+void init_ch2();
 
 
 void TC1_Handler       ( void );
+void TC2_Handler( void );
 
 
 

@@ -28,3 +28,5 @@ timer_driver.c
 
 uart.c
 
+usart.c
+

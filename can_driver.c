@@ -110,8 +110,11 @@ void send_can_msg(can_message *msg){
 	if(buffer_number > 2){
 		buffer_number = 0;
 	}*/
-	
+	//mcp2515_bit_modify(MCP_CANINTF, 0xff, 0x00);
 	mcp2515_request_to_send(MCP_RTS_TX0+buffer_number);
+	
+	printf("canintef %x \n\r", mcp2515_read(MCP_CANINTF));
+	printf("eflg %x \n\r", mcp2515_read(MCP_EFLG));
 	//mcp2515_bit_modify(MCP_TXB0CTRL+16*buffer_number,0b00001000,0b00001000);
 	//mcp2515_bit_modify(0x0D,0b00000111,0b00000111);
 }

@@ -148,7 +148,7 @@ int main(void){
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
 		send_stick_can();
-		_delay_ms(5);
+		_delay_ms(50);
 
 
 		if(can_interrupted()){
