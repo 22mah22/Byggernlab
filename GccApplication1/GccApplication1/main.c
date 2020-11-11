@@ -16,6 +16,7 @@
 #include "dac_controller.h"
 #include "motor_controller.h"
 #include "timer.h"
+#include "feedback.h"
 
 int main(void)
 {
@@ -89,8 +90,7 @@ int main(void)
 	PIOA->PIO_OER |= PIO_OER_P9; //Output Enable Register, Output Enable*/
 	volatile CAN_MESSAGE msg;
 	volatile CAN_MESSAGE msgToSend;
-	msgToSend.id = 0;
-	msgToSend.data_length = 8;
+	uint8_t solenoide_pressed = 0;
 	SysTick_init();
     while (1) 
     {
@@ -114,12 +114,7 @@ int main(void)
 		msgToSend.data[0] = joystick.left_val;
 		msgToSend.id = 0x0007;
 
-		if(button_check(joystick.butt_pressed)){
-			PIOC->PIO_CODR |= PIO_CODR_P13;
-			for(int i = 0; i < 1600000; i++){
-			}
-			PIOC->PIO_SODR |= PIO_SODR_P13;
-		}
+		check_solenoide_shot();
 		
 		
 		//printf("%d",ADC->ADC_ISR);
@@ -133,21 +128,21 @@ int main(void)
 		printf("joyright : %d   \n\r", joystick.y_val);*/
 		//printf("adc_input : %d ::::", ADC->ADC_LCDR & 0x00000CE4);
 		
-		
-		if(TO_INCREMENT){
-			printf("to_increment");
-			//goal_counter();
-			for(int j = 0; j < 5*1600000; j++){
-				
+
+		send_time_to_node_1(msgToSend);
+
+		//limits to fewer OLED updates a second, can be tweaked
+		if(!(get_controller_runs()%3)){
+			send_motor_info_to_node_1(msgToSend, y_value_pi, get_solenoide_status());
+			//Make sure 8 bit doesen't overflow as it would break logic
+			if(get_controller_runs > 250){
+				reset_controller_runs();
 			}
 		}
-
-		msgToSend.data[0] = return_seconds();
-		if(!(return_milliseconds()%10)){
-			can_send(&msgToSend, 0);
-			printf("data sent: %d", msgToSend.data[0]);
+		if(get_goal_flag()){
+			send_goals_to_node_1(msgToSend, get_total_goals());
+			reset_goal_flag();
 		}
-	
 		
 		/*//printf("G�����llll %d \n\r", ADC->ADC_ISR);
 		

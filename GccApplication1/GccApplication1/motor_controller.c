@@ -9,9 +9,19 @@
  #include "printf-stdarg.h"
  #include "uart.h"
  #include "sam.h"
+ #include "timer.h"
  
  uint8_t previous = 1;
  uint8_t y_value_pi = 0;
+ uint8_t solenoide_status = 0;
+
+ uint8_t get_solenoide_status(){
+	 return solenoide_status;
+ }
+
+void reset_solenoide_status(){
+	solenoide_status = 0;
+ }
  
  void move_solenoid(){
 	 //printf("joystick.x_val : %d \n\r", joystick.x_val);
@@ -27,7 +37,21 @@
 		 timer_change_duty(val2);
 	 }
  }
- 
+
+ void check_solenoid_shot(){
+	static uint32_t last_time_pressed = 0;
+	if(button_check(joystick.butt_pressed)){
+		last_time_pressed = return_milliseconds();
+		PIOC->PIO_CODR |= PIO_CODR_P13;
+		solenoide_status = 1;
+	}
+	else{
+		if(return_milliseconds() > (last_time_pressed + 10)){
+			PIOC->PIO_SODR |= PIO_SODR_P13;
+			solenoide_status = 0;
+		}
+	}
+ }
  
  void change_motor_speed(){
 	 //printf("joystick.y_val : %d \n\r", joystick.y_val);

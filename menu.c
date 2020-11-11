@@ -4,6 +4,8 @@
 #include "protagonists.h"
 #include "joystick_driver.h"
 #include "menuconfigs.h"
+#include "can_driver.h"
+#include "can_interrupt.h"
 
 char* string_list[] = {
 	"Option 1",
@@ -229,13 +231,41 @@ void choose_character(){
 void play_game(){
 	clear_oled();
 	calc_offset();
-	printf("outwhile");
+	volatile can_message* msgToReceive;
 	while(!(PIND & (1<< PIND4))){ //left button to exit game
-		
-		printf("inwhilebefore");
+		//Sending joystick data to node 2
 		send_stick_can();
-		printf("inwhile");
-		_delay_ms(5);
+		//Checking for messages from node 2
+		if(can_interrupted()){
+			msgToReceive = receive_can_msg(0);
+			switch (msgToReceive->id)​{
+    		case 0x1:
+      			// 0x1 means: Goal scored
+				clear_oled();
+				oled_write_string(3, "GAME OVER!", 8);
+				_delay_ms(1500);
+				return;
+      			break;
+
+			case 0x4:
+				// 0x4 means: Motor position
+				clear_oled();
+				character_printer(smol_wojak, 40, 40, (((msgToReceive->data[0]) * (128-40))/100), 24, 0);
+				if(msgToReceive->data[1]){
+					clear_oled();
+					oled_write_string(3, "SHOT", 8);
+				}
+				break;
+			
+			case 0x7:
+				// 0x7 means: Time gone by
+				oled_write_string(0, msgToReceive->data[0], 8);
+				break;
+			
+			default:
+				oled_write_string(1, "unknown CAN", 8);
+			}
+		}
 	}
 	return;
 }
