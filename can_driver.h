@@ -20,8 +20,6 @@
  * and writing to its CAN control-registers.
  */
 
-
-
 void can_init();
 
 /**
