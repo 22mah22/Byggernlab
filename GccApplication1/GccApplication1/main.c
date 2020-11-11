@@ -124,7 +124,7 @@ int main(void)
 		
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
- 		printf("goals : %d   \n\r", TOTAL_GOALS);
+//		printf("goals : %d   \n\r", TOTAL_GOALS);
 		/*printf("left_butt : %d   \n\r", joystick.left_button);
 		printf("right_butt : %d   \n\r", joystick.right_button);
 		printf("left_slider : %d   \n\r", joystick.left_val);
@@ -143,8 +143,9 @@ int main(void)
 		}
 
 		msgToSend.data[0] = return_seconds();
-		if(!(return_milliseconds()%100)){
+		if(!(return_milliseconds()%10)){
 			can_send(&msgToSend, 0);
+			printf("data sent: %d", msgToSend.data[0]);
 		}
 	
 		

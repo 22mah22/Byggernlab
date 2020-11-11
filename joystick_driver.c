@@ -151,8 +151,8 @@ void send_stick_can(){
 	msgToSend.data[5] = slider.l_val;
 	msgToSend.data[6] = slider.r_val;
 	msgToSend.data[7] = (PIND & (1<< PIND4)) >> 3 | (PIND & (1<< PIND5)) >> 5; //left and right button on second least significant and least significant
-	printf("button data: %d \n\r",msgToSend.data[7]);
-	printf("button data: %d \n\r",msgToSend.data[5]);
+	/*printf("button data: %d \n\r",msgToSend.data[7]);
+	printf("button data: %d \n\r",msgToSend.data[5]);*/
 	
 	msgToSend.id = 0x0015;
 	send_can_msg(&msgToSend);

@@ -136,8 +136,8 @@ can_message* receive_can_msg(uint8_t buffer_number){
 	}
 	
 	//Reset interrupt flag
-	mcp_2515_bit_modify(MCP_CANINTF, 1, 0);
-	mcp_2515_bit_modify(MCP_CANINTF, 2, 0);
+	mcp2515_bit_modify(MCP_CANINTF, 1, 0);
+	mcp2515_bit_modify(MCP_CANINTF, 2, 0);
 	
 	return &msg;
 }

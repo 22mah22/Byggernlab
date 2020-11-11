@@ -140,7 +140,6 @@ int main(void){
 	
 	can_interrupt_enable();
 	can_message* receivedMsg;
-
 	
 	calc_offset();
 	while(1){
@@ -155,7 +154,8 @@ int main(void){
 
 		if(can_interrupted()){
 			receivedMsg = receive_can_msg(0);
-			printf("%d sauusss", receivedMsg->data[0]);
+			uint8_t myTime = receivedMsg->data[0];
+			printf("time running: %d", myTime);
 		}
 
 	/*	for(int i = 0; i < 8; i++){
