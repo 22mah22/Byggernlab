@@ -16,6 +16,8 @@ Device_Startup\startup_sam3xa.c
 
 Device_Startup\system_sam3xa.c
 
+feedback.c
+
 motor_controller.c
 
 main.c

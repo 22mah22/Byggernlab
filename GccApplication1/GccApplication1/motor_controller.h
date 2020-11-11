@@ -24,9 +24,9 @@ extern uint8_t y_value_pi; // value for use in pi controller
 
 joyVal joystick;
 
-uint8_t get_solenoide_status();
+uint8_t get_solenoid_status();
 
-void reset_solenoide_status();
+void reset_solenoid_status();
 
 void move_solenoid();
 
