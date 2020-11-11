@@ -19,6 +19,7 @@
  * @brief Initializes the CAN bus on the node by initializing the mcp2515 microcontroller
  * and writing to its CAN control-registers.
  */
+
 void can_init();
 
 /**
@@ -41,3 +42,7 @@ can_message* receive_can_msg(uint8_t buffer_number);
  * @return return 1 and resets interuptflag if transmitted, 0 if not
  */
 uint8_t can_check_complete(uint8_t buffer_number);
+
+uint8_t can_interrupted();
+
+void can_interrupt_enable();

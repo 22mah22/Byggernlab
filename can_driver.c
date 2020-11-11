@@ -5,8 +5,9 @@
  *  Author: magneah
  */ 
 #include "can_driver.h"
-
+#include "DEFINITIONS.h"
 #include <avr/interrupt.h>
+#include <avr/io.h>
 
 #define idBufferHighAddress 0x31
 #define idBufferLowAddress 0x32
@@ -15,6 +16,28 @@
 
 uint8_t buffer_number = 0;
 
+volatile uint8_t can_flag = 0;
+
+ISR(INT0_vect){
+	can_flag = 1;
+}
+
+uint8_t can_interrupted(){
+	if (can_flag){	
+		can_flag = 0;
+		return 1;
+	}
+	return 0;
+}
+
+void can_interrupt_enable(){
+	cli();
+	set_bit(MCUCR, ISC01);
+	clear_bit(MCUCR, ISC00);
+	// Enable interrupt on PD2/INT0 on the AtMega
+	set_bit(GICR,INT0);
+	sei();
+}
 
 void can_init(){
 	
@@ -112,7 +135,9 @@ can_message* receive_can_msg(uint8_t buffer_number){
 		msg.data[m] = mcp2515_read(0x66+m+16*buffer_number);
 	}
 	
-	//flag recieved
+	//Reset interrupt flag
+	mcp2515_bit_modify(MCP_CANINTF, 1, 0);
+	mcp2515_bit_modify(MCP_CANINTF, 2, 0);
 	
 	return &msg;
 }

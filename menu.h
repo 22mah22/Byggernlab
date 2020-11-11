@@ -35,3 +35,5 @@ void wojakprinter();
 void hello_world();
 
 void choose_character();
+
+void play_game();

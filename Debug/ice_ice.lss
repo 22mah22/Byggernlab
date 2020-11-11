@@ -103,62 +103,62 @@ Disassembly of section .text:
       aa:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000ae <can_init>:
+
 uint8_t buffer_number = 0;
 
+volatile uint8_t can_flag = 0;
 
-void can_init(){
-	
-	mcp2515_init();
+ISR(INT0_vect){
       ae:	0e 94 0a 01 	call	0x214	; 0x214 <mcp2515_init>
-	mcp2515_reset();
+	can_flag = 1;
       b2:	0e 94 04 01 	call	0x208	; 0x208 <mcp2515_reset>
-	mcp2515_bit_modify(MCP_CNF2, 0b10000000, 0x01<<7);	//BTLMODE: Length of PS2 determined by PHSEG2 bits in CNF3
-	
-	mcp2515_bit_modify(MCP_CNF1, 0b11000000, 0x00<<6);	//SJW: 1*Tq
-	mcp2515_bit_modify(MCP_CNF1, 0b00111111, 0x03);*/
-	
-	mcp2515_write(MCP_CNF3, 0x01); //0x01 // 0b00000010
+	set_bit(MCUCR, ISC01);
+	clear_bit(MCUCR, ISC00);
+	// Enable interrupt on PD2/INT0 on the AtMega
+	set_bit(GICR,INT0);
+	sei();
+}
       b6:	61 e0       	ldi	r22, 0x01	; 1
       b8:	88 e2       	ldi	r24, 0x28	; 40
       ba:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010 original
+
       be:	65 eb       	ldi	r22, 0xB5	; 181
       c0:	89 e2       	ldi	r24, 0x29	; 41
       c2:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	mcp2515_write(MCP_CNF1, 0x43); //0x43 // 0b01000000
+void can_init(){
       c6:	63 e4       	ldi	r22, 0x43	; 67
       c8:	8a e2       	ldi	r24, 0x2A	; 42
       ca:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
 	
-	mcp2515_bit_modify(MCP_CANINTE, 0b00000011, MCP_RX_INT);
+	mcp2515_init();
       ce:	43 e0       	ldi	r20, 0x03	; 3
       d0:	63 e0       	ldi	r22, 0x03	; 3
       d2:	8b e2       	ldi	r24, 0x2B	; 43
       d4:	0e 94 ec 00 	call	0x1d8	; 0x1d8 <mcp2515_bit_modify>
+	mcp2515_reset();
 	
-	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
       d8:	60 e0       	ldi	r22, 0x00	; 0
       da:	8f e0       	ldi	r24, 0x0F	; 15
       dc:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
       e0:	08 95       	ret
 
 000000e2 <send_can_msg>:
-// 	sei();
 	
-}
-
-
-void send_can_msg(can_message *msg){
+	mcp2515_bit_modify(MCP_CNF1, 0b11000000, 0x00<<6);	//SJW: 1*Tq
+	mcp2515_bit_modify(MCP_CNF1, 0b00111111, 0x03);*/
+	
+	mcp2515_write(MCP_CNF3, 0x01); //0x01 // 0b00000010
+	mcp2515_write(MCP_CNF2, 0xb5); //0xb5 // 0b10010010 original
       e2:	0f 93       	push	r16
       e4:	1f 93       	push	r17
       e6:	cf 93       	push	r28
       e8:	8c 01       	movw	r16, r24
-		if(buffer_number > 2){
-			buffer_number = 0;
-		}
-	}*/
 	
-	mcp2515_write(idBufferHighAddress+16*buffer_number, msg->id>>3);
+	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
+	//mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);	
+	
+	
+	
       ea:	fc 01       	movw	r30, r24
       ec:	60 81       	ld	r22, Z
       ee:	71 81       	ldd	r23, Z+1	; 0x01
@@ -173,11 +173,11 @@ void send_can_msg(can_message *msg){
      102:	80 7f       	andi	r24, 0xF0	; 240
      104:	8f 5c       	subi	r24, 0xCF	; 207
      106:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	uint8_t lowbufferval = mcp2515_read(0x32);
+	
      10a:	82 e3       	ldi	r24, 0x32	; 50
      10c:	0e 94 c7 00 	call	0x18e	; 0x18e <mcp2515_read>
-	
-	mcp2515_write(idBufferLowAddress+16*buffer_number, 0x00ff & ((lowbufferval&0b00011111) | (msg->id<<5)));
+// 	cli();
+// 	
      110:	f8 01       	movw	r30, r16
      112:	60 81       	ld	r22, Z
      114:	62 95       	swap	r22
@@ -190,11 +190,11 @@ void send_can_msg(can_message *msg){
      124:	80 7f       	andi	r24, 0xF0	; 240
      126:	8e 5c       	subi	r24, 0xCE	; 206
      128:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	
-	uint8_t regvalue = mcp2515_read(0x35);
+// 	
+// 	MCUCR |= 1 << ISC01;
      12c:	85 e3       	ldi	r24, 0x35	; 53
      12e:	0e 94 c7 00 	call	0x18e	; 0x18e <mcp2515_read>
-	mcp2515_write(dataLengthBufferAddress+16*buffer_number, (regvalue&0b11110000) | msg->data_length);
+// 	MCUCR &= ~(1 << ISC00);
      132:	80 7f       	andi	r24, 0xF0	; 240
      134:	f8 01       	movw	r30, r16
      136:	92 81       	ldd	r25, Z+2	; 0x02
@@ -205,15 +205,15 @@ void send_can_msg(can_message *msg){
      142:	80 7f       	andi	r24, 0xF0	; 240
      144:	8b 5c       	subi	r24, 0xCB	; 203
      146:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	
-	
-	for(uint8_t m = 0; m < msg->data_length; m++){
+// 	GICR |= 1 << INT0;
+// 	
+// 	sei();
      14a:	f8 01       	movw	r30, r16
      14c:	82 81       	ldd	r24, Z+2	; 0x02
      14e:	88 23       	and	r24, r24
      150:	a9 f0       	breq	.+42     	; 0x17c <send_can_msg+0x9a>
      152:	c0 e0       	ldi	r28, 0x00	; 0
-		mcp2515_write(dataBufferAddress+m+16*buffer_number, msg->data[m]);
+	
      154:	f8 01       	movw	r30, r16
      156:	ec 0f       	add	r30, r28
      158:	f1 1d       	adc	r31, r1
@@ -227,29 +227,29 @@ void send_can_msg(can_message *msg){
      16a:	63 81       	ldd	r22, Z+3	; 0x03
      16c:	8a 5c       	subi	r24, 0xCA	; 202
      16e:	0e 94 d5 00 	call	0x1aa	; 0x1aa <mcp2515_write>
-	
-	uint8_t regvalue = mcp2515_read(0x35);
-	mcp2515_write(dataLengthBufferAddress+16*buffer_number, (regvalue&0b11110000) | msg->data_length);
-	
-	
-	for(uint8_t m = 0; m < msg->data_length; m++){
+// 	
+// 	MCUCR |= 1 << ISC01;
+// 	MCUCR &= ~(1 << ISC00);
+// 	GICR |= 1 << INT0;
+// 	
+// 	sei();
      172:	cf 5f       	subi	r28, 0xFF	; 255
      174:	f8 01       	movw	r30, r16
      176:	82 81       	ldd	r24, Z+2	; 0x02
      178:	c8 17       	cp	r28, r24
      17a:	60 f3       	brcs	.-40     	; 0x154 <send_can_msg+0x72>
-	/*buffer_number += 1;
-	if(buffer_number > 2){
-		buffer_number = 0;
-	}*/
+
+void send_can_msg(can_message *msg){
 	
-	mcp2515_request_to_send(MCP_RTS_TX0+buffer_number);
+	/*while(!can_check_complete(buffer_number)){
+		buffer_number += 1;
+		if(buffer_number > 2){
      17c:	80 91 a4 01 	lds	r24, 0x01A4	; 0x8001a4 <__data_end>
      180:	8f 57       	subi	r24, 0x7F	; 127
      182:	0e 94 e7 00 	call	0x1ce	; 0x1ce <mcp2515_request_to_send>
-	//mcp2515_bit_modify(MCP_TXB0CTRL+16*buffer_number,0b00001000,0b00001000);
-	//mcp2515_bit_modify(0x0D,0b00000111,0b00000111);
-}
+			buffer_number = 0;
+		}
+	}*/
      186:	cf 91       	pop	r28
      188:	1f 91       	pop	r17
      18a:	0f 91       	pop	r16
@@ -657,7 +657,7 @@ void send_stick_can(){
      3d6:	82 2f       	mov	r24, r18
      3d8:	89 2b       	or	r24, r25
      3da:	8b 87       	std	Y+11, r24	; 0x0b
-	printf("button data: %d \n\r",msgToSend.data[7]);
+	/*printf("button data: %d \n\r",msgToSend.data[7]);
      3dc:	28 2f       	mov	r18, r24
      3de:	08 2e       	mov	r0, r24
      3e0:	00 0c       	add	r0, r0
@@ -669,7 +669,7 @@ void send_stick_can(){
      3ec:	1f 93       	push	r17
      3ee:	0f 93       	push	r16
      3f0:	0e 94 0d 05 	call	0xa1a	; 0xa1a <printf>
-	printf("button data: %d \n\r",msgToSend.data[5]);
+	printf("button data: %d \n\r",msgToSend.data[5]);*/
      3f4:	89 85       	ldd	r24, Y+9	; 0x09
      3f6:	28 2f       	mov	r18, r24
      3f8:	08 2e       	mov	r0, r24
@@ -770,49 +770,49 @@ void send_stick_can(){
      474:	e1 f7       	brne	.-8      	; 0x46e <main+0x34>
      476:	00 c0       	rjmp	.+0      	; 0x478 <main+0x3e>
      478:	00 00       	nop
+	can_init();
+	//launch_menusystem();
 		
-		
-	oled_init();
      47a:	0e 94 64 02 	call	0x4c8	; 0x4c8 <oled_init>
-	clear_oled();
+	//Check if the whole thing just works from up here:
      47e:	0e 94 a1 02 	call	0x542	; 0x542 <clear_oled>
 	
+	
 		
-	go_to_line(7);
      482:	87 e0       	ldi	r24, 0x07	; 7
      484:	0e 94 92 02 	call	0x524	; 0x524 <go_to_line>
      488:	cc e5       	ldi	r28, 0x5C	; 92
      48a:	d0 e0       	ldi	r29, 0x00	; 0
-	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
-	//character_printer(wojak, 64, 40);
-	//_delay_ms(60000);
-
-	for(int i = 0; i < 92; i++){
-		printf("\n");
-     48c:	8a e0       	ldi	r24, 0x0A	; 10
-     48e:	90 e0       	ldi	r25, 0x00	; 0
-     490:	0e 94 23 05 	call	0xa46	; 0xa46 <putchar>
-     494:	21 97       	sbiw	r28, 0x01	; 1
 	go_to_line(7);
 	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
 	//character_printer(wojak, 64, 40);
 	//_delay_ms(60000);
 
 	for(int i = 0; i < 92; i++){
+     48c:	8a e0       	ldi	r24, 0x0A	; 10
+     48e:	90 e0       	ldi	r25, 0x00	; 0
+     490:	0e 94 23 05 	call	0xa46	; 0xa46 <putchar>
+     494:	21 97       	sbiw	r28, 0x01	; 1
+		
+	go_to_line(7);
+	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
+	//character_printer(wojak, 64, 40);
+	//_delay_ms(60000);
+
      496:	d1 f7       	brne	.-12     	; 0x48c <main+0x52>
+			_delay_ms(5000);
 		}
 	}*/
 	
 	
-	//launch_menusystem();
-	calc_offset();
+	can_interrupt_enable();
      498:	0e 94 1e 01 	call	0x23c	; 0x23c <calc_offset>
+	can_message* receivedMsg;
+	
+	calc_offset();
 	while(1){
 		// CAN BUS TEST
 		//msgToReceive = receive_can_msg(0);
-		//_delay_ms(5000);
-		//send_can_msg(&msgToSend);
-		printf("Program running %d \r\n", 2);
      49c:	12 e0       	ldi	r17, 0x02	; 2
      49e:	cf e1       	ldi	r28, 0x1F	; 31
      4a0:	d1 e0       	ldi	r29, 0x01	; 1
@@ -821,7 +821,7 @@ void send_stick_can(){
      4a6:	df 93       	push	r29
      4a8:	cf 93       	push	r28
      4aa:	0e 94 0d 05 	call	0xa1a	; 0xa1a <printf>
-		send_stick_can();
+		//_delay_ms(5000);
      4ae:	0e 94 9d 01 	call	0x33a	; 0x33a <send_stick_can>
      4b2:	8f ef       	ldi	r24, 0xFF	; 255
      4b4:	97 e1       	ldi	r25, 0x17	; 23
@@ -836,12 +836,6 @@ void send_stick_can(){
      4c6:	ed cf       	rjmp	.-38     	; 0x4a2 <main+0x68>
 
 000004c8 <oled_init>:
-	atmelMap->OLED_CMD[1] = 0xB1;
-	atmelMap->OLED_CMD[1] = 0x00;
-	atmelMap->OLED_CMD[1] = 0x10;
-}
-void oled_write(amap* atmelMap){
-	atmelMap->OLED_DATA[1] = 0x0F;
      4c8:	e0 e0       	ldi	r30, 0x00	; 0
      4ca:	f0 e1       	ldi	r31, 0x10	; 16
      4cc:	8e ea       	ldi	r24, 0xAE	; 174
@@ -908,65 +902,24 @@ void oled_write(amap* atmelMap){
      540:	08 95       	ret
 
 00000542 <clear_oled>:
-}
-
-void clear_oled(){
      542:	1f 93       	push	r17
      544:	cf 93       	push	r28
      546:	df 93       	push	r29
      548:	10 e0       	ldi	r17, 0x00	; 0
-	ext_ram[0] = c;
-}
-void oled_write_data(char c)
-{
-	volatile char *ext_ram = (char *) 0x1200;
-	ext_ram[0] = c;
      54a:	c0 e0       	ldi	r28, 0x00	; 0
      54c:	d2 e1       	ldi	r29, 0x12	; 18
-	atmelMap->OLED_DATA[1] = 0x0F;
-}
-
-void clear_oled(){
-	for(int i = 0; i < 8 ; i++){
-		go_to_line(i);
      54e:	81 2f       	mov	r24, r17
      550:	0e 94 92 02 	call	0x524	; 0x524 <go_to_line>
-		
-		go_to_column(0);
      554:	80 e0       	ldi	r24, 0x00	; 0
      556:	0e 94 97 02 	call	0x52e	; 0x52e <go_to_column>
      55a:	80 e8       	ldi	r24, 0x80	; 128
      55c:	90 e0       	ldi	r25, 0x00	; 0
-	ext_ram[0] = c;
-}
-void oled_write_data(char c)
-{
-	volatile char *ext_ram = (char *) 0x1200;
-	ext_ram[0] = c;
      55e:	18 82       	st	Y, r1
      560:	01 97       	sbiw	r24, 0x01	; 1
-void clear_oled(){
-	for(int i = 0; i < 8 ; i++){
-		go_to_line(i);
-		
-		go_to_column(0);
-		for(int j = 0; j < 128; j++){
      562:	e9 f7       	brne	.-6      	; 0x55e <clear_oled+0x1c>
      564:	1f 5f       	subi	r17, 0xFF	; 255
-void oled_write(amap* atmelMap){
-	atmelMap->OLED_DATA[1] = 0x0F;
-}
-
-void clear_oled(){
-	for(int i = 0; i < 8 ; i++){
      566:	18 30       	cpi	r17, 0x08	; 8
      568:	91 f7       	brne	.-28     	; 0x54e <clear_oled+0xc>
-		for(int j = 0; j < 128; j++){
-			
-			oled_write_data(0x00);
-		}
-	}
-}
      56a:	df 91       	pop	r29
      56c:	cf 91       	pop	r28
      56e:	1f 91       	pop	r17
@@ -1113,28 +1066,58 @@ void clear_oled(){
      606:	08 95       	ret
 
 00000608 <USART_Transmit>:
+	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
+	clear_bit(UCSR0C, 0); // Clock polarity
+	fdevopen(USART_Transmit, USART_Receive);
+}
+void USART_Transmit(unsigned char data){
+	while (!(UCSR0A & (1<<UDRE0)));
      608:	5d 9b       	sbis	0x0b, 5	; 11
      60a:	fe cf       	rjmp	.-4      	; 0x608 <USART_Transmit>
+	
+	UDR0 = data;
      60c:	8c b9       	out	0x0c, r24	; 12
      60e:	08 95       	ret
 
 00000610 <USART_Receive>:
+}
+
+unsigned int USART_Receive(void)
+{
+	
+	while (!(UCSR0A & (1<<RXC0)));
      610:	5f 9b       	sbis	0x0b, 7	; 11
      612:	fe cf       	rjmp	.-4      	; 0x610 <USART_Receive>
+	
+
+	return UDR0;
      614:	8c b1       	in	r24, 0x0c	; 12
      616:	90 e0       	ldi	r25, 0x00	; 0
      618:	08 95       	ret
 
 0000061a <USART_Init>:
+#include <stdio.h>
+#define clear_bit( reg, bit ) (reg &= ~(1 << bit))
+
+void USART_Init (unsigned int ubrr ){
+	
+	UBRR0H = (unsigned char)(ubrr>>8);
      61a:	90 bd       	out	0x20, r25	; 32
+	UBRR0L = (unsigned char)ubrr;
      61c:	89 b9       	out	0x09, r24	; 9
+	
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
      61e:	88 e1       	ldi	r24, 0x18	; 24
      620:	8a b9       	out	0x0a, r24	; 10
+	
+	UCSR1C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
      622:	8e e8       	ldi	r24, 0x8E	; 142
      624:	8c bf       	out	0x3c, r24	; 60
+	clear_bit(UCSR0C, 0); // Clock polarity
      626:	80 b5       	in	r24, 0x20	; 32
      628:	8e 7f       	andi	r24, 0xFE	; 254
      62a:	80 bd       	out	0x20, r24	; 32
+	fdevopen(USART_Transmit, USART_Receive);
      62c:	68 e0       	ldi	r22, 0x08	; 8
      62e:	73 e0       	ldi	r23, 0x03	; 3
      630:	84 e0       	ldi	r24, 0x04	; 4

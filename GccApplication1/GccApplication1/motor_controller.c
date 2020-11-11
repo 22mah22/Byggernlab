@@ -124,7 +124,7 @@ uint8_t encoder_read(){
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
 	y_value_pi = (8888-encoder_data_int)/88; //scaled so that value is 0-100;
- 	printf("Encoder data: %x \n\r", encoder_data_int);
+ 	//printf("Encoder data: %x \n\r", encoder_data_int);
 // 	
 // 	if(encoder_data &= (1 << 15)){
 // 		//encoder_data = (~encoder_data + 1);

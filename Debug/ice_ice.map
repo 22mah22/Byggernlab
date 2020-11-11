@@ -1107,12 +1107,12 @@ END GROUP
                                 0x324 (size before relaxing)
  .debug_str     0x00000613       0xbb main.o
                                 0x2da (size before relaxing)
- .debug_str     0x000006ce      0x176 OLED_driver.o
-                                0x35d (size before relaxing)
- .debug_str     0x00000844       0x71 sram_test.o
+ .debug_str     0x000006ce      0x1b2 OLED_driver.o
+                                0x357 (size before relaxing)
+ .debug_str     0x00000880       0x71 sram_test.o
                                 0x1fe (size before relaxing)
- .debug_str     0x000008b5       0x9d USART.o
-                                0x1dc (size before relaxing)
+ .debug_str     0x000008f1       0x61 USART.o
+                                0x1e2 (size before relaxing)
 
 .debug_loc      0x00000000     0x1994
  *(.debug_loc)

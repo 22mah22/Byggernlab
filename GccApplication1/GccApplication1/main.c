@@ -88,6 +88,9 @@ int main(void)
 	PIOA->PIO_PER |= PIO_PER_P9; //PIO Enable Register, PIO Enable
 	PIOA->PIO_OER |= PIO_OER_P9; //Output Enable Register, Output Enable*/
 	volatile CAN_MESSAGE msg;
+	volatile CAN_MESSAGE msgToSend;
+	msgToSend.id = 0;
+	msgToSend.data_length = 8;
 	SysTick_init();
     while (1) 
     {
@@ -107,7 +110,10 @@ int main(void)
 		move_solenoid();
 		//change_motor_speed();
 		encoder_read();
-		
+		msgToSend.data_length = 7;
+		msgToSend.data[0] = joystick.left_val;
+		msgToSend.id = 0x0007;
+
 		if(button_check(joystick.butt_pressed)){
 			PIOC->PIO_CODR |= PIO_CODR_P13;
 			for(int i = 0; i < 1600000; i++){
@@ -118,7 +124,7 @@ int main(void)
 		
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
- 		printf("goals : %d   \n\r", TOTAL_GOALS);
+//		printf("goals : %d   \n\r", TOTAL_GOALS);
 		/*printf("left_butt : %d   \n\r", joystick.left_button);
 		printf("right_butt : %d   \n\r", joystick.right_button);
 		printf("left_slider : %d   \n\r", joystick.left_val);
@@ -135,11 +141,18 @@ int main(void)
 				
 			}
 		}
+
+		msgToSend.data[0] = return_seconds();
+		if(!(return_milliseconds()%10)){
+			can_send(&msgToSend, 0);
+			printf("data sent: %d", msgToSend.data[0]);
+		}
+	
 		
-		/*//printf("Gååååållll %d \n\r", ADC->ADC_ISR);
+		/*//printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %d \n\r", ADC->ADC_ISR);
 		
 		if(ADC->ADC_ISR & (0x1 << 26)){
-			printf("Gååååållll %x \r", ADC->ADC_ISR);
+			printf("Gï¿½ï¿½ï¿½ï¿½ï¿½llll %x \r", ADC->ADC_ISR);
 			
 		}*/
 		/*if(!can_receive(&msg, 0)){
