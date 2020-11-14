@@ -72,13 +72,14 @@ int main(void){
 	DDRA |= 0x18;
 	/*
 	_delay_ms(1000);
-	volatile char * ext_ram = (char *) 0x1800;
+	volatile char * sram = (char *) 0x1800;
 	uint8_t value5 = 5;
 	
 	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[15]);
 	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[16]);
 	_delay_ms(1000);
 	*/
+	volatile char * sram = (char *) 0x1800;
 	can_init();
 	
 
@@ -106,7 +107,7 @@ int main(void){
 	can_interrupt_enable();
 	
 	//SRAM_test(); _delay_ms(1000);
-	launch_menusystem();
+	//launch_menusystem();
 		
 	//Check if the whole thing just works from up here:
 	
@@ -148,6 +149,27 @@ int main(void){
 	
 	can_message* receivedMsg;
 	calc_offset();
+	
+	
+	
+	
+	oled_init();
+	clear_oled();
+	oled_write_string(3, "Heia Magne!", 5);
+	uint8_t toggle = 0b00000000;
+	while(1){
+		if(PIND & (1<< PIND5)){
+			clear_oled();
+			reset_oled_array_sram(sram);
+		}
+		if(button_check(PINB & (1<< PINB1)))
+		{
+			toggle = ~toggle;
+		}
+		printf("Program running %d \r\n", 2);
+		update_adc_values(&joystick, &slider);
+		oled_drawing_sram(sram, slider.l_val, slider.r_val, toggle);
+	}
 	while(1){
 		// CAN BUS TEST
 		//msgToReceive = receive_can_msg(0);

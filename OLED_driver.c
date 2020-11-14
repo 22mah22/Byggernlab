@@ -1,5 +1,8 @@
 #include "OLED_driver.h"
 #include "fonts.h"
+#include "joystick_driver.h"
+
+uint8_t oled_array[8][100];
 
 
 void oled_write_command(char c)
@@ -174,4 +177,95 @@ void character_printer(uint8_t arr[], int width, int height, uint8_t x_offset, u
 				}
 			}
 		}
+}
+
+
+
+void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write){
+	char byteToWrite;
+	if(r_slider > 63){
+		r_slider = 63;
+	}
+	go_to_line(7-(r_slider/8));
+	go_to_column(l_slider);
+	
+	byteToWrite = oled_array[7-(r_slider/8)][l_slider] | (1<<(7-(r_slider%8)));
+	oled_array[7-(r_slider/8)][l_slider] = byteToWrite;
+	if(!write){
+		oled_write_data(0b00000000);
+		oled_array[7-(r_slider/8)][l_slider] = 0b00000000;
+	}else{
+		oled_write_data(byteToWrite);
+	}
+	
+}
+
+void oled_drawing_sram(char * sram, uint8_t l_slider, uint8_t r_slider, uint8_t write){
+	char byteToWrite;
+	if(r_slider > 63){
+		r_slider = 63;
+	}
+	go_to_line(7-(r_slider/8));
+	go_to_column(l_slider);
+	
+	byteToWrite = sram[1000+(7-(r_slider/8))*l_slider+l_slider] | (1<<(7-(r_slider%8)));
+	sram[1000+(7-(r_slider/8))*l_slider+l_slider] = byteToWrite;
+	if(!write){
+		oled_write_data(0b00000000);
+		sram[1000+(7-(r_slider/8))*l_slider+l_slider] = 0b00000000;
+		}else{
+		oled_write_data(byteToWrite);
+	}
+	
+}
+
+void draw_sram(){
+	volatile char * sram = (char *) 0x1800;
+	uint8_t toggle = 0b00000000;
+	while(!PIND & (1<< PIND4)){
+		if(PIND & (1<< PIND5)){
+			clear_oled();
+			reset_oled_array_sram(sram);
+		}
+		if(button_check(PINB & (1<< PINB1)))
+		{
+			toggle = ~toggle;
+		}
+		printf("Program running %d \r\n", 2);
+		update_adc_values(&joystick, &slider);
+		oled_drawing_sram(sram, slider.l_val, slider.r_val, toggle);
+	}
+	return;
+}
+void draw(){
+	uint8_t toggle = 0b00000000;
+	while(!PIND & (1<< PIND4)){
+		if(PIND & (1<< PIND5)){
+			clear_oled();
+			reset_oled_array();
+		}
+		if(button_check(PINB & (1<< PINB1)))
+		{
+			toggle = ~toggle;
+		}
+		printf("Program running %d \r\n", 2);
+		update_adc_values(&joystick, &slider);
+		oled_drawing(, slider.l_val, slider.r_val, toggle);
+	}
+	return;
+}
+
+void reset_oled_array(){
+	for (int i = 0; i < 8; i++){
+		for (int j = 0; j < 100; j++){
+			oled_array[i][j] = 0b00000000;
+		}
+	}
+}
+void reset_oled_array_sram(char * sram){
+	for (int i = 0; i < 8; i++){
+		for (int j = 0; j < 100; j++){
+			sram[1000+i*j+j] = 0b00000000;
+		}
+	}
 }

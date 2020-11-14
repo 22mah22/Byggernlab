@@ -32,3 +32,13 @@ void oled_write_inverted_char_using_font(char c, uint8_t n);
 void oled_write_char8(char c);
 
 void character_printer(uint8_t arr[], int width, int height, uint8_t x_offset, uint8_t y_offset, uint8_t inverted);
+
+void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write);
+
+void reset_oled_array();
+
+void oled_drawing_sram(char* sram, uint8_t l_slider, uint8_t r_slider, uint8_t write);
+
+void reset_oled_array_sram(char* sram);
+
+uint8_t oled_array[8][100];
