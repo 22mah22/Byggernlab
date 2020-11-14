@@ -14,6 +14,14 @@
  uint8_t previous = 1;
  uint8_t y_value_pi = 0;
  uint8_t solenoide_status = 0;
+ 
+  void set_pi_value(uint8_t val){
+	  y_value_pi = val;
+  }
+ 
+ uint8_t get_pi_value(){
+	 return y_value_pi;
+ }
 
  uint8_t get_solenoid_status(){
 	 return solenoide_status;
@@ -145,8 +153,8 @@ uint8_t encoder_read(){
 	
 	uint16_t encoder_data = (LSB | (MSB << 8));
 	int encoder_data_int = LSB | (MSB << 8);
-	y_value_pi = (8888-encoder_data_int)/88; //scaled so that value is 0-100;
- 	printf("Encoder             data: %x \n\r", y_value_pi);
+	set_pi_value((8888-encoder_data_int)/88); //scaled so that value is 0-100;
+ 	printf("Encoder             data: %x \n\r", get_pi_value());
 // 	
 // 	if(encoder_data &= (1 << 15)){
 // 		//encoder_data = (~encoder_data + 1);

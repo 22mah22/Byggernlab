@@ -88,7 +88,7 @@ double T_periode = 0.02;
 void TC1_Handler( void ){
 	
 	prev_error = error;
-	error = joystick.left_val - y_value_pi;
+	error = joystick.left_val - get_pi_value();
 	sum_error += error;
 	paadrag = kp*error+T_periode*ki*sum_error+(kd/T_periode)*(error-prev_error);
 	if(joystick.left_button){

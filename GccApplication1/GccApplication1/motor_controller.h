@@ -20,9 +20,11 @@ typedef struct {
 	int8_t right_button;
 } joyVal;
 
-extern uint8_t y_value_pi; // value for use in pi controller
-
 joyVal joystick;
+
+void set_pi_value(uint8_t val);
+  
+uint8_t get_pi_value();
 
 uint8_t get_solenoid_status();
 

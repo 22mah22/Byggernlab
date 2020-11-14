@@ -133,13 +133,13 @@ int main(void)
 
 		//limits to fewer OLED updates a second, can be tweaked
 		if(!(get_controller_runs()%3)){
-			send_motor_info_to_node_1(&msgToSend, y_value_pi, get_solenoid_status());
+			send_motor_info_to_node_1(&msgToSend, get_pi_value(), get_solenoid_status());
 			//Make sure 8 bit doesen't overflow as it would break logic
 			if(get_controller_runs > 250){
 				reset_controller_runs();
 			}
 		}
-		send_motor_info_to_node_1(&msgToSend, y_value_pi, get_solenoid_status());
+		send_motor_info_to_node_1(&msgToSend, get_pi_value(), get_solenoid_status());
 		
 		if(get_goal_flag()){
 			send_goals_to_node_1(&msgToSend, get_total_goals());
