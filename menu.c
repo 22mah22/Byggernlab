@@ -6,6 +6,8 @@
 #include "menuconfigs.h"
 #include "can_driver.h"
 
+volatile char * sram = (char *) 0x1800;
+
 char* string_list[] = {
 	"Option 1",
 	"Option 2",
@@ -33,7 +35,7 @@ void write_menu_to_screen(menu* menuPointer){
 	clear_oled_new();
 	for(unsigned int i = 0; i < 8; i++){
 		go_to_column(0);
-		oled_write_string(i, menuPointer->labels[i], 8);
+		oled_write_string(i, menuPointer->labels[i], 5);
 	}
 	invert_selected(menuPointer);
 }
@@ -52,7 +54,7 @@ void change_menu(menu* next_menu, menu** menuHead){
 
 void invert_selected(menu* menuPointer){
 	go_to_column(0);
-	oled_write_string_inverted((menuPointer->selected), menuPointer->labels[(menuPointer->selected)], 8);
+	oled_write_string_inverted((menuPointer->selected), menuPointer->labels[(menuPointer->selected)], 5);
 }
 
 void change_selected(menu** menuHead, DIRECTION d){
@@ -102,30 +104,56 @@ void launch_menusystem(){
 		static menu* mainMenu;
 		mainMenu = new_menu(NULL);
 		menu* submenu = new_menu(mainMenu);
-		menu* submenu_5 = new_menu(mainMenu);
+		menu* submenu2 = new_menu(mainMenu);
+		menu* difficulties = new_menu(mainMenu);
 		
-		mainMenu->labels[0] = "Demo of a submenu";
-		mainMenu->labels[1] = "Choose character";
-		mainMenu->f[1] = choose_character;
-		mainMenu->labels[2] = "";
-		mainMenu->labels[3] = "Write greeting";
-		mainMenu->f[3] = hello_world;
-		mainMenu->labels[4] = "Default submenu";
-		mainMenu->labels[5] = "Play ping-pong";
-		mainMenu->f[5] = play_game;
+		mainMenu->labels[0] = "Play ping-pong";
+		mainMenu->f[0] = play_game;
+
+		mainMenu->labels[1] = "Graphics";
+		mainMenu->links[1] = submenu;
+
+		mainMenu->labels[2] = "Characters";
+		mainMenu->links[2] = submenu2;
+
+		mainMenu->labels[3] = "Calibrate joystick";
+		mainMenu->f[3] = calibrate;
+
+		mainMenu->labels[4] = "Choose difficulty";
+		mainMenu->links[4] = difficulties;
+		difficulties->labels[0] = "easy"
+		difficulties->f[0] = set_easy;
+		difficulties->labels[1] = "medium"
+		difficulties->f[1] = set_medium;
+		difficulties->labels[2] = "hard"
+		difficulties->f[2] = set_hard;
+
+		mainMenu->labels[5] = "Reaction test";
+		mainMenu->f[5] = reaction_test;
+
 		mainMenu->labels[6] = "";
-		mainMenu->labels[7] = "";
-		mainMenu->links[0] = submenu;
-		mainMenu->links[4] = submenu_5;
+
+		mainMenu->labels[7] = "Credits";
+		mainMenu->f[7] = show_credits;
+
 		
-		submenu->labels[0] = "Do nothing";
-		submenu->labels[1] = "Loaf around";
-		submenu->labels[2] = "funny women";
-		submenu->labels[3] = "Draw a wojak";
-		submenu->f[3] = wojakprinter;
+		submenu->labels[0] = "Draw something";
+		submenu->labels[1] = "Draw a wojak";
+		submenu->labels[2] = "list funny women";
+		submenu->f[2] = wojakprinter;
 		submenu->labels[4] = "";
 		submenu->labels[5] = "";
 		submenu->labels[6] = "";
+
+		submenu2->labels[0] = "Choose character";
+		submenu2->f[0] = choose_character;
+		submenu2->labels[1] = "Hi-scores";
+		submenu2->f[1] = hiscore;
+		submenu2->labels[2] = "Reset hi-scores";
+		submenu2->f[2] = reset_scores;
+		submenu2->labels[4] = "";
+		submenu2->labels[5] = "";
+		submenu2->labels[6] = "";
 		
 		
 	headPointer = &mainMenu;
@@ -139,16 +167,15 @@ void launch_menusystem(){
 	//RUN
 	while(1){
 		
-		update_adc_values(&joystick, &slider);
+		update_adc_values();
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
 		uint8_t joy_button = PINB & (1<< PINB1);
 	
-		printf("\r J_x: %4d, J_y: %4d, J_b: %3d Slider 1: %3d, Slider 2: %3d |||| %3d,%3d",joystick.x_val,joystick.y_val,joy_button<1,slider.l_val,slider.r_val,left_button>1,right_button>1);
 	
 		//_delay_ms(1);
-		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		DIRECTION current_dir = joystick_direction(current_dir);
 		if(current_dir != NEUTRAL && current_dir != WAITING){
 			change_selected(headPointer, current_dir);
 		}
@@ -169,8 +196,8 @@ void wojakprinter(){
 
 void hello_world(){
 	clear_oled();
-	oled_write_string(0, "Hello world!", 8);
-	oled_write_string(7, "Joystick-return", 8);
+	oled_write_string(0, "Hello world!", 5);
+	oled_write_string(7, "Joystick-return", 5);
 	_delay_ms(1000);
 	while((PINB & (1<< PINB1))){}
 	return;
@@ -178,7 +205,7 @@ void hello_world(){
 
 void choose_character(){
 	clear_oled();
-	oled_write_string(0, "CHOOSE!", 8);
+	oled_write_string(0, "CHOOSE!", 5);
 
 	//INVERT LEFT PICTURE
 	character_printer(wojak, 64, 40, 0, 1, 1);
@@ -187,18 +214,18 @@ void choose_character(){
 	uint8_t chosen = 0;
 	
 	while(1){
-		update_adc_values(&joystick, &slider);
+		update_adc_values();
 		
 		uint8_t left_button = PIND & (1<< PIND4);
 		uint8_t right_button = PIND & (1<< PIND5);
 		uint8_t joy_button = PINB & (1<< PINB1);
 	
-		DIRECTION current_dir = joystick_direction(current_dir, joystick);
+		DIRECTION current_dir = joystick_direction(current_dir);
 		if(current_dir != NEUTRAL && current_dir != WAITING){
 			if (current_dir == RIGHT){
 				//INVERT RIGHT PICTURE
 				clear_oled();
-				oled_write_string(0, "CHOOSE!", 8);
+				oled_write_string(0, "CHOOSE!", 5);
 				character_printer(wojak, 64, 40, 0, 1, 0);
 				character_printer(pepe, 64, 40, 64, 1, 1);
 				
@@ -207,7 +234,7 @@ void choose_character(){
 			//INVERT LEFT PICTURE
 			else if (current_dir == LEFT){
 				clear_oled();
-				oled_write_string(0, "CHOOSE!", 8);
+				oled_write_string(0, "CHOOSE!", 5);
 				character_printer(wojak, 64, 40, 0, 1, 1);
 				character_printer(pepe, 64, 40, 64, 1, 0);
 				
@@ -217,10 +244,14 @@ void choose_character(){
 		if(button_check(joy_button)){
 			clear_oled();
 			if(chosen == 0){
-				oled_write_string(3, "Wojak chosen", 8);
+				oled_write_string(3, "Wojak chosen", 5);
+				//save selected character in sram
+				sram[0] = 0;
 			}
 			else{
-				oled_write_string(3, "Pepe chosen", 8);
+				oled_write_string(3, "Pepe chosen", 5);
+				//save selected character in sram
+				sram[0] = 1;
 			}
 			_delay_ms(700);
 			return;
@@ -245,7 +276,24 @@ void play_game(){
 			case 0x1:
       			// 0x1 means: Goal scored
 				clear_oled();
-				oled_write_string(3, "GAME OVER!", 8);
+				go_to_column(10);
+				oled_write_string(3, "GAME OVER!", 5);
+
+				if(sram[0] == 0){ //wojak is selected
+					sram[1] = msgToReceive->data[0];
+					sram[2] = msgToReceive->data[1];
+				}
+				else if(sram[0 == 1]){ //pepe is selected
+					sram[3] = msgToReceive->data[0];
+					sram[4] = msgToReceive->data[1];
+				}
+				uint16_t seconds = msgToReceive->data[0] + (msgToReceive->data[1] << 4);
+				char buffer[6];
+				sprintf (buffer, "%u", seconds);
+
+				go_to_column(10);
+				oled_write_string(4, "Your score:",5);
+				oled_write_string(4, buffer,5);
 				_delay_ms(3500);
 				return;
       			break;
@@ -254,7 +302,7 @@ void play_game(){
 				// 0x4 means: Motor position
 				//clear_oled();
 				//character_printer(smol_wojak, 8, 8, (((msgToReceive->data[0]) * (128-40))/100), 24, 0);
-				go_to_line(1);
+				go_to_line(8);
 				for (uint8_t i = 0; i < 5; i++){
 					go_to_column(position + i);
 					oled_write_data(0b00000000);
@@ -266,13 +314,13 @@ void play_game(){
 				}
 
 				if(msgToReceive->data[1]){
-					oled_write_string(3, "SHOT", 8);
+					oled_write_string(3, "SHOT", 5);
 				}
 				break;
 			
 			case 0x7:
 				// 0x7 means: Time gone by
-				oled_write_string(0, msgToReceive->data[0], 8);
+				oled_write_string(0, msgToReceive->data[0], 5);
 				break;
 			
 			default:
@@ -280,6 +328,190 @@ void play_game(){
 				//oled_write_string(1, "unknown CAN", 8);
 			}
 		}
+	}
+	return;
+}
+
+void calibrate(){
+	clear_oled();
+	go_to_line(0);
+	go_to_column(10);
+	oled_write_string(0, "Please let go of joystick", 5);
+	oled_write_string(3, "Calibrating in:", 5);
+	_delay_ms(1500);
+	oled_write_string(3, "3", 5);
+	_delay_ms(1500);
+	oled_write_string(3, "2", 5);
+	_delay_ms(1500);
+	oled_write_string(3, "1", 5);
+	_delay_ms(1500);
+	calc_offset();
+	clear_oled();
+	go_to_line(0);
+	go_to_column(10);
+	oled_write_string(0, "Joystick calibrated", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void set_easy(){
+	send_difficulty_can(1);
+	clear_oled();
+	go_to_line(0);
+	go_to_column(10);
+	oled_write_string(0, "Difficulty set to easy", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void set_medium()){
+	send_difficulty_can(2);
+	clear_oled();
+	go_to_line(0);
+	go_to_column(10);
+	oled_write_string(0, "Difficulty set to medium", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void set_hard(){
+	send_difficulty_can(3);
+	clear_oled();
+	go_to_line(0);
+	go_to_column(10);
+	oled_write_string(0, "Difficulty set to hard", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void show_credits(){
+	clear_oled();
+	go_to_column(10);
+	oled_write_string(0, "MADE BY:", 5);
+	go_to_column(10);
+	oled_write_string(2, "Bendik Løvlie", 5);
+	go_to_column(10);
+	oled_write_string(3, "Magne Hovdar", 5);
+	go_to_column(10);
+	oled_write_string(4, "Thomas Nyhus", 5);
+	go_to_column(10);
+	oled_write_string_inverted(6, "TTK4155", 5);
+	go_to_column(10);
+	oled_write_string_inverted(7, "Autumn 2020, NTNU", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void hiscore(){
+	clear_oled();
+	go_to_column(10);
+	uint16_t seconds = sram[1] + (sram[2] << 4);
+	char buffer[6];
+	sprintf (buffer, "%u", seconds);
+	oled_write_string(1, "wojak high score:", 5);
+	go_to_column(10);
+	oled_write_string(2, buffer, 5);
+	seconds = sram[3] + (sram[4] << 4);
+	sprintf (buffer, "%u", seconds);
+	go_to_column(10);
+	oled_write_string(4, "pepe high score:", 5);
+	go_to_column(10);
+	oled_write_string(5, buffer, 5);
+	_delay_ms(1500);
+	return;
+}
+
+void reset_scores(){
+	for(int i = 1; i < 5; i++){
+		sram[i] = 0;
+	}
+	clear_oled();
+	go_to_column(10);
+	oled_write_string(0, "Hiscores deleted", 5);
+	_delay_ms(1500);
+	return;
+}
+
+void reaction_test(){
+	clear_oled();
+	go_to_column(10);
+	oled_write_string(0, "If left lights up, click left.", 5);
+	go_to_column(10);
+	oled_write_string(2, "If right lights up, click right.", 5);
+
+	uint8_t trigger = 0;
+	uint8_t side = 0;
+	while((!PIND & (1<< PIND5)) || (PIND & (1<< PIND4))){
+		//0.1s interval start time
+		_delay_ms(100);
+		uint8_t num = (rand() % (30 + 1));
+
+		//Random start time of game
+		if(num == 10 && ){
+			send_reaction_start_can();
+			trigger = 1;
+			if((num % 2)){
+				for(int row = 0; row < 8; row++){
+					for (int col = 0; col <64; col++){
+						go_to_column(col);
+						go_to_line(row);
+						oled_write_data(0b11111111);
+					}
+				}
+				side = 1;
+			}
+			else
+			{
+				for(int row = 0; row < 8; row++){
+					for (int col = 64; col <128; col++){
+						go_to_column(col);
+						go_to_line(row);
+						oled_write_data(0b11111111);
+					}
+				}
+				side = 2;
+			}
+			//react instantly to button presses
+			while((!PIND & (1<< PIND5)) || (PIND & (1<< PIND4))){
+				//ensures we avoid 100ms wait time when we react
+			}
+		}
+	}
+	if(trigger == 0){
+	clear_oled();
+	go_to_column(10);
+	oled_write_string(0, "Fail. Too early.", 5);
+	_delay_ms(1500);
+	return;
+	}
+	//else if button corresponds with lit up side of screen
+	else if(((side == 1) && (PIND & (1<< PIND4)) || ((side == 2) && (PIND & (1<< PIND5))){
+		can_message* msgToReceive;
+		uint16_t ms = 0;
+		uint8_t id = 0;
+		char buffer[6];
+		while(1){
+			msgToReceive = receive_can_msg(0);
+			id = msgToReceive->id;
+			if(id == 0x2){
+				clear_oled();
+				ms = msgToReceive->data[0] + (msgToReceive->data[1] << 4);
+				go_to_column(10);
+				oled_write_string(1, "You reaction time:", 5);
+				go_to_column(10);
+				sprintf (buffer, "%u", ms);
+				oled_write_string(2, buffer, 5);
+				oled_write_string(2, " milliseconds", 5);
+				_delay_ms(1500);
+				return;
+			}
+		}
+	}
+	else{
+		clear_oled();
+		go_to_column(10);
+		oled_write_string(0, "Something went wrong", 5);
+		_delay_ms(1500);
 	}
 	return;
 }

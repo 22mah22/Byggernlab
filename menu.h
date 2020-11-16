@@ -37,3 +37,19 @@ void hello_world();
 void choose_character();
 
 void play_game();
+
+void calibrate();
+
+void set_easy();
+
+void set_medium();
+
+void set_hard();
+
+void show_credtis();
+
+void hiscore();
+
+void reset_scores();
+
+void reaction_test()

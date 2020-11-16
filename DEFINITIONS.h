@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @brief Definitions and constants to be used throughout the system such as
+ * clock speed, baud rate, memory mapping and basic bit manipulation functions.
+ */
+
+
 #pragma once
 #include <stdint.h>
 

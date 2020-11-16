@@ -10,16 +10,16 @@ uint8_t y_offset = 160;
 uint8_t previous = 1;
 DIRECTION joydir = NEUTRAL;
 
+static joyVal joystick;
+static sliderVal slider;
 DIRECTION direction;
 
+joyVal get_joyvals(){
+	return joystick;
+}
 
-void get_adc_data(amap* atmelMap, joyVal* stick, sliderVal* slider){
-	uint8_t val = 1;
-	atmelMap->ADC[1] = 0x04;
-	stick->x_val = atmelMap->ADC[1];
-	stick->y_val = atmelMap->ADC[1];
-	slider->l_val = atmelMap->ADC[1];
-	slider->r_val = atmelMap->ADC[1];
+sliderVal get_slidervals(){
+	return slider;
 }
 
 void calc_offset(){
@@ -28,29 +28,6 @@ void calc_offset(){
 	x_offset = adc[0];
 	y_offset = adc[0];
 }
-
-/* no longer in use
-void calc_pos_stick(joyVal* values, char* adc){
-
-	uint8_t x = adc[0];
-	uint8_t y = adc[0];
-	if(x>=x_offset){
-		values->x_val = (x-x_offset)*(100)/(255-x_offset);
-		}else if(x<x_offset){
-		values->x_val = -(x_offset-x)*(100)/x_offset;
-	}
-	if(y>=y_offset){
-		values->y_val = (y-y_offset)*(100)/(255-y_offset);
-		}else if(y<y_offset){
-		values->y_val = -(y_offset-y)*(100)/y_offset;
-	}
-}
-
-
-void calc_pos_slider(sliderVal* values, uint8_t left, uint8_t right){
-	values->l_val = left*100/255;
-	values->r_val = right*100/255;
-} */
 
 uint8_t button_check(uint8_t current){
 	if(current == 0 && previous == 1){
@@ -64,29 +41,29 @@ uint8_t button_check(uint8_t current){
 	return 0;
 }
 
-void update_adc_values(joyVal* stick, sliderVal* slider){
+void update_adc_values(){
 	volatile char *adc = (char *) 0x1400;
-	adc[0] = 0x01; // Må skrives til for å oppdatere adc registrene.
+	adc[0] = 0x01; // Mï¿½ skrives til for ï¿½ oppdatere adc registrene.
 	uint8_t x = adc[0];
 	uint8_t y = adc[0];
 	uint8_t left = adc[0];
 	uint8_t right = adc[0];
 	
 	if(x>=x_offset){
-		stick->x_val = (x-x_offset)*(100)/(255-x_offset);
+		joystick.x_val = (x-x_offset)*(100)/(255-x_offset);
 	}
 	else if(x<x_offset){
-		stick->x_val = -(x_offset-x)*(100)/x_offset;
+		joystick.x_val = -(x_offset-x)*(100)/x_offset;
 	}
 	if(y>=y_offset){
-		stick->y_val = (y-y_offset)*(100)/(255-y_offset);
+		joystick.y_val = (y-y_offset)*(100)/(255-y_offset);
 	}
 	else if(y<y_offset){
-		stick->y_val = -(y_offset-y)*(100)/y_offset;
+		joystick.y_val = -(y_offset-y)*(100)/y_offset;
 	}
 	
-	slider->l_val = left*100/255;
-	slider->r_val = right*100/255;
+	slider.l_val = left*100/255;
+	slider.r_val = right*100/255;
 }
 /*
 DIRECTION joystick_direction(joyVal stick){
@@ -113,52 +90,24 @@ DIRECTION joystick_direction(joyVal stick){
 	
 }*/
 
-DIRECTION joystick_direction(DIRECTION dir, joyVal stick){
-	if(stick.x_val < 50 && stick.x_val > -50 && stick.y_val < 50 && stick.y_val > -50 ){
+DIRECTION joystick_direction(DIRECTION dir){
+	if(joystick.x_val < 50 && joystick.x_val > -50 && joystick.y_val < 50 && joystick.y_val > -50 ){
 		dir = NEUTRAL;
 	}
 	if(dir == NEUTRAL){
-		if(stick.x_val > 95){
+		if(joystick.x_val > 95){
 			return RIGHT;
 		}
-		if(stick.x_val < -95){
+		if(joystick.x_val < -95){
 			return LEFT;
 		}
-		if(stick.y_val < -95){
+		if(joystick.y_val < -95){
 			return DOWN;
 		}
-		if(stick.y_val > 95){
+		if(joystick.y_val > 95){
 			return UP;
 		}
 		return NEUTRAL;
 	}
 	return WAITING;
-}
-
-void send_stick_can(){
-	
-	update_adc_values(&joystick, &slider);
-	
-	can_message msgToSend;
-	msgToSend.data_length = 8;
-	msgToSend.data[0] = abs(joystick.x_val);
-	msgToSend.data[1] = abs(joystick.y_val);
-	msgToSend.data[2] = PINB & (1<< PINB1); // button pressed?
-	
-	uint8_t x_positive = (joystick.x_val < 0) ? 0x00 : 0x11;
-	uint8_t y_positive = (joystick.y_val < 0) ? 0x00 : 0x11;
-	
-	msgToSend.data[3] = x_positive;
-	msgToSend.data[4] = y_positive;
-	msgToSend.data[5] = slider.l_val;
-	msgToSend.data[6] = slider.r_val;
-	msgToSend.data[7] = (PIND & (1<< PIND4)) >> 3 | (PIND & (1<< PIND5)) >> 5; //left and right button on second least significant and least significant
-// 	printf("button data: %d \n\r",msgToSend.data[7]);
- 	//printf("button data: %d \n\r",msgToSend.data[5]);
-	 
-	
-	msgToSend.id = 0x0016;
-	_delay_ms(20);
-	send_can_msg(&msgToSend);
-	
 }

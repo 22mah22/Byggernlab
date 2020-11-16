@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "mcp2515_driver.h"
 
+
 /**
  * @brief Initializes the CAN bus on the node by initializing the mcp2515 microcontroller
  * and writing to its CAN control-registers.
@@ -43,6 +44,35 @@ can_message* receive_can_msg(uint8_t buffer_number);
  */
 uint8_t can_check_complete(uint8_t buffer_number);
 
+/**
+ * @brief Simple function to check if the CAN-ISR has set the flag high.
+ * @return 1 if flag has been set. O if not
+ */
 uint8_t can_interrupted();
 
+/**
+ * @brief Function to enable interrupt via CAN for the AtMega. 
+ * Sets up the interrupt INT0 on port PD2/INT0
+ */
 void can_interrupt_enable();
+
+/**
+ * @brief Updates joystick and slider data and sends it over CAN
+ */
+void send_stick_can();
+
+/**
+ * @brief Sends a requested PID difficulty setting over CAN
+ * @param diff 1 for easy, 2 for medium, 3 for hard. Defaults to medium
+ */
+void send_difficulty_can(uint8_t diff);
+
+/**
+ * @brief Sends message to node 2 that reaction test has started over CAN
+ */
+void send_reaction_start_can();
+
+/**
+ * @brief Sends message to node 2 that reaction test has ended over CAN
+ */
+void send_reaction_stop_can();

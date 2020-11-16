@@ -8,6 +8,7 @@
 #include "DEFINITIONS.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include "joystick_driver.h"
 
 #define idBufferHighAddress 0x31
 #define idBufferLowAddress 0x32
@@ -154,4 +155,71 @@ uint8_t can_check_complete(uint8_t buffer_number){
 	printf("check");
 	mcp2515_bit_modify(MCP_CANINTF,MCP_TX0IF+2*buffer_number,0x00);
 	return 1;
+}
+
+void send_stick_can(){
+	
+	update_adc_values();
+	joyVal joystick = get_joyvals();
+	sliderVal slider = get_slidervals();
+	
+	can_message msgToSend;
+	msgToSend.data_length = 8;
+	msgToSend.data[0] = abs(joystick.x_val);
+	msgToSend.data[1] = abs(joystick.y_val);
+	msgToSend.data[2] = PINB & (1<< PINB1); // button pressed?
+	
+	uint8_t x_positive = (joystick.x_val < 0) ? 0x00 : 0x11;
+	uint8_t y_positive = (joystick.y_val < 0) ? 0x00 : 0x11;
+	
+	msgToSend.data[3] = x_positive;
+	msgToSend.data[4] = y_positive;
+	msgToSend.data[5] = slider.l_val;
+	msgToSend.data[6] = slider.r_val;
+	msgToSend.data[7] = (PIND & (1<< PIND4)) >> 3 | (PIND & (1<< PIND5)) >> 5; 
+	//left and right button on second least significant and least significant
+
+	 
+	
+	msgToSend.id = 0x0016;
+	_delay_ms(20);
+	send_can_msg(&msgToSend);
+	
+}
+
+void send_difficulty_can(uint8_t diff){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	if(diff == 1){//easy
+		msgToSend.data[0] = 1;
+	}
+	else if (diff == 3){//hard
+		msgToSend.data[0] = 3;
+	}
+	else{ //set to medium
+		msgToSend.data[0] = 2;
+	}
+
+	msgToSend.id = 0x6;
+	_delay_ms(20);
+	send_can_msg(&msgToSend);
+	
+}
+
+void send_reaction_start_can(){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	msgToSend.id = 0x4;
+	//
+	msgToSend.data[0] = 0;
+	send_can_msg(&msgToSend);
+}
+
+void send_reaction_stop_can(){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	msgToSend.id = 0x3;
+	//placeholder
+	msgToSend.data[0] = 0;
+	send_can_msg(&msgToSend);
 }

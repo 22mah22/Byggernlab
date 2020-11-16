@@ -16,10 +16,10 @@
 #include "printf-stdarg.h"
 
 #include "can_controller.h"
-
+#include "timer.h"
 #include "motor_controller.h"
 
-
+uint16_t starttime = 0;
 #define DEBUG_INTERRUPT 1
 
 /**
@@ -76,7 +76,27 @@ void CAN0_Handler( void )
 			if(DEBUG_INTERRUPT)printf("joystick button: %d ", joystick.butt_pressed);
 			if(DEBUG_INTERRUPT)printf("\n\r");*/
 		}
-		
+		else if(message.id == 0x6){
+			//Readjust PID controller
+			//Bendik, any ideas?
+			/*
+			if(message.data[0] == 1){ //easy
+
+			}
+			else if(message.data[0] == 3){ //hard
+
+			}
+			else{ //medium
+
+			}
+			*/
+		}
+		else if(message.id == 0x4){//start signal
+			starttime = return_milliseconds;
+		}
+		else if(message.id == 0x3){//stop signal
+			send_reaction_time_to_node_1(message, return_milliseconds()-starttime);
+		}
 		else{
 			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
 			if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
