@@ -139,8 +139,8 @@ void launch_menusystem(){
 		
 		submenu->labels[0] = "Draw something";
 		submenu->labels[1] = "Draw a wojak";
+		submenu->f[1] = wojakprinter;
 		submenu->labels[2] = "list funny women";
-		submenu->f[2] = wojakprinter;
 		submenu->labels[4] = "";
 		submenu->labels[5] = "";
 		submenu->labels[6] = "";
