@@ -46,10 +46,10 @@ void set_medium();
 
 void set_hard();
 
-void show_credtis();
+void show_credits();
 
 void hiscore();
 
 void reset_scores();
 
-void reaction_test()
+void reaction_test();

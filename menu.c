@@ -5,6 +5,7 @@
 #include "joystick_driver.h"
 #include "menuconfigs.h"
 #include "can_driver.h"
+#include <stdlib.h>
 
 volatile char * sram = (char *) 0x1800;
 
@@ -121,11 +122,11 @@ void launch_menusystem(){
 
 		mainMenu->labels[4] = "Choose difficulty";
 		mainMenu->links[4] = difficulties;
-		difficulties->labels[0] = "easy"
+		difficulties->labels[0] = "easy";
 		difficulties->f[0] = set_easy;
-		difficulties->labels[1] = "medium"
+		difficulties->labels[1] = "medium";
 		difficulties->f[1] = set_medium;
-		difficulties->labels[2] = "hard"
+		difficulties->labels[2] = "hard";
 		difficulties->f[2] = set_hard;
 
 		mainMenu->labels[5] = "Reaction test";
@@ -364,7 +365,7 @@ void set_easy(){
 	return;
 }
 
-void set_medium()){
+void set_medium(){
 	send_difficulty_can(2);
 	clear_oled();
 	go_to_line(0);
@@ -407,12 +408,12 @@ void hiscore(){
 	go_to_column(10);
 	uint16_t seconds = sram[1] + (sram[2] << 4);
 	char buffer[6];
-	sprintf (buffer, "%u", seconds);
+	sprintf(buffer, "%u", seconds);
 	oled_write_string(1, "wojak high score:", 5);
 	go_to_column(10);
 	oled_write_string(2, buffer, 5);
 	seconds = sram[3] + (sram[4] << 4);
-	sprintf (buffer, "%u", seconds);
+	sprintf(buffer, "%u", seconds);
 	go_to_column(10);
 	oled_write_string(4, "pepe high score:", 5);
 	go_to_column(10);
@@ -447,7 +448,7 @@ void reaction_test(){
 		uint8_t num = (rand() % (30 + 1));
 
 		//Random start time of game
-		if(num == 10 && ){
+		if(num == 10){
 			send_reaction_start_can();
 			trigger = 1;
 			if((num % 2)){
@@ -473,7 +474,7 @@ void reaction_test(){
 			}
 			//react instantly to button presses
 			while((!PIND & (1<< PIND5)) || (PIND & (1<< PIND4))){
-				//ensures we avoid 100ms wait time when we react
+				;//ensures we avoid 100ms wait time when we react
 			}
 		}
 	}
@@ -485,7 +486,7 @@ void reaction_test(){
 	return;
 	}
 	//else if button corresponds with lit up side of screen
-	else if(((side == 1) && (PIND & (1<< PIND4)) || ((side == 2) && (PIND & (1<< PIND5))){
+	else if(((side == 1) && (PIND & (1<< PIND4))) || ((side == 2) && (PIND & (1<< PIND5)))){
 		can_message* msgToReceive;
 		uint16_t ms = 0;
 		uint8_t id = 0;
@@ -499,7 +500,7 @@ void reaction_test(){
 				go_to_column(10);
 				oled_write_string(1, "You reaction time:", 5);
 				go_to_column(10);
-				sprintf (buffer, "%u", ms);
+				sprintf(buffer, "%u", ms);
 				oled_write_string(2, buffer, 5);
 				oled_write_string(2, " milliseconds", 5);
 				_delay_ms(1500);
