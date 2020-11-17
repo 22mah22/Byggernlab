@@ -203,6 +203,15 @@ void send_difficulty_can(uint8_t diff){
 	
 }
 
+void send_game_start_can(){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	msgToSend.id = 0x2;
+	//placeholder
+	msgToSend.data[0] = 0;
+	send_can_msg(&msgToSend);
+}
+
 void send_reaction_start_can(){
 	can_message msgToSend;
 	msgToSend.data_length = 1;

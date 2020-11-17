@@ -274,7 +274,7 @@ void play_game(){
 					sram[3] = msgToReceive->data[0];
 					sram[4] = msgToReceive->data[1];
 				}
-				uint16_t seconds = msgToReceive->data[0] + (msgToReceive->data[1] << 4);
+				uint16_t seconds = msgToReceive->data[0] + (msgToReceive->data[1] << 8);
 				char buffer[6];
 				sprintf (buffer, "%u", seconds);
 
@@ -392,13 +392,13 @@ void show_credits(){
 void hiscore(){
 	clear_oled();
 	go_to_column(10);
-	uint16_t seconds = sram[1] + (sram[2] << 4);
+	uint16_t seconds = sram[1] + (sram[2] << 8);
 	char buffer[6];
 	sprintf(buffer, "%u", seconds);
 	oled_write_string(1, "wojak high score:", 5);
 	go_to_column(10);
 	oled_write_string(2, buffer, 5);
-	seconds = sram[3] + (sram[4] << 4);
+	seconds = sram[3] + (sram[4] << 8);
 	sprintf(buffer, "%u", seconds);
 	go_to_column(10);
 	oled_write_string(4, "pepe high score:", 5);

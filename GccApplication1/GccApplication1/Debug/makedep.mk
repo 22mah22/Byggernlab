@@ -22,6 +22,8 @@ motor_controller.c
 
 main.c
 
+pid.c
+
 printf-stdarg.c
 
 timer.c

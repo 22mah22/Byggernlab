@@ -1,6 +1,9 @@
 #include "pid.h"
 #include "sam.h"
 #include "motor_controller.h"
+#include "timer_driver.h"
+
+static Tc *tc = 0x40080000;
 
 double prev_error = 0;
 double error = 0;
@@ -26,7 +29,7 @@ void TC1_Handler( void ){
 	//printf("x: %d \n\r",paadrag);
 	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
-	ti_counter++;
+	increment_controller_runs();
 }
 uint8_t get_difficulty(){
 	return difficulty;

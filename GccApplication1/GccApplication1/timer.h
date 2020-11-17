@@ -10,3 +10,7 @@ void SysTick_Handler       ( void );
 uint32_t return_milliseconds();
 
 uint16_t return_seconds();
+
+uint16_t return_starttime();
+
+void set_starttime();

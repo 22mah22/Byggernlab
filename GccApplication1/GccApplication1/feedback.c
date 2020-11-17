@@ -22,8 +22,8 @@ void send_goal_to_node_1(CAN_MESSAGE* msgToSend){
     msgToSend->data_length = 2;
     //Low ID  since this is an urgent message
     msgToSend->id = 0x1;    
-    msgToSend->data[0] = (uint8_t) (return_seconds() & 0x00FF);
-    msgToSend->data[1] = (uint8_t) ((return_seconds() & 0xFF00) >> 8);
+    msgToSend->data[0] = (uint8_t) ((return_seconds()-return_starttime()) & 0x00FF);
+    msgToSend->data[1] = (uint8_t) (((return_seconds()-return_starttime()) & 0xFF00) >> 8);
 	can_send(msgToSend, 0);
 }
 

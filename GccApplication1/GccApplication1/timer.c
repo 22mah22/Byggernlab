@@ -3,6 +3,7 @@
 #include "sam.h"
 
 static uint32_t milliseconds;
+static uint16_t starttime = 0;
 //SysTick_Type* SysTick = SysTick_BASE;
 
 void SysTick_init(){
@@ -22,6 +23,11 @@ uint16_t return_seconds(){
   uint16_t secs = (milliseconds/1000);
   return secs;
 }
-/*uint32_t time_running_ms(){*/
-  //  return (seconds*1000)+(SysTick->VAL)/(0xa037a0/1000);
-//}
+
+uint16_t return_starttime(){
+	return starttime;
+}
+
+void set_starttime(){
+	starttime = return_seconds();
+}

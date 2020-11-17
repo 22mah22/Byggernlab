@@ -17,6 +17,7 @@
 #include "motor_controller.h"
 #include "timer.h"
 #include "feedback.h"
+#include "pid.h"
 
 int main(void)
 {

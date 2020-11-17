@@ -7,6 +7,7 @@
 
 #include "sam.h"
 #include "motor_controller.h"
+#include "timer_driver.h"
 	
 static Tc *tc = 0x40080000;
 uint8_t ti_counter = 0;
@@ -15,6 +16,10 @@ uint8_t ti_counter = 0;
 
 uint8_t get_controller_runs(){
 	return ti_counter;
+}
+
+void increment_controller_runs(){
+	ti_counter++;
 }
 
 void reset_controller_runs(){
@@ -76,6 +81,7 @@ void timer_change_duty_buzzer(uint8_t dutyCycle){
 	
 }
 
+/*
 double prev_error = 0;
 double error = 0;
 int paadrag = 0;
@@ -99,7 +105,7 @@ void TC1_Handler( void ){
 	int a = tc->TC_CHANNEL[1].TC_SR; // funker uten?!
 	NVIC_ClearPendingIRQ(ID_TC1);
 	ti_counter++;
-}
+}*/
 
 void TC2_Handler( void ){
 	

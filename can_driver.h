@@ -68,6 +68,11 @@ void send_stick_can();
 void send_difficulty_can(uint8_t diff);
 
 /**
+ * @brief Sends message to node 2 that game has started over CAN
+ */
+void send_game_start_can();
+
+/**
  * @brief Sends message to node 2 that reaction test has started over CAN
  */
 void send_reaction_start_can();

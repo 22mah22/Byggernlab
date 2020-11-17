@@ -22,6 +22,7 @@ void reset_controller_runs();
 void TC1_Handler       ( void );
 void TC2_Handler( void );
 
+void increment_controller_runs();
 
 
 #endif /* TIMER_DRIVER_H_ */

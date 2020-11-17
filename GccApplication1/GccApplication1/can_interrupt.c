@@ -100,6 +100,9 @@ void CAN0_Handler( void )
 		else if(message.id == 0x3){//stop signal
 			send_reaction_time_to_node_1(&message, return_milliseconds()-starttime);
 		}
+		else if(message.id == 0x2){//game start signal
+			set_starttime();
+		}
 		else{
 			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
 			if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
