@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief A module for handling a timer using systick.
+ */
+
 #pragma once
 #include <stdint.h>
 

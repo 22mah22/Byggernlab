@@ -109,7 +109,7 @@ int main(void)
 		
 		
 		
-		move_solenoid();
+		move_servo();
 		//change_motor_speed();
 		encoder_read();
 

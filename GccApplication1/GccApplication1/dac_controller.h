@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Module for handling dac initialization.
+ */
+
 /*
  * dac_controller.h
  *
@@ -10,6 +15,9 @@
 #define DAC_CONTROLLER_H_
 
 
+/**
+ * @brief Initialize the dac
+ */
 void dac_init();
 
 

@@ -31,7 +31,7 @@ void reset_solenoid_status(){
 	solenoide_status = 0;
  }
  
- void move_solenoid(){
+ void move_servo(){
 	 //printf("joystick.x_val : %d \n\r", joystick.x_val);
 	 
 	  
@@ -122,7 +122,7 @@ void motor_box_init(){
 }
 
 
-uint8_t encoder_read(){
+void encoder_read(){
 	// PIO (Output) Enable Register, PIO Enable
 	PIOD->PIO_PER |= PIO_PER_P2; // Pin 27 sel PD2 SEL
 	PIOD->PIO_OER |= PIO_OER_P2; // 

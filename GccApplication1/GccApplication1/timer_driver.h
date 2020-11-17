@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Driver module for setting up and handling pwm timers and timer interrupt.
+ */
+
 /*
  * timer_driver.h
  *

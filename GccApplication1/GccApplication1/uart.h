@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief A simple interface for receiving and transmitting characters to a computer using UART via the on board USB-connector.
+ */
+
 /*
  * uart.h
  *
