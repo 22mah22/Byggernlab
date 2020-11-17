@@ -231,9 +231,8 @@ void draw_sram(){
 		{
 			toggle = ~toggle;
 		}
-		printf("Program running %d \r\n", 2);
-		update_adc_values(&joystick, &slider);
-		oled_drawing_sram(sram, slider.l_val, slider.r_val, toggle);
+		update_adc_values();
+		oled_drawing_sram(sram, get_slidervals().l_val, get_slidervals().r_val, toggle);
 	}
 	return;
 }
@@ -248,9 +247,8 @@ void draw(){
 		{
 			toggle = ~toggle;
 		}
-		printf("Program running %d \r\n", 2);
-		update_adc_values(&joystick, &slider);
-		oled_drawing(, slider.l_val, slider.r_val, toggle);
+		update_adc_values();
+		oled_drawing(get_slidervals().l_val, get_slidervals().r_val, toggle);
 	}
 	return;
 }

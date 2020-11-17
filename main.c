@@ -12,7 +12,7 @@
 #include "USART.h"
 #include <stdio.h>
 #include <string.h>
-#include "sram_test.h"
+//#include "sram_test.h"
 #include "joystick_driver.h"
 #include "OLED_driver.h"
 
@@ -78,124 +78,27 @@ int main(void){
 	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[15]);
 	printf("\n\n\n\n\nasdhfkajsdhfjksa %d \r\n\n\n\n\n", ext_ram[16]);
 	_delay_ms(1000);
-	*/
-	volatile char * sram = (char *) 0x1800;
+	*//*
+	volatile char * sram = (char *) 0x1800;*/
 	can_init();
 	
 
-
-	
-	//DDRC = 0xFF;
-	//PORTC = 0x00;
-	
-	
-	
-	
-	//calc_offset(atmelMap);
-	
-	
-	
-	
-	/*
-	PORTB |= (1<<DDB1);
-	TCCR2 |= (1<<WGM20);
-	TCCR2 |= (1<<WGM20);	
-	TCCR2 |= (1<<COM21);
-	TCCR2 |= (1<<COM20);
-	*/
-
 	can_interrupt_enable();
-	
 	//SRAM_test(); _delay_ms(1000);
-	//launch_menusystem();
-		
-	//Check if the whole thing just works from up here:
+	launch_menusystem();
 	
-	
-		
-	go_to_line(7);
-	//oled_write_string(0," Kongeriget Norge er et frit, uafhaengigt og udeleligt Rige. Dets Regjeringsform er indskraenket og arvelig-monarkisk.", 8);
-	//character_printer(wojak, 64, 40);
-	//_delay_ms(60000);
-
-	for(int i = 0; i < 92; i++){
-		printf("\n");
-		
-		
-	}
-	
-	
-	
-	can_message msgToSend;
-	msgToSend.data_length = 8;
-	for(int i = 0; i < 8; i++){
-		msgToSend.data[i] = 255;
-	}
-	msgToSend.id = 0x0006;
-	
-	can_message* msgToReceive;
-	
-	
-	//msgToReceive = receive_can_msg(0);
-	
-	/*while(1){
-		for(int i = 0; i < 8; i++){
-			printf("\r   %c | %d | %d   \r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
-			_delay_ms(5000);
-		}
-	}*/
-	
-	
-	
-	can_message* receivedMsg;
-	calc_offset();
-	
-	
-	
-	
-	oled_init();
-	clear_oled();
-	oled_write_string(3, "Heia Magne!", 5);
-	uint8_t toggle = 0b00000000;
-	while(1){
-		if(PIND & (1<< PIND5)){
-			clear_oled();
-			reset_oled_array_sram(sram);
-		}
-		if(button_check(PINB & (1<< PINB1)))
-		{
-			toggle = ~toggle;
-		}
-		printf("Program running %d \r\n", 2);
-		update_adc_values(&joystick, &slider);
-		oled_drawing_sram(sram, slider.l_val, slider.r_val, toggle);
-	}
 	while(1){
 		// CAN BUS TEST
 		//msgToReceive = receive_can_msg(0);
 		//_delay_ms(5000);
 		//send_can_msg(&msgToSend);
-		printf("Program running %d \r\n", 2);
 		send_stick_can();
 		_delay_ms(50);
 
 
-		if(can_interrupted()){
-			receivedMsg = receive_can_msg(0);
-			printf("%d", receivedMsg->data);
-		}
-
-	/*	for(int i = 0; i < 8; i++){
-			printf("\r   %c | %d | %d   \n\r",msgToReceive->data[i],msgToReceive->data_length,msgToReceive->id);
-			_delay_ms(50);
-		}
-		*/
+		printf("menu fail");
 	}
-
-		/*
-		printf("%d",1);
-		printf("%d", USART_Receive());
-		*/
+	
 	return 0;
 }
 

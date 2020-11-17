@@ -95,10 +95,10 @@ void CAN0_Handler( void )
 			
 		}
 		else if(message.id == 0x4){//start signal
-			starttime = return_milliseconds;
+			starttime = return_milliseconds();
 		}
 		else if(message.id == 0x3){//stop signal
-			send_reaction_time_to_node_1(message, return_milliseconds()-starttime);
+			send_reaction_time_to_node_1(&message, return_milliseconds()-starttime);
 		}
 		else{
 			if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);

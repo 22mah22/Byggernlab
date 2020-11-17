@@ -41,7 +41,6 @@ C_SRCS +=  \
 ../mcp2515_driver.c \
 ../menu.c \
 ../menuconfigs.c \
-../menu_list.c \
 ../spi_driver.c \
 ../joystick_driver.c \
 ../main.c \
@@ -61,7 +60,6 @@ can_driver.o \
 mcp2515_driver.o \
 menu.o \
 menuconfigs.o \
-menu_list.o \
 spi_driver.o \
 joystick_driver.o \
 main.o \
@@ -74,7 +72,6 @@ can_driver.o \
 mcp2515_driver.o \
 menu.o \
 menuconfigs.o \
-menu_list.o \
 spi_driver.o \
 joystick_driver.o \
 main.o \
@@ -87,7 +84,6 @@ can_driver.d \
 mcp2515_driver.d \
 menu.d \
 menuconfigs.d \
-menu_list.d \
 spi_driver.d \
 joystick_driver.d \
 main.d \
@@ -100,7 +96,6 @@ can_driver.d \
 mcp2515_driver.d \
 menu.d \
 menuconfigs.d \
-menu_list.d \
 spi_driver.d \
 joystick_driver.d \
 main.d \
@@ -144,13 +139,6 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./menuconfigs.o: .././menuconfigs.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega162" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./menu_list.o: .././menu_list.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega162" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

@@ -142,7 +142,7 @@ int main(void)
 		send_motor_info_to_node_1(&msgToSend, get_pi_value(), get_solenoid_status());
 		
 		if(get_goal_flag()){
-			send_goals_to_node_1(&msgToSend, get_total_goals());
+			send_goal_to_node_1(&msgToSend);
 			reset_goal_flag();
 		}
 		

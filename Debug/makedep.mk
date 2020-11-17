@@ -10,8 +10,6 @@ menu.c
 
 menuconfigs.c
 
-menu_list.c
-
 spi_driver.c
 
 joystick_driver.c
