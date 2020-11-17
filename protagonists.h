@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Bit matrixes used to represent pixtures on the screen
+ */
+
 /*
  * IncFile1.h
  *

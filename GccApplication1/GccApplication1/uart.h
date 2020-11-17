@@ -1,7 +1,7 @@
 /*
  * uart.h
  *
- * Author: Gustav O. Often and Eivind H. Jølsgard
+ * Author: Gustav O. Often and Eivind H. Jï¿½lsgard
  *
  * For use in TTK4155 Embedded and Industrial Computer Systems Design
  * NTNU - Norwegian University of Science and Technology
@@ -25,11 +25,40 @@ typedef struct uart_ringbuffer_t
 	} uart_ringbuffer;
 
 
+/**
+ * @brief Configure UART.
+ *
+ * @param void
+ *
+ * @retval void.
+ */
 void configure_uart(void);
 
+/**
+ * \brief Get character from UART
+ *
+ * \param *c location of character 
+ *
+ * \retval Success(0) or failure(1)
+ */
 int uart_getchar(uint8_t *c);
+
+/*
+ * \brief Sends a character through the UART interface
+ *
+ * \param c Character to be sent
+ *
+ * \retval Success(0) or failure(1).
+ */
 int uart_putchar(const uint8_t c);
 
+/**
+ * @brief Handler for UART interrupts
+ *
+ * @param void
+ *
+ * @retval void.
+ */
 void UART_Handler       ( void );
 
 

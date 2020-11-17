@@ -1,4 +1,4 @@
-//Overview of sram storage
+
 
 //volatile char * sram = (char *) 0x1800;
 /*

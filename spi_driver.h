@@ -17,10 +17,20 @@
 #include <stdint.h>
 #include "mcp2515.h"
 
-void spi_write(char data);
-
-
-uint8_t spi_read();
-
+/**
+ * @brief Function to initialize SPI on the AtMega
+ */
 
 void spi_init();
+
+/**
+ * @brief Function to write a byte of data using spi
+ * @param data byte to write
+ */
+void spi_write(char data);
+
+/**
+ * @brief Function to read data sent using spi
+ */
+uint8_t spi_read();
+
