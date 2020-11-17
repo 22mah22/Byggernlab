@@ -26,7 +26,7 @@ void can_init();
 /**
  * @brief Function to send a predetermined message to a reciever over the CAN bus
  * @param msg pointer to a memory location where a message is stored. Implemented as a pointer
- * to make sure the variable will not exit  scope.
+ * to make sure the variable will not exit scope.
  */
 void send_can_msg(can_message *msg);
 

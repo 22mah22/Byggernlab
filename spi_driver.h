@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Driver module for SPI communications.
+ */
+
 /*
  * spi_driver.h
  *
@@ -14,6 +19,8 @@
 
 void spi_write(char data);
 
+
 uint8_t spi_read();
+
 
 void spi_init();

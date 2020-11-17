@@ -18,6 +18,7 @@
 #include "can_controller.h"
 #include "timer.h"
 #include "motor_controller.h"
+#include "pid.h"
 
 uint16_t starttime = 0;
 #define DEBUG_INTERRUPT 1
@@ -81,17 +82,17 @@ void CAN0_Handler( void )
 		else if(message.id == 0x6){
 			//Readjust PID controller
 			//Bendik, any ideas?
-			/*
+			
 			if(message.data[0] == 1){ //easy
-
+				set_difficulty(1);
 			}
 			else if(message.data[0] == 3){ //hard
-
+				set_difficulty(3);
 			}
 			else{ //medium
-
+				set_difficulty(2);
 			}
-			*/
+			
 		}
 		else if(message.id == 0x4){//start signal
 			starttime = return_milliseconds;
