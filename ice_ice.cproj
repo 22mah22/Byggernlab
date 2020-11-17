@@ -167,9 +167,6 @@
     <Compile Include="menu.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="menuconfigs.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="menuconfigs.h">
       <SubType>compile</SubType>
     </Compile>

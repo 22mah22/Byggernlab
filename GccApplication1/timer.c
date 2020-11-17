@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "sam.h"
 
+uint32_t trigger_time = 0;
 static uint32_t milliseconds;
 static uint16_t starttime = 0;
 //SysTick_Type* SysTick = SysTick_BASE;
@@ -30,4 +31,12 @@ uint16_t return_starttime(){
 
 void set_starttime(){
 	starttime = return_seconds();
+}
+
+uint32_t return_trigger_time(){
+	return trigger_time;
+}
+
+void set_trigger_time(){
+	trigger_time = return_milliseconds();
 }

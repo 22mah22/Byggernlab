@@ -40,3 +40,7 @@ uint16_t return_starttime();
  * @brief Function to set starttime to the current number of seconds gone by
  */
 void set_starttime();
+
+uint32_t return_trigger_time();
+
+void set_trigger_time();

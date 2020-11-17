@@ -2,7 +2,7 @@
 #include "fonts.h"
 #include "joystick_driver.h"
 
-uint8_t oled_array[8][100];
+//uint8_t oled_array[8][100];
 
 
 void oled_write_command(char c)
@@ -180,7 +180,7 @@ void character_printer(uint8_t arr[], int width, int height, uint8_t x_offset, u
 }
 
 
-
+/*
 void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write){
 	char byteToWrite;
 	if(r_slider > 63){
@@ -199,7 +199,7 @@ void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write){
 	}
 	
 }
-
+*/
 void oled_drawing_sram(char * sram, uint8_t l_slider, uint8_t r_slider, uint8_t write){
 	char byteToWrite;
 	if(r_slider > 63){
@@ -213,7 +213,8 @@ void oled_drawing_sram(char * sram, uint8_t l_slider, uint8_t r_slider, uint8_t 
 	if(!write){
 		oled_write_data(0b00000000);
 		sram[1000+(7-(r_slider/8))*l_slider+l_slider] = 0b00000000;
-		}else{
+		}
+	else{
 		oled_write_data(byteToWrite);
 	}
 	
@@ -221,8 +222,9 @@ void oled_drawing_sram(char * sram, uint8_t l_slider, uint8_t r_slider, uint8_t 
 
 void draw_sram(){
 	volatile char * sram = (char *) 0x1800;
-	uint8_t toggle = 0b00000000;
-	while(!PIND & (1<< PIND4)){
+	uint8_t toggle = 0b11111111;
+	clear_oled();
+	while(!(PIND & (1<< PIND4))){
 		if(PIND & (1<< PIND5)){
 			clear_oled();
 			reset_oled_array_sram(sram);
@@ -236,9 +238,10 @@ void draw_sram(){
 	}
 	return;
 }
+/*
 void draw(){
 	uint8_t toggle = 0b00000000;
-	while(!PIND & (1<< PIND4)){
+	while(!(PIND & (1<< PIND4))){
 		if(PIND & (1<< PIND5)){
 			clear_oled();
 			reset_oled_array();
@@ -256,10 +259,11 @@ void draw(){
 void reset_oled_array(){
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 100; j++){
-			oled_array[i][j] = 0b00000000;
+			//oled_array[i][j] = 0b00000000;
 		}
 	}
 }
+*/
 void reset_oled_array_sram(char * sram){
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 100; j++){

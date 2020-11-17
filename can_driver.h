@@ -81,3 +81,7 @@ void send_reaction_start_can();
  * @brief Sends message to node 2 that reaction test has ended over CAN
  */
 void send_reaction_stop_can();
+
+void send_pong_started();
+
+void send_pong_ended();

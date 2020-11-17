@@ -13,6 +13,7 @@ double ki = 20;
 double kd = 1;
 double sum_error = 0;
 double T_periode = 0.02;
+int active = 0;
 
 uint8_t difficulty = 0;
 
@@ -21,7 +22,7 @@ void TC1_Handler( void ){
 	prev_error = error;
 	error = joystick.left_val - get_pi_value();
 	sum_error += error;
-	paadrag = (kp+difficulty*10)*error+T_periode*(ki-difficulty*4)*sum_error+((kd + difficulty*1)/T_periode)*(error-prev_error);
+	paadrag = active*((kp+difficulty*10)*error+T_periode*(ki-difficulty*4)*sum_error+((kd + difficulty*1)/T_periode)*(error-prev_error));
 	if(joystick.left_button){
 		sum_error = 0; 
 	}
@@ -37,3 +38,10 @@ uint8_t get_difficulty(){
 void set_difficulty(uint8_t difficulty_to_set){
 	difficulty = difficulty_to_set;
 };
+
+void stop_pid(){
+	active = 0;
+}
+void start_pid(){
+	active = 1;
+}

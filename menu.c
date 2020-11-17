@@ -35,7 +35,7 @@ menu* new_menu(menu* parent){
 void write_menu_to_screen(menu* menuPointer){
 	clear_oled_new();
 	for(unsigned int i = 0; i < 8; i++){
-		go_to_column(0);
+		go_to_column(2);
 		oled_write_string(i, menuPointer->labels[i], 5);
 	}
 	invert_selected(menuPointer);
@@ -55,6 +55,8 @@ void change_menu(menu* next_menu, menu** menuHead){
 
 void invert_selected(menu* menuPointer){
 	go_to_column(0);
+	oled_write_string((menuPointer->selected), "  ", 5);
+	go_to_column(8);
 	oled_write_string_inverted((menuPointer->selected), menuPointer->labels[(menuPointer->selected)], 5);
 }
 
@@ -106,10 +108,11 @@ void launch_menusystem(){
 		menu* submenu2 = new_menu(mainMenu);
 		menu* difficulties = new_menu(mainMenu);
 		
-		mainMenu->labels[0] = "Play ping-pong";
+		mainMenu->labels[0] = "Ping-pong";
 		mainMenu->f[0] = play_game;
 
 		mainMenu->labels[1] = "Graphics";
+		mainMenu->f[1] = draw_sram;
 
 		mainMenu->labels[2] = "Characters";
 		mainMenu->links[2] = submenu2;
@@ -176,7 +179,7 @@ void launch_menusystem(){
 
 void wojakprinter(){
 	clear_oled();
-	character_printer(wojak, 64, 40, 40, 2, 0);
+	character_printer(wojak, 56, 40, 40, 2, 0);
 	
 	_delay_ms(1000);
 	while((PINB & (1<< PINB1))){}
@@ -194,11 +197,11 @@ void hello_world(){
 
 void choose_character(){
 	clear_oled();
-	oled_write_string(0, "CHOOSE!", 5);
+	oled_write_string(0, "Choose your hero:", 5);
 
 	//INVERT LEFT PICTURE
-	character_printer(wojak, 64, 40, 0, 1, 1);
-	character_printer(pepe, 64, 40, 64, 1, 0);
+	character_printer(wojak, 56, 40, 0, 1, 1);
+	character_printer(pepe, 56, 40, 64, 1, 0);
 	
 	uint8_t chosen = 0;
 	
@@ -215,8 +218,8 @@ void choose_character(){
 				//INVERT RIGHT PICTURE
 				clear_oled();
 				oled_write_string(0, "CHOOSE!", 5);
-				character_printer(wojak, 64, 40, 0, 1, 0);
-				character_printer(pepe, 64, 40, 64, 1, 1);
+				character_printer(wojak, 56, 40, 0, 1, 0);
+				character_printer(pepe, 56, 40, 64, 1, 1);
 				
 				chosen = 1;
 			}
@@ -224,8 +227,8 @@ void choose_character(){
 			else if (current_dir == LEFT){
 				clear_oled();
 				oled_write_string(0, "CHOOSE!", 5);
-				character_printer(wojak, 64, 40, 0, 1, 1);
-				character_printer(pepe, 64, 40, 64, 1, 0);
+				character_printer(wojak, 56, 40, 0, 1, 1);
+				character_printer(pepe, 56, 40, 64, 1, 0);
 				
 				chosen = 0;
 			}
@@ -249,9 +252,14 @@ void choose_character(){
 }
 void play_game(){
 	clear_oled();
+	go_to_column(8);
+	oled_write_string(0, "Starting Ping-Pong", 5);
 	calc_offset();
+	_delay_ms(1000);
+	clear_oled();
 	can_message* msgToReceive;
 	uint8_t position = 0;
+	send_game_start_can();
 	while(!(PIND & (1<< PIND5))){ //right button to exit game
 		//Sending joystick data to node 2
 		send_stick_can();
@@ -267,12 +275,17 @@ void play_game(){
 				oled_write_string(3, "GAME OVER!", 5);
 
 				if(sram[0] == 0){ //wojak is selected
-					sram[1] = msgToReceive->data[0];
-					sram[2] = msgToReceive->data[1];
+					if(sram[1] < msgToReceive->data[0]){
+						sram[1] = msgToReceive->data[0];
+						sram[2] = msgToReceive->data[1];
+					}
+					
 				}
 				else if(sram[0 == 1]){ //pepe is selected
-					sram[3] = msgToReceive->data[0];
-					sram[4] = msgToReceive->data[1];
+					if(sram[3] < msgToReceive->data[0]){
+						sram[3] = msgToReceive->data[0];
+						sram[4] = msgToReceive->data[1];
+					}
 				}
 				uint16_t seconds = msgToReceive->data[0] + (msgToReceive->data[1] << 8);
 				char buffer[6];
@@ -300,14 +313,19 @@ void play_game(){
 					oled_write_data(0b11110000);
 				}
 
-				if(msgToReceive->data[1]){
-					oled_write_string(3, "SHOT", 5);
+				/*if(msgToReceive->data[1]){
+					go_to_column(2);
+					oled_write_string(8, "SHOT", 5);
 				}
+				else{
+					go_to_column(2);
+					oled_write_string(8, "      ", 5);
+				}*/
 				break;
 			
 			case 0x7:
 				// 0x7 means: Time gone by
-				oled_write_string(0, msgToReceive->data[0], 5);
+				oled_write_string(8, msgToReceive->data[0], 5);
 				break;
 			
 			default:
@@ -316,6 +334,8 @@ void play_game(){
 			}
 		}
 	}
+	//send_pong_ended();
+	_delay_ms(50);
 	return;
 }
 
@@ -345,7 +365,7 @@ void set_easy(){
 	send_difficulty_can(1);
 	clear_oled();
 	go_to_line(0);
-	go_to_column(10);
+	go_to_column(1);
 	oled_write_string(0, "Difficulty set to easy", 5);
 	_delay_ms(1500);
 	return;
@@ -355,7 +375,7 @@ void set_medium(){
 	send_difficulty_can(2);
 	clear_oled();
 	go_to_line(0);
-	go_to_column(10);
+	go_to_column(1);
 	oled_write_string(0, "Difficulty set to medium", 5);
 	_delay_ms(1500);
 	return;
@@ -365,7 +385,7 @@ void set_hard(){
 	send_difficulty_can(3);
 	clear_oled();
 	go_to_line(0);
-	go_to_column(10);
+	go_to_column(1);
 	oled_write_string(0, "Difficulty set to hard", 5);
 	_delay_ms(1500);
 	return;
@@ -385,7 +405,7 @@ void show_credits(){
 	oled_write_string(6, "TTK4155", 5);
 	go_to_column(10);
 	oled_write_string(7, "Autumn 2020, NTNU", 5);
-	_delay_ms(1500);
+	_delay_ms(2500);
 	return;
 }
 
@@ -436,10 +456,10 @@ void reaction_test(){
 	while(!(button_check(PIND & (1<< PIND4)) || button_check(PIND & (1<< PIND5)))){
 		//0.1s interval start time
 		_delay_ms(100);
-		uint8_t num = (rand() % (30 + 1));
+		uint8_t num = (rand() % (60 + 1));
 
 		//Random start time of game
-		if(num == 10){
+		if(num == 10 || num == 9){
 			send_reaction_start_can();
 			trigger = 1;
 			if(!(num % 2)){
@@ -471,11 +491,11 @@ void reaction_test(){
 		}
 	}
 	if(trigger == 0){
-	clear_oled();
-	go_to_column(10);
-	oled_write_string(0, "Fail. Too early.", 5);
-	_delay_ms(1500);
-	return;
+		clear_oled();
+		go_to_column(10);
+		oled_write_string(0, "Fail. Too early.", 5);
+		_delay_ms(1500);
+		return;
 	}
 	//else if button corresponds with lit up side of screen
 	else if(((side == 1) && (PIND & (1<< PIND4))) || ((side == 2) && (PIND & (1<< PIND5)))){

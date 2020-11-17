@@ -63,6 +63,9 @@ void CAN0_Handler( void )
 			joystick.x_val = (message.data[3] == 0x11) ? message.data[0] : message.data[0]*-1;
 			joystick.y_val = (message.data[4] == 0x11) ? message.data[1] : message.data[1]*-1;
 			joystick.butt_pressed = message.data[2];
+			if(!joystick.butt_pressed){
+				set_trigger_time();
+			}
 			joystick.left_val = message.data[5];
 			joystick.right_val = message.data[6];
 			joystick.left_button = message.data[7] & 0b00000010;
@@ -101,6 +104,7 @@ void CAN0_Handler( void )
 			send_reaction_time_to_node_1(&message, return_milliseconds()-starttime);
 		}
 		else if(message.id == 0x2){//game start signal
+			start_pid();
 			set_starttime();
 		}
 		else{

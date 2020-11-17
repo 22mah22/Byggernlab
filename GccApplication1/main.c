@@ -96,7 +96,7 @@ int main(void)
 	SysTick_init();
     while (1) 
     {
-		
+		/*
 		PIOA->PIO_SODR = PIO_SODR_P19; //Set Output Data Register, Set Output Data
 		for(int i = 0; i < 1600000; i++){
 		}
@@ -106,7 +106,7 @@ int main(void)
 		}
 		//printf("%x ", tc->TC_CHANNEL[0].TC_SR);
 		PIOA->PIO_CODR |= PIO_CODR_P20; //Clear Output Data Register,
-		
+		*/
 		
 		
 		move_servo();
@@ -120,7 +120,7 @@ int main(void)
 
 		//printf("%d",ADC->ADC_ISR);
 // 		printf("adc_input : %x   \n\r", ADC->ADC_CDR[1]);
-		printf("goals : %d   \n\r", get_total_goals());
+		//printf("goals : %d   \n\r", get_total_goals());
 		/*printf("left_butt : %d   \n\r", joystick.left_button);
 		printf("right_butt : %d   \n\r", joystick.right_button);
 		printf("left_slider : %d   \n\r", joystick.left_val);
@@ -143,7 +143,11 @@ int main(void)
 		send_motor_info_to_node_1(&msgToSend, get_pi_value(), get_solenoid_status());
 		
 		if(get_goal_flag()){
-			send_goal_to_node_1(&msgToSend);
+			if((return_trigger_time() + 200) < return_milliseconds()){
+				send_goal_to_node_1(&msgToSend);
+				stop_pid();
+				
+			}
 			reset_goal_flag();
 		}
 		

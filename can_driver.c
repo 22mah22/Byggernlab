@@ -149,7 +149,6 @@ uint8_t can_check_complete(uint8_t buffer_number){
 	if(!(isBufferTransmitted & (MCP_TX0IF+2*buffer_number)) ){
 		return 0;
 	}
-	printf("check");
 	mcp2515_bit_modify(MCP_CANINTF,MCP_TX0IF+2*buffer_number,0x00);
 	return 1;
 }
@@ -229,3 +228,19 @@ void send_reaction_stop_can(){
 	msgToSend.data[0] = 0;
 	send_can_msg(&msgToSend);
 }
+/*void send_pong_started(){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	msgToSend.id = 0x2;
+	//placeholder
+	msgToSend.data[0] = 0;
+	send_can_msg(&msgToSend);
+}
+void send_pong_ended(){
+	can_message msgToSend;
+	msgToSend.data_length = 1;
+	msgToSend.id = 0x10;
+	//placeholder
+	msgToSend.data[0] = 0;
+	send_can_msg(&msgToSend);
+}*/

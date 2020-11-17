@@ -22,3 +22,7 @@ uint8_t get_difficulty();
  * @param difficulty_to_set Chosen difficulty to play with
  */
 void set_difficulty(uint8_t difficulty_to_set);
+
+
+void stop_pid();
+void start_pid();

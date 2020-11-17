@@ -104,8 +104,10 @@ void character_printer(uint8_t arr[], int width, int height, uint8_t x_offset, u
  * @param r_slider right slider value
  * @param write whether to write white or black. 1 for "pencil", 0 for "rubber"
  */
-void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write);
+//void oled_drawing(uint8_t l_slider, uint8_t r_slider, uint8_t write);
 
+//void draw();
+void draw_sram();
 /**
  * @brief Function to null out the array that keeps track of the screen pixels
  */

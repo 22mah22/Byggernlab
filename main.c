@@ -22,9 +22,6 @@
 
 #include "menu.h"
 
-uint8_t currentMenu = 0;
-uint8_t menuMax = 2;
-
 //const int *BASE = 0x1000;
 
 void led_test(void){
@@ -41,17 +38,6 @@ void led_test(void){
 	//_delay_ms(10);
 	PORTE &= ~(1<<PE1); // set ALE low (valid addr)
 }
-
-typedef struct{
-	struct menuItem* prev;
-	struct menuItem* next;
-	struct menuItem* parent;
-	struct menuItem* child;
-	uint8_t line;
-	char* label;
-} menuItem;
-
-
 
 int main(void){
 	
@@ -96,7 +82,7 @@ int main(void){
 		_delay_ms(50);
 
 
-		printf("menu fail");
+		printf("fail");
 	}
 	
 	return 0;

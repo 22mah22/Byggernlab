@@ -8,8 +8,6 @@ mcp2515_driver.c
 
 menu.c
 
-menuconfigs.c
-
 spi_driver.c
 
 joystick_driver.c
