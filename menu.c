@@ -3,7 +3,7 @@
 #include <string.h>
 #include "protagonists.h"
 #include "joystick_driver.h"
-#include "menuconfigs.h"
+//#include "menuconfigs.h"
 #include "can_driver.h"
 #include <stdlib.h>
 
@@ -13,10 +13,10 @@ char* string_list[] = {
 	"Option 1",
 	"Option 2",
 	"Option 3",
-	"Option 4",
-	"Option 5",
-	"Option 6",
-	"Option 7",
+	"",
+	"",
+	"",
+	"",
 	"<- Back"
 };
 menu* new_menu(menu* parent){
@@ -64,14 +64,12 @@ void change_selected(menu** menuHead, DIRECTION d){
 		while(((*(menuHead))->labels[((*(menuHead))->selected)]) == ""){
 			((*(menuHead))->selected)--;
 		}
-		printf("%d up",((*(menuHead))->selected));
 	}
 	if(d == DOWN){
 		((*(menuHead))->selected)++;
 		while(((*(menuHead))->labels[((*(menuHead))->selected)]) == ""){
 			((*(menuHead))->selected)++;
 		}
-		printf("%d down",((*(menuHead))->selected));
 	}
 	if(((*(menuHead))->selected) == 8){
 		((*(menuHead))->selected) = 0;
@@ -98,13 +96,13 @@ void button_pressed(menu** menuHead){
 void launch_menusystem(){
 	
 	//INITIATE
+	
 	oled_init();
 	clear_oled();
 	menu** headPointer = NULL;
 	
 		static menu* mainMenu;
 		mainMenu = new_menu(NULL);
-		menu* submenu = new_menu(mainMenu);
 		menu* submenu2 = new_menu(mainMenu);
 		menu* difficulties = new_menu(mainMenu);
 		
@@ -112,15 +110,14 @@ void launch_menusystem(){
 		mainMenu->f[0] = play_game;
 
 		mainMenu->labels[1] = "Graphics";
-		mainMenu->links[1] = submenu;
 
 		mainMenu->labels[2] = "Characters";
 		mainMenu->links[2] = submenu2;
 
-		mainMenu->labels[3] = "Calibrate joystick";
+		mainMenu->labels[3] = "Calibrate stick";
 		mainMenu->f[3] = calibrate;
 
-		mainMenu->labels[4] = "Choose difficulty";
+		mainMenu->labels[4] = "Difficulty";
 		mainMenu->links[4] = difficulties;
 		difficulties->labels[0] = "easy";
 		difficulties->f[0] = set_easy;
@@ -132,25 +129,16 @@ void launch_menusystem(){
 		mainMenu->labels[5] = "Reaction test";
 		mainMenu->f[5] = reaction_test;
 
-		mainMenu->labels[6] = "";
-
+		mainMenu->labels[6] = "Draw a wojak";
+		mainMenu->f[6] = wojakprinter;
 		mainMenu->labels[7] = "Credits";
 		mainMenu->f[7] = show_credits;
 
-		
-		submenu->labels[0] = "Draw something";
-		submenu->labels[1] = "Draw a wojak";
-		submenu->f[1] = wojakprinter;
-		submenu->labels[2] = "list funny women";
-		submenu->labels[4] = "";
-		submenu->labels[5] = "";
-		submenu->labels[6] = "";
-
 		submenu2->labels[0] = "Choose character";
 		submenu2->f[0] = choose_character;
-		submenu2->labels[1] = "Hi-scores";
+		submenu2->labels[1] = "Hiscores";
 		submenu2->f[1] = hiscore;
-		submenu2->labels[2] = "Reset hi-scores";
+		submenu2->labels[2] = "Reset scores";
 		submenu2->f[2] = reset_scores;
 		submenu2->labels[4] = "";
 		submenu2->labels[5] = "";
@@ -271,8 +259,6 @@ void play_game(){
 		if(can_interrupted()){
 			msgToReceive = receive_can_msg(0);
 			uint16_t id = msgToReceive->id;
-			printf("\r fake id and data: %d  %d \r\n",id, msgToReceive->data[0]);
-			printf("\r id and length: %d  %d \r\n",msgToReceive->id, msgToReceive->data_length);
 			switch (id){
 			case 0x1:
       			// 0x1 means: Goal scored
@@ -294,7 +280,7 @@ void play_game(){
 
 				go_to_column(10);
 				oled_write_string(4, "Your score:",5);
-				oled_write_string(4, buffer,5);
+				oled_write_string(5, buffer,8);
 				_delay_ms(3500);
 				return;
       			break;
@@ -337,14 +323,14 @@ void calibrate(){
 	clear_oled();
 	go_to_line(0);
 	go_to_column(10);
-	oled_write_string(0, "Please let go of joystick", 5);
+	oled_write_string(0, "Please let go of stick", 5);
 	oled_write_string(3, "Calibrating in:", 5);
 	_delay_ms(1500);
-	oled_write_string(3, "3", 5);
+	oled_write_string(4, "3", 8);
 	_delay_ms(1500);
-	oled_write_string(3, "2", 5);
+	oled_write_string(4, "2", 8);
 	_delay_ms(1500);
-	oled_write_string(3, "1", 5);
+	oled_write_string(4, "1", 8);
 	_delay_ms(1500);
 	calc_offset();
 	clear_oled();
@@ -390,15 +376,15 @@ void show_credits(){
 	go_to_column(10);
 	oled_write_string(0, "MADE BY:", 5);
 	go_to_column(10);
-	oled_write_string(2, "Bendik Løvlie", 5);
+	oled_write_string(2, "Bendik Lovlie", 5);
 	go_to_column(10);
 	oled_write_string(3, "Magne Hovdar", 5);
 	go_to_column(10);
 	oled_write_string(4, "Thomas Nyhus", 5);
 	go_to_column(10);
-	oled_write_string_inverted(6, "TTK4155", 5);
+	oled_write_string(6, "TTK4155", 5);
 	go_to_column(10);
-	oled_write_string_inverted(7, "Autumn 2020, NTNU", 5);
+	oled_write_string(7, "Autumn 2020, NTNU", 5);
 	_delay_ms(1500);
 	return;
 }
@@ -436,13 +422,18 @@ void reset_scores(){
 void reaction_test(){
 	clear_oled();
 	go_to_column(10);
-	oled_write_string(0, "If left lights up, click left.", 5);
+	oled_write_string(0, "If left lights up,", 5);
 	go_to_column(10);
-	oled_write_string(2, "If right lights up, click right.", 5);
+	oled_write_string(1, "click left.", 5);
+	go_to_column(10);
+	oled_write_string(2, "If right lights up,", 5);
+	go_to_column(10);
+	oled_write_string(3, "click right.", 5);
+	_delay_ms(2500);
 
 	uint8_t trigger = 0;
 	uint8_t side = 0;
-	while((!PIND & (1<< PIND5)) || (PIND & (1<< PIND4))){
+	while(!(button_check(PIND & (1<< PIND4)) || button_check(PIND & (1<< PIND5)))){
 		//0.1s interval start time
 		_delay_ms(100);
 		uint8_t num = (rand() % (30 + 1));
@@ -451,7 +442,8 @@ void reaction_test(){
 		if(num == 10){
 			send_reaction_start_can();
 			trigger = 1;
-			if((num % 2)){
+			if(!(num % 2)){
+				clear_oled();
 				for(int row = 0; row < 8; row++){
 					for (int col = 0; col <64; col++){
 						go_to_column(col);
@@ -461,8 +453,8 @@ void reaction_test(){
 				}
 				side = 1;
 			}
-			else
-			{
+			else{
+				clear_oled();
 				for(int row = 0; row < 8; row++){
 					for (int col = 64; col <128; col++){
 						go_to_column(col);
@@ -473,7 +465,7 @@ void reaction_test(){
 				side = 2;
 			}
 			//react instantly to button presses
-			while((!PIND & (1<< PIND5)) || (PIND & (1<< PIND4))){
+			while(!(button_check(PIND & (1<< PIND4)) || button_check(PIND & (1<< PIND5)))){
 				;//ensures we avoid 100ms wait time when we react
 			}
 		}
@@ -487,23 +479,26 @@ void reaction_test(){
 	}
 	//else if button corresponds with lit up side of screen
 	else if(((side == 1) && (PIND & (1<< PIND4))) || ((side == 2) && (PIND & (1<< PIND5)))){
+		clear_oled();
 		can_message* msgToReceive;
-		uint16_t ms = 0;
+		int ms = 0;
 		uint8_t id = 0;
 		char buffer[6];
 		while(1){
+			send_reaction_stop_can();
+			_delay_ms(50);
 			msgToReceive = receive_can_msg(0);
 			id = msgToReceive->id;
 			if(id == 0x2){
-				clear_oled();
-				ms = msgToReceive->data[0] + (msgToReceive->data[1] << 4);
+				ms = msgToReceive->data[0] + (msgToReceive->data[1] << 8);
+				printf("asdgsdfg %d", ms);
 				go_to_column(10);
 				oled_write_string(1, "You reaction time:", 5);
 				go_to_column(10);
 				sprintf(buffer, "%u", ms);
 				oled_write_string(2, buffer, 5);
-				oled_write_string(2, " milliseconds", 5);
-				_delay_ms(1500);
+				oled_write_string(3, " milliseconds", 5);
+				_delay_ms(2500);
 				return;
 			}
 		}

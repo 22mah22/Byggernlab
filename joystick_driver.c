@@ -32,11 +32,9 @@ void calc_offset(){
 uint8_t button_check(uint8_t current){
 	if(current == 0 && previous == 1){
 		previous = 0;
-		printf("%s", "B");
 		return 1;
 	}else if(current != 0){
 		previous = 1;
-		//printf("%s", "C");
 	}
 	return 0;
 }

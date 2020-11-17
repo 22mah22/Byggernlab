@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include "joystick_driver.h"
+#include <util/delay.h>
 
 #define idBufferHighAddress 0x31
 #define idBufferLowAddress 0x32
@@ -113,9 +114,6 @@ void send_can_msg(can_message *msg){
 	}*/
 	//mcp2515_bit_modify(MCP_CANINTF, 0xff, 0x00);
 	mcp2515_request_to_send(MCP_RTS_TX0+buffer_number);
-	
-	printf("canintef %x \n\r", mcp2515_read(MCP_CANINTF));
-	printf("eflg %x \n\r", mcp2515_read(MCP_EFLG));
 	//mcp2515_bit_modify(MCP_TXB0CTRL+16*buffer_number,0b00001000,0b00001000);
 	//mcp2515_bit_modify(0x0D,0b00000111,0b00000111);
 }
@@ -148,7 +146,6 @@ can_message* receive_can_msg(uint8_t buffer_number){
 uint8_t can_check_complete(uint8_t buffer_number){
 	uint8_t active_flags = mcp2515_read(MCP_CANINTF);
 	uint8_t isBufferTransmitted = (active_flags & (MCP_TX0IF+2*buffer_number));
-	printf("%d || \r", active_flags);
 	if(!(isBufferTransmitted & (MCP_TX0IF+2*buffer_number)) ){
 		return 0;
 	}
